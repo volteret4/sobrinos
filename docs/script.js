@@ -16,26 +16,39 @@ class TabNavigation {
   }
 
   init() {
-    // Obtener elementos del DOM
-    this.tabs = {
-      comment: document.querySelector('[data-tab="comment"]'),
-      lyrics: document.querySelector('[data-tab="lyrics"]'),
-      links: document.querySelector('[data-tab="links"]'),
-      tracks: document.querySelector('[data-tab="tracks"]'),
-    };
+    // Obtener elementos del DOM usando los selectores correctos
+    const tabElements = document.querySelectorAll(".nav-tab");
+    const panelElements = document.querySelectorAll(".tab-panel");
 
-    this.panels = {
-      comment: document.getElementById("comment"),
-      lyrics: document.getElementById("lyrics"),
-      links: document.getElementById("links"),
-      tracks: document.getElementById("tracks"),
-    };
+    // Crear mapas de pestañas y paneles
+    this.tabs = {};
+    this.panels = {};
+
+    tabElements.forEach((tab) => {
+      const tabName =
+        tab.getAttribute("data-tab") || tab.getAttribute("href")?.substring(1);
+      if (tabName) {
+        this.tabs[tabName] = tab;
+      }
+    });
+
+    panelElements.forEach((panel) => {
+      const panelId = panel.id;
+      if (panelId) {
+        this.panels[panelId] = panel;
+      }
+    });
+
+    console.log("Pestañas encontradas:", Object.keys(this.tabs));
+    console.log("Paneles encontrados:", Object.keys(this.panels));
 
     // Configurar eventos
     this.bindEvents();
 
     // Activar pestaña inicial
-    this.showTab(this.getActiveTabFromURL() || "comment");
+    const initialTab =
+      this.getActiveTabFromURL() || Object.keys(this.tabs)[0] || "comment";
+    this.showTab(initialTab);
   }
 
   bindEvents() {
@@ -524,7 +537,83 @@ class AccessibilityEnhancer {
 }
 
 // =============================
-// GESTIÓN DEL ÍNDICE DE ÁLBUMES
+// GESTIÓN DE TEMA OSCURO
+// =============================
+
+class ThemeManager {
+  constructor() {
+    this.init();
+  }
+
+  init() {
+    // Obtener tema guardado o usar automático
+    this.currentTheme = localStorage.getItem("theme") || this.getSystemTheme();
+    this.applyTheme(this.currentTheme);
+    this.createThemeToggle();
+
+    // Escuchar cambios en el sistema
+    window
+      .matchMedia("(prefers-color-scheme: dark)")
+      .addEventListener("change", (e) => {
+        if (!localStorage.getItem("theme")) {
+          this.applyTheme(e.matches ? "dark" : "light");
+        }
+      });
+  }
+
+  getSystemTheme() {
+    return window.matchMedia("(prefers-color-scheme: dark)").matches
+      ? "dark"
+      : "light";
+  }
+
+  applyTheme(theme) {
+    document.documentElement.setAttribute("data-theme", theme);
+    this.currentTheme = theme;
+
+    // Actualizar icono del botón si existe
+    const toggleBtn = document.querySelector(".theme-toggle");
+    if (toggleBtn) {
+      toggleBtn.innerHTML = theme === "dark" ? "☀️" : "🌙";
+      toggleBtn.title =
+        theme === "dark" ? "Cambiar a tema claro" : "Cambiar a tema oscuro";
+    }
+  }
+
+  toggleTheme() {
+    const newTheme = this.currentTheme === "dark" ? "light" : "dark";
+    this.applyTheme(newTheme);
+    localStorage.setItem("theme", newTheme);
+  }
+
+  createThemeToggle() {
+    // Buscar si ya existe un botón
+    let toggleBtn = document.querySelector(".theme-toggle");
+
+    if (!toggleBtn) {
+      // Crear botón de tema
+      toggleBtn = document.createElement("button");
+      toggleBtn.className = "theme-toggle";
+      toggleBtn.setAttribute("aria-label", "Cambiar tema");
+
+      // Agregar al header
+      const navLinks = document.querySelector(".nav-links");
+      if (navLinks) {
+        navLinks.appendChild(toggleBtn);
+      }
+    }
+
+    // Configurar botón
+    toggleBtn.innerHTML = this.currentTheme === "dark" ? "☀️" : "🌙";
+    toggleBtn.title =
+      this.currentTheme === "dark"
+        ? "Cambiar a tema claro"
+        : "Cambiar a tema oscuro";
+
+    // Agregar evento
+    toggleBtn.addEventListener("click", () => this.toggleTheme());
+  }
+}
 // =============================
 
 class AlbumIndexManager {
@@ -638,10 +727,14 @@ let tabNavigation;
 let lyricsEnhancer;
 let accessibilityEnhancer;
 let albumIndexManager;
+let themeManager;
 
 // Inicializar cuando el DOM esté listo
 document.addEventListener("DOMContentLoaded", function () {
   console.log("🎵 Album Web Generator cargando...");
+
+  // Inicializar tema oscuro (siempre)
+  themeManager = new ThemeManager();
 
   // Inicializar mejoras de accesibilidad
   accessibilityEnhancer = new AccessibilityEnhancer();

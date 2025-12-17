@@ -95,6 +95,7 @@ class HTMLGenerator:
                 </div>
                 <div class="nav-links">
                     <a href="../index.html" class="nav-link">🏠 Inicio</a>
+                    <button class="theme-toggle" aria-label="Cambiar tema">🌙</button>
                 </div>
             </nav>
         </div>

@@ -42,11 +42,11 @@ Ya te debería permitir leer tarjetas usando `pcsc_scan`.
 
 ## Uso
 
-#### Identificar tarjetas
+### Identificar tarjetas
 
 Con el siguiente [script](https://github.com/volteret4/sobrinos/blob/main/nfc/nfc_detect_uid.py) podrás obtener el UID de cada tarjeta que mas tarde necesitaremos para reaccionar a las mismas.
 
-#### Reaccionar a tarjetas
+### Reaccionar a tarjetas
 
 Una vez detectadas, podemos editar el siguiente [script](https://github.com/volteret4/sobrinos/blob/main/nfc/nfc_reaccionar.py) modificando la parte en que se identifica cada tarjeta con la función a realizar.
 
@@ -79,7 +79,7 @@ TARJETAS_CONFIG = {
 >
 > `curl -G -S -s --data-urlencode "cmd=play_item NAS/moode/moode/M/Mogwai/" http://moode_url/command/`
 
-#### (Opcional) Crea imágenes para esas tarjetas
+### Crea imágenes para esas tarjetas
 
 Con este [script](https://github.com/volteret4/sobrinos/blob/main/nfc/nfc_generar_portada.py) podremos crear imagenes con el tamaño de las tarjetas (52mmx82mm):
 
@@ -97,7 +97,11 @@ _CARA B_
 - Tracklist
 - QR a wikipedia y genius
 
-#### (Opcional 2) Crea una web con información para el QR de la tarjeta
+### (TODO) Creador archivo config
+
+Con este _¡script!_ escanearemos una a una las tarjetas asociandolas a las rutas que escribiremos (mantener capacidad de interaccion? crear con tkinter un browser?)
+
+##### (Opcional) Crea una web con información para el QR de la tarjeta
 
 Con este script podrás crear una web que recopilará información sobre el disco en cuestión.
 

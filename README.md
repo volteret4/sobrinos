@@ -103,7 +103,7 @@ Con este _¡script!_ escanearemos una a una las tarjetas asociandolas a las ruta
 
 ##### (Opcional) Crea una web con información para el QR de la tarjeta
 
-Con este script podrás crear una web que recopilará información sobre el disco en cuestión.
+Con este script podrás crear una [web](https://volteret4.github.io/sobrinos) que recopilará información sobre el disco en cuestión.
 
 ```bash
 # creará una html y actualizará el json para el index.html:

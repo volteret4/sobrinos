@@ -9,14 +9,15 @@ from typing import Optional, Dict, Any
 import time
 import urllib.parse
 
+logger = logging.getLogger(__name__)
+
 try:
     import musicbrainzngs
     musicbrainzngs.set_useragent("AlbumWebGenerator", "1.0", "https://github.com/example/album-web-generator")
+    HAS_MUSICBRAINZ = True
 except ImportError:
-    print("Error: musicbrainzngs no está instalado. Instala con: pip install musicbrainzngs")
-    exit(1)
-
-logger = logging.getLogger(__name__)
+    logger.warning("musicbrainzngs no está instalado. Instala con: pip install musicbrainzngs")
+    HAS_MUSICBRAINZ = False
 
 
 class ImageFinder:
@@ -29,10 +30,40 @@ class ImageFinder:
             'User-Agent': 'AlbumWebGenerator/1.0 (https://github.com/example/album-web-generator)'
         })
 
-        # Cache para evitar búsquedas repetidas
-        self._cache = {}
+        # Cache y rate limiting
+        self.cache = {}
+        self.last_request_time = 0
+        self.rate_limit_delay = 1.0
 
-        # Rate limiting
+        # Configuración de APIs
+        try:
+            from dotenv import load_dotenv
+            load_dotenv()
+        except ImportError:
+            pass
+
+        # Spotify
+        self.spotify_client_id = self._get_env_var('SPOTIFY_CLIENT_ID')
+        self.spotify_client_secret = self._get_env_var('SPOTIFY_CLIENT_SECRET')
+        self.spotify_token = None
+        self.spotify_token_expires = 0
+
+        # Last.fm
+        self.lastfm_api_key = self._get_env_var('LASTFM_API_KEY')
+
+        # Log de configuración
+        if self.spotify_client_id and self.spotify_client_secret:
+            logger.info("✅ Credenciales de Spotify configuradas")
+        else:
+            logger.info("⚠️ Spotify no configurado - usando solo fuentes gratuitas")
+
+        if self.lastfm_api_key:
+            logger.info("✅ API de Last.fm configurada")
+
+    def _get_env_var(self, var_name: str) -> Optional[str]:
+        """Obtener variable de entorno de manera segura"""
+        import os
+        return os.getenv(var_name)
         self._last_request_time = 0
         self._min_request_interval = 1  # segundo entre requests
 
@@ -48,8 +79,8 @@ class ImageFinder:
             Diccionario con información de la imagen o None
         """
         cache_key = f"album_{artist}_{album}"
-        if cache_key in self._cache:
-            return self._cache[cache_key]
+        if cache_key in self.cache:
+            return self.cache[cache_key]
 
         logger.info(f"Buscando imagen del álbum: {artist} - {album}")
 
@@ -67,40 +98,112 @@ class ImageFinder:
         if not image_info:
             image_info = self._search_discogs_album(artist, album)
 
-        self._cache[cache_key] = image_info
+        self.cache[cache_key] = image_info
         return image_info
 
-    def find_artist_image(self, artist: str) -> Optional[Dict[str, str]]:
+    def find_artist_image(self, artist: str, db_manager=None) -> Optional[Dict[str, str]]:
         """
         Buscar imagen del artista
 
         Args:
             artist: Nombre del artista
+            db_manager: Manager de base de datos para buscar rutas locales
 
         Returns:
             Diccionario con información de la imagen o None
         """
         cache_key = f"artist_{artist}"
-        if cache_key in self._cache:
-            return self._cache[cache_key]
+        if cache_key in self.cache:
+            return self.cache[cache_key]
 
         logger.info(f"Buscando imagen del artista: {artist}")
 
-        # Intentar diferentes fuentes
+        # 1. Buscar en base de datos primero
+        if db_manager:
+            db_image = self._search_database_artist_image(artist, db_manager)
+            if db_image:
+                self.cache[cache_key] = db_image
+                return db_image
+
+        # 2. Intentar diferentes fuentes
         image_info = None
 
-        # 1. MusicBrainz
+        # MusicBrainz
         image_info = self._search_musicbrainz_artist(artist)
 
-        # 2. Last.fm
+        # Last.fm
         if not image_info:
             image_info = self._search_lastfm_artist(artist)
 
-        self._cache[cache_key] = image_info
-        return image_info
+        # Spotify (si está configurado)
+        if not image_info and self.spotify_client_id:
+            image_info = self._search_spotify_artist(artist)
+
+        self.cache[cache_key] = image_info
+        return image_info  # Devolver None si no se encuentra, no placeholder
+
+    def _search_database_artist_image(self, artist_name: str, db_manager) -> Optional[Dict[str, str]]:
+        """Buscar imagen del artista en la base de datos"""
+        try:
+            import os
+
+            # Buscar artista en BD
+            cursor = db_manager.connection.cursor()
+            cursor.execute("""
+                SELECT img, img_urls, img_paths, name
+                FROM artists
+                WHERE LOWER(name) = LOWER(?)
+            """, (artist_name,))
+
+            result = cursor.fetchone()
+            if not result:
+                logger.debug(f"Artista no encontrado en BD: {artist_name}")
+                return None
+
+            # Prioridad: img_paths > img > img_urls
+            if result['img_paths']:
+                img_path = result['img_paths'].strip()
+                if img_path and os.path.exists(img_path):
+                    logger.info(f"Imagen de artista encontrada en BD: {img_path}")
+                    return {
+                        'url': img_path,  # Usar ruta directa, no file://
+                        'source': 'database'
+                    }
+                else:
+                    logger.debug(f"Ruta de imagen no existe: {img_path}")
+
+            if result['img']:
+                img_url = result['img'].strip()
+                if img_url:
+                    logger.info(f"URL de imagen de artista encontrada en BD: {img_url}")
+                    return {
+                        'url': img_url,
+                        'source': 'database'
+                    }
+
+            if result['img_urls']:
+                # Si hay múltiples URLs, tomar la primera válida
+                urls = [url.strip() for url in result['img_urls'].strip().split('\n') if url.strip()]
+                if urls:
+                    logger.info(f"URLs de imagen de artista encontradas en BD: {urls[0]}")
+                    return {
+                        'url': urls[0],
+                        'source': 'database'
+                    }
+
+            logger.debug(f"No se encontró imagen válida en BD para: {artist_name}")
+            return None
+
+        except Exception as e:
+            logger.error(f"Error buscando imagen en BD: {e}")
+            return None
 
     def _search_musicbrainz_album(self, artist: str, album: str) -> Optional[Dict[str, str]]:
         """Buscar imagen del álbum en MusicBrainz Cover Art Archive"""
+        if not HAS_MUSICBRAINZ:
+            logger.debug("MusicBrainz no disponible, saltando búsqueda")
+            return None
+
         try:
             self._rate_limit()
 
@@ -146,6 +249,10 @@ class ImageFinder:
 
     def _search_musicbrainz_artist(self, artist: str) -> Optional[Dict[str, str]]:
         """Buscar imagen del artista en MusicBrainz"""
+        if not HAS_MUSICBRAINZ:
+            logger.debug("MusicBrainz no disponible, saltando búsqueda")
+            return None
+
         try:
             self._rate_limit()
 
@@ -204,6 +311,85 @@ class ImageFinder:
 
         return None
 
+    def _search_spotify_artist(self, artist: str) -> Optional[Dict[str, str]]:
+        """Buscar imagen del artista en Spotify"""
+        try:
+            if not self._get_spotify_token():
+                return None
+
+            self._rate_limit()
+
+            # Buscar artista
+            search_url = "https://api.spotify.com/v1/search"
+            params = {
+                'q': artist,
+                'type': 'artist',
+                'limit': 1
+            }
+            headers = {'Authorization': f'Bearer {self.spotify_token}'}
+
+            response = self.session.get(search_url, params=params, headers=headers)
+            response.raise_for_status()
+
+            data = response.json()
+            artists = data.get('artists', {}).get('items', [])
+
+            if artists and artists[0].get('images'):
+                # Tomar la imagen de mejor calidad
+                images = sorted(artists[0]['images'], key=lambda x: x.get('width', 0), reverse=True)
+                if images:
+                    logger.info(f"Imagen encontrada en Spotify para: {artist}")
+                    return {
+                        'url': images[0]['url'],
+                        'source': 'spotify'
+                    }
+
+            return None
+
+        except Exception as e:
+            logger.error(f"Error buscando en Spotify: {e}")
+            return None
+
+    def _get_spotify_token(self) -> bool:
+        """Obtener token de acceso de Spotify"""
+        if not self.spotify_client_id or not self.spotify_client_secret:
+            return False
+
+        # Verificar si el token actual es válido
+        if self.spotify_token and time.time() < self.spotify_token_expires:
+            return True
+
+        try:
+            # Solicitar nuevo token
+            auth_url = "https://accounts.spotify.com/api/token"
+            auth_data = {
+                'grant_type': 'client_credentials'
+            }
+
+            import base64
+            auth_string = f"{self.spotify_client_id}:{self.spotify_client_secret}"
+            auth_bytes = auth_string.encode('utf-8')
+            auth_b64 = base64.b64encode(auth_bytes).decode('utf-8')
+
+            headers = {
+                'Authorization': f'Basic {auth_b64}',
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+
+            response = self.session.post(auth_url, data=auth_data, headers=headers)
+            response.raise_for_status()
+
+            token_data = response.json()
+            self.spotify_token = token_data['access_token']
+            self.spotify_token_expires = time.time() + token_data['expires_in'] - 60  # -60 seg de margen
+
+            logger.info("Token de Spotify obtenido exitosamente")
+            return True
+
+        except Exception as e:
+            logger.error(f"Error obteniendo token de Spotify: {e}")
+            return False
+
     def _search_lastfm_artist(self, artist: str) -> Optional[Dict[str, str]]:
         """Buscar imagen del artista en Last.fm"""
         try:
@@ -250,13 +436,13 @@ class ImageFinder:
     def _rate_limit(self):
         """Implementar rate limiting para las APIs"""
         current_time = time.time()
-        time_since_last = current_time - self._last_request_time
+        time_since_last = current_time - self.last_request_time
 
-        if time_since_last < self._min_request_interval:
-            sleep_time = self._min_request_interval - time_since_last
+        if time_since_last < self.rate_limit_delay:
+            sleep_time = self.rate_limit_delay - time_since_last
             time.sleep(sleep_time)
 
-        self._last_request_time = time.time()
+        self.last_request_time = time.time()
 
     def download_image(self, image_info: Dict[str, str], output_path: str) -> bool:
         """

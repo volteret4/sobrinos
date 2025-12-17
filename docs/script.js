@@ -24,6 +24,7 @@ class TabNavigation {
     this.tabs = {};
     this.panels = {};
 
+    // Mapear pestañas por su data-tab o href
     tabElements.forEach((tab) => {
       const tabName =
         tab.getAttribute("data-tab") || tab.getAttribute("href")?.substring(1);
@@ -32,6 +33,7 @@ class TabNavigation {
       }
     });
 
+    // Mapear paneles por su ID real
     panelElements.forEach((panel) => {
       const panelId = panel.id;
       if (panelId) {
@@ -96,25 +98,32 @@ class TabNavigation {
   }
 
   showTab(tabName) {
-    if (!this.tabs[tabName] || !this.panels[tabName]) {
+    if (!this.tabs[tabName]) {
       console.warn(`Pestaña no encontrada: ${tabName}`);
       return;
     }
 
-    // Desactivar pestañas actuales
-    Object.keys(this.tabs).forEach((name) => {
-      const tab = this.tabs[name];
-      const panel = this.panels[name];
-
-      if (tab && panel) {
-        tab.classList.remove("active");
-        panel.classList.remove("active");
-      }
+    // Desactivar todas las pestañas
+    Object.values(this.tabs).forEach((tab) => {
+      if (tab) tab.classList.remove("active");
     });
 
-    // Activar nueva pestaña
+    // Desactivar todos los paneles
+    Object.values(this.panels).forEach((panel) => {
+      if (panel) panel.classList.remove("active");
+    });
+
+    // Activar la pestaña clickeada
     this.tabs[tabName].classList.add("active");
-    this.panels[tabName].classList.add("active");
+
+    // Activar el panel correspondiente por su ID
+    const targetPanel = document.getElementById(tabName);
+    if (targetPanel) {
+      targetPanel.classList.add("active");
+    } else {
+      console.warn(`Panel no encontrado para: ${tabName}`);
+    }
+
     this.activeTab = tabName;
 
     // Ejecutar callback específico de la pestaña
@@ -518,19 +527,23 @@ class AccessibilityEnhancer {
   }
 
   enhanceScreenReaderSupport() {
-    // Agregar atributos ARIA
+    // Agregar atributos ARIA sin cambiar IDs existentes
     const tabs = document.querySelectorAll(".nav-tab");
     const panels = document.querySelectorAll(".tab-panel");
 
     tabs.forEach((tab, index) => {
       tab.setAttribute("role", "tab");
-      tab.setAttribute("aria-controls", `panel-${index}`);
+      const tabName =
+        tab.getAttribute("data-tab") || tab.getAttribute("href")?.substring(1);
+      if (tabName) {
+        tab.setAttribute("aria-controls", tabName);
+      }
       tab.setAttribute("aria-selected", tab.classList.contains("active"));
     });
 
-    panels.forEach((panel, index) => {
+    panels.forEach((panel) => {
       panel.setAttribute("role", "tabpanel");
-      panel.setAttribute("id", `panel-${index}`);
+      // Mantener el ID original, no cambiarlo
       panel.setAttribute("aria-hidden", !panel.classList.contains("active"));
     });
   }
@@ -629,14 +642,55 @@ class AlbumIndexManager {
 
   async loadAlbumsData() {
     try {
-      // Intentar cargar datos desde un archivo JSON
+      // Intentar cargar datos desde el archivo JSON
       const response = await fetch("./albums-data.json");
       if (response.ok) {
         this.albums = await response.json();
         this.renderAlbumsGrid();
+        this.updateStats();
       }
     } catch (e) {
       console.log("No se encontró archivo de datos de álbumes");
+    }
+  }
+
+  updateStats() {
+    const albumsCount = this.albums.length;
+    const artistsCount = new Set(this.albums.map((album) => album.artist)).size;
+    const genres = this.albums
+      .flatMap((album) =>
+        Array.isArray(album.genre) ? album.genre : [album.genre],
+      )
+      .filter(Boolean);
+    const genresCount = new Set(genres).size;
+
+    // Actualizar contadores
+    document.getElementById("albums-count").textContent = albumsCount;
+    document.getElementById("artists-count").textContent = artistsCount;
+    document.getElementById("genres-count").textContent = genresCount;
+
+    // Actualizar estadísticas de géneros
+    const genreCounts = {};
+    genres.forEach((genre) => {
+      genreCounts[genre] = (genreCounts[genre] || 0) + 1;
+    });
+
+    const topGenres = Object.entries(genreCounts)
+      .sort(([, a], [, b]) => b - a)
+      .slice(0, 3);
+
+    const topGenresElement = document.getElementById("top-genres");
+    if (topGenresElement && topGenres.length > 0) {
+      topGenresElement.innerHTML = topGenres
+        .map(
+          ([genre, count]) => `
+                <div style="margin: 0.5rem 0; display: flex; justify-content: space-between; align-items: center;">
+                    <span>${genre}</span>
+                    <div style="background: var(--color-primary); color: white; padding: 0.25rem 0.5rem; border-radius: 12px; font-size: 0.75rem;">${count}</div>
+                </div>
+            `,
+        )
+        .join("");
     }
   }
 
@@ -651,20 +705,28 @@ class AlbumIndexManager {
     if (!grid) return;
 
     grid.innerHTML = this.albums
-      .map(
-        (album) => `
-            <a href="albums/${album.filename}" class="album-card">
-                <div class="album-card-cover">
-                    <img src="${album.cover_image || this.getPlaceholderImage()}"
-                         alt="Portada de ${album.title}"
-                         loading="lazy">
-                </div>
-                <h3 class="album-card-title">${album.title}</h3>
-                <p class="album-card-artist">${album.artist}</p>
-                <p class="album-card-year">${album.year || ""}</p>
-            </a>
-        `,
-      )
+      .map((album) => {
+        const imageUrl =
+          album.thumbnail_image ||
+          album.cover_image ||
+          this.getPlaceholderImage();
+        const fullImageUrl = album.cover_image || imageUrl;
+
+        return `
+                <a href="albums/${album.filename}" class="album-card">
+                    <div class="album-card-cover">
+                        <img src="${imageUrl}"
+                             alt="Portada de ${album.title}"
+                             loading="lazy"
+                             onclick="event.preventDefault(); event.stopPropagation(); window.open('${fullImageUrl}', '_blank');"
+                             style="cursor: pointer;">
+                    </div>
+                    <h3 class="album-card-title">${album.title}</h3>
+                    <p class="album-card-artist">${album.artist}</p>
+                    <p class="album-card-year">${album.year || ""}</p>
+                </a>
+            `;
+      })
       .join("");
   }
 

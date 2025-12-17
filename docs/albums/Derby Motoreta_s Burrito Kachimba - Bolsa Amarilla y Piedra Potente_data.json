@@ -123,16 +123,16 @@
     }
   ],
   "local_cover": null,
-  "user_comment": "testttt asdasd",
+  "user_comment": "asgf",
   "album_image": {
-    "url": "https://coverartarchive.org/release/9711e0a9-8109-4563-9636-161003491003/42464784628.jpg",
+    "url": "../imgs/Derby Motoreta_s Burrito Kachimba - Bolsa Amarilla y Piedra Potente_album.jpg",
+    "thumbnail_url": "../thumbnails/Derby Motoreta_s Burrito Kachimba - Bolsa Amarilla y Piedra Potente_album_thumb.jpg",
     "source": "MusicBrainz Cover Art Archive",
-    "size": "large",
-    "mbid": "9711e0a9-8109-4563-9636-161003491003"
+    "type": "album"
   },
   "artist_image": {
-    "mbid": "315030de-14c0-4635-b9cb-ac50896451d1",
-    "source": "MusicBrainz"
+    "url": "/home/huan/gits/pollo/music-fuzzy/.content/artistas_img/Derby_Motoretas_Burrito_Kachimba/image_1.jpg",
+    "source": "database"
   },
   "lyrics": {
     "Agua Grande": {

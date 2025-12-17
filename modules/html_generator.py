@@ -4,7 +4,7 @@ Genera páginas HTML responsivas para álbumes
 """
 
 import logging
-from typing import Dict, Any, List
+from typing import Dict, Any, List, Optional
 import html
 import json
 
@@ -119,15 +119,13 @@ class HTMLGenerator:
             <div class="album-hero">
                 <div class="album-images">
                     <div class="album-cover">
-                        <img src="{self._get_image_url(album_info.get('album_image'))}"
+                        <img src="{self._get_thumbnail_url(album_info.get('album_image'))}"
                              alt="Portada de {html.escape(album_info['title'])}"
+                             onclick="window.open('{self._get_image_url(album_info.get('album_image'))}', '_blank')"
+                             style="cursor: pointer;"
                              onerror="this.src='data:image/svg+xml,%3Csvg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'300\\' height=\\'300\\' viewBox=\\'0 0 300 300\\'%3E%3Crect width=\\'300\\' height=\\'300\\' fill=\\'%23ddd\\'/%3E%3Ctext x=\\'50%25\\' y=\\'50%25\\' text-anchor=\\'middle\\' dy=\\'.3em\\' font-family=\\'Arial, sans-serif\\' font-size=\\'18\\' fill=\\'%23999\\'%3EÁlbum%3C/text%3E%3C/svg%3E'">
                     </div>
-                    <div class="artist-image">
-                        <img src="{self._get_image_url(album_info.get('artist_image'))}"
-                             alt="Foto de {html.escape(album_info['artist'])}"
-                             onerror="this.src='data:image/svg+xml,%3Csvg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'300\\' height=\\'300\\' viewBox=\\'0 0 300 300\\'%3E%3Ccircle cx=\\'150\\' cy=\\'150\\' r=\\'150\\' fill=\\'%23ddd\\'/%3E%3Ctext x=\\'50%25\\' y=\\'50%25\\' text-anchor=\\'middle\\' dy=\\'.3em\\' font-family=\\'Arial, sans-serif\\' font-size=\\'18\\' fill=\\'%23999\\'%3EArtista%3C/text%3E%3C/svg%3E'">
-                    </div>
+                    {self._generate_artist_image_html(album_info)}
                 </div>
 
                 <div class="album-info">
@@ -138,6 +136,16 @@ class HTMLGenerator:
             </div>
         </div>
     </header>"""
+
+    def _generate_artist_image_html(self, album_info: Dict[str, Any]) -> str:
+        """Generar HTML para imagen de artista solo si existe"""
+        artist_image = album_info.get('artist_image')
+        if artist_image and artist_image.get('url'):
+            return f"""<div class="artist-image">
+                        <img src="{html.escape(artist_image['url'])}"
+                             alt="Foto de {html.escape(album_info['artist'])}">
+                    </div>"""
+        return ""
 
     def _generate_album_details(self, album_info: Dict[str, Any]) -> str:
         """Generar detalles del álbum"""
@@ -385,13 +393,37 @@ class HTMLGenerator:
         </div>
     </footer>"""
 
-    def _get_image_url(self, image_info: Dict[str, Any]) -> str:
+    def _get_thumbnail_url(self, image_info: Optional[Dict[str, Any]]) -> str:
+        """
+        Obtener URL del thumbnail o usar imagen original como fallback
+
+        Args:
+            image_info: Información de la imagen
+
+        Returns:
+            URL del thumbnail o imagen original
+        """
+        if not image_info:
+            return self.get_placeholder_image_url()
+
+        # Si hay thumbnail, usarlo
+        if 'thumbnail_url' in image_info:
+            return image_info['thumbnail_url']
+
+        # Si no, usar imagen original
+        return image_info.get('url', self.get_placeholder_image_url())
+
+    def get_placeholder_image_url(self) -> str:
+        """Obtener URL de imagen placeholder"""
+        return "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300' viewBox='0 0 300 300'%3E%3Crect width='300' height='300' fill='%23ddd'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dy='.3em' font-family='Arial, sans-serif' font-size='18' fill='%23999'%3EImagen%3C/text%3E%3C/svg%3E"
+
+    def _get_image_url(self, image_info: Optional[Dict[str, Any]]) -> str:
         """Obtener URL de imagen o placeholder"""
         if image_info and 'url' in image_info:
             return html.escape(image_info['url'])
 
         # Placeholder por defecto
-        return "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300' viewBox='0 0 300 300'%3E%3Crect width='300' height='300' fill='%23ddd'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dy='.3em' font-family='Arial, sans-serif' font-size='18' fill='%23999'%3EImagen%3C/text%3E%3C/svg%3E"
+        return self.get_placeholder_image_url()
 
     def _generate_album_colors(self, album_info: Dict[str, Any]) -> Dict[str, str]:
         """

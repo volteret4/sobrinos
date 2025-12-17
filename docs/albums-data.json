@@ -7,9 +7,11 @@
     "genre": [
       "Musiques du monde"
     ],
-    "cover_image": "https://coverartarchive.org/release/9711e0a9-8109-4563-9636-161003491003/42464784628.jpg",
+    "cover_image": "../imgs/Derby Motoreta_s Burrito Kachimba - Bolsa Amarilla y Piedra Potente_album.jpg",
+    "thumbnail_image": "../thumbnails/Derby Motoreta_s Burrito Kachimba - Bolsa Amarilla y Piedra Potente_album_thumb.jpg",
+    "artist_image": "/home/huan/gits/pollo/music-fuzzy/.content/artistas_img/Derby_Motoretas_Burrito_Kachimba/image_1.jpg",
     "tracks_count": 12,
     "has_lyrics": true,
-    "date_added": "2025-12-17T21:46:42.797044"
+    "date_added": "2025-12-17T23:42:37.937191"
   }
 ]

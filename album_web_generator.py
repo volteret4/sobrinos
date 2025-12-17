@@ -115,7 +115,8 @@ class AlbumWebGenerator:
             album_info['title']
         )
         album_info['artist_image'] = self.image_finder.find_artist_image(
-            album_info['artist']
+            album_info['artist'],
+            self.db_manager
         )
 
         # 4. Buscar letras de canciones
@@ -150,12 +151,20 @@ class AlbumWebGenerator:
         # Crear estructura docs/albums
         docs_dir = Path(output_dir) / "docs"
         albums_dir = docs_dir / "albums"
+        imgs_dir = docs_dir / "imgs"
+        thumbnails_dir = docs_dir / "thumbnails"
+
         albums_dir.mkdir(parents=True, exist_ok=True)
+        imgs_dir.mkdir(parents=True, exist_ok=True)
+        thumbnails_dir.mkdir(parents=True, exist_ok=True)
 
         # Generar nombre seguro para archivos
         safe_name = self._get_safe_filename(
             f"{album_info['artist']} - {album_info['title']}"
         )
+
+        # Copiar y procesar imágenes
+        album_info = self._process_album_images(album_info, safe_name, imgs_dir, thumbnails_dir)
 
         # Solo generar HTML (CSS y JS son globales)
         html_content = self.html_generator.generate_html(album_info)
@@ -174,6 +183,133 @@ class AlbumWebGenerator:
         logger.info(f"Archivo generado en: {albums_dir}")
         logger.info(f"  - HTML: {html_path.name}")
         logger.info(f"  - Data: {json_path.name}")
+
+    def _process_album_images(self, album_info: Dict[str, Any], safe_name: str,
+                             imgs_dir: Path, thumbnails_dir: Path) -> Dict[str, Any]:
+        """
+        Procesar y copiar imágenes a la estructura web
+
+        Args:
+            album_info: Información del álbum
+            safe_name: Nombre seguro para archivos
+            imgs_dir: Directorio de imágenes
+            thumbnails_dir: Directorio de thumbnails
+
+        Returns:
+            album_info actualizado con rutas web de imágenes
+        """
+        try:
+            from PIL import Image
+            import shutil
+
+            # Procesar imagen del álbum
+            if album_info.get('album_image') and album_info['album_image'].get('url'):
+                album_info['album_image'] = self._copy_and_process_image(
+                    album_info['album_image'],
+                    f"{safe_name}_album",
+                    imgs_dir,
+                    thumbnails_dir,
+                    'album'
+                )
+
+            # Procesar imagen del artista
+            if album_info.get('artist_image') and album_info['artist_image'].get('url'):
+                album_info['artist_image'] = self._copy_and_process_image(
+                    album_info['artist_image'],
+                    f"{safe_name}_artist",
+                    imgs_dir,
+                    thumbnails_dir,
+                    'artist'
+                )
+
+            return album_info
+
+        except ImportError:
+            logger.warning("Pillow no está instalado. Las imágenes no se procesarán.")
+            return album_info
+        except Exception as e:
+            logger.error(f"Error procesando imágenes: {e}")
+            return album_info
+
+    def _copy_and_process_image(self, image_info: Dict[str, Any], base_name: str,
+                               imgs_dir: Path, thumbnails_dir: Path,
+                               image_type: str) -> Dict[str, Any]:
+        """
+        Copiar imagen original y crear thumbnail
+
+        Args:
+            image_info: Información de la imagen original
+            base_name: Nombre base para los archivos
+            imgs_dir: Directorio de imágenes
+            thumbnails_dir: Directorio de thumbnails
+            image_type: Tipo de imagen ('album' o 'artist')
+
+        Returns:
+            Información actualizada de la imagen
+        """
+        try:
+            from PIL import Image
+            import shutil
+            import requests
+            from io import BytesIO
+
+            original_url = image_info['url']
+
+            # Rutas de destino
+            img_filename = f"{base_name}.jpg"
+            thumb_filename = f"{base_name}_thumb.jpg"
+
+            img_path = imgs_dir / img_filename
+            thumb_path = thumbnails_dir / thumb_filename
+
+            # Si ya existen, no procesar de nuevo
+            if img_path.exists() and thumb_path.exists():
+                return {
+                    'url': f"../imgs/{img_filename}",
+                    'thumbnail_url': f"../thumbnails/{thumb_filename}",
+                    'source': image_info.get('source', 'processed'),
+                    'type': image_type
+                }
+
+            # Abrir imagen original
+            if original_url.startswith(('http://', 'https://')):
+                # URL remota
+                response = requests.get(original_url, timeout=10)
+                response.raise_for_status()
+                image = Image.open(BytesIO(response.content))
+            elif Path(original_url).exists():
+                # Archivo local
+                image = Image.open(original_url)
+            else:
+                logger.warning(f"Imagen no accesible: {original_url}")
+                return image_info
+
+            # Convertir a RGB si es necesario
+            if image.mode != 'RGB':
+                image = image.convert('RGB')
+
+            # Guardar imagen original redimensionada (máx 800x800)
+            img_copy = image.copy()
+            img_copy.thumbnail((800, 800), Image.Resampling.LANCZOS)
+            img_copy.save(img_path, 'JPEG', quality=90, optimize=True)
+
+            # Crear thumbnail (300x300)
+            thumb_copy = image.copy()
+            thumb_copy.thumbnail((300, 300), Image.Resampling.LANCZOS)
+            thumb_copy.save(thumb_path, 'JPEG', quality=85, optimize=True)
+
+            logger.info(f"Imágenes procesadas: {img_filename} y {thumb_filename}")
+
+            return {
+                'url': f"../imgs/{img_filename}",
+                'thumbnail_url': f"../thumbnails/{thumb_filename}",
+                'source': image_info.get('source', 'processed'),
+                'type': image_type
+            }
+
+        except Exception as e:
+            logger.error(f"Error procesando imagen {base_name}: {e}")
+            return image_info
 
     def _update_albums_index(self, album_info: Dict[str, Any], filename: str, docs_dir: Path):
         """
@@ -200,7 +336,9 @@ class AlbumWebGenerator:
             'artist': album_info.get('artist', 'Artista Desconocido'),
             'year': album_info.get('year'),
             'genre': album_info.get('genre', []),
-            'cover_image': self._get_cover_image_path(album_info),
+            'cover_image': self._get_web_image_path(album_info, 'album_image'),
+            'thumbnail_image': self._get_web_image_path(album_info, 'album_image', thumbnail=True),
+            'artist_image': self._get_web_image_path(album_info, 'artist_image'),
             'tracks_count': len(album_info.get('tracks', [])),
             'has_lyrics': bool(album_info.get('lyrics')),
             'date_added': str(datetime.now().isoformat())
@@ -227,19 +365,27 @@ class AlbumWebGenerator:
         with open(albums_data_file, 'w', encoding='utf-8') as f:
             json.dump(albums_data, f, indent=2, ensure_ascii=False)
 
-    def _get_cover_image_path(self, album_info: Dict[str, Any]) -> Optional[str]:
+    def _get_web_image_path(self, album_info: Dict[str, Any], image_key: str, thumbnail: bool = False) -> Optional[str]:
         """
-        Obtener ruta de la imagen de portada
+        Obtener ruta web de imagen procesada
 
         Args:
             album_info: Información del álbum
+            image_key: Clave de la imagen ('album_image' o 'artist_image')
+            thumbnail: Si obtener la ruta del thumbnail
 
         Returns:
-            Ruta a la imagen de portada o None
+            Ruta web de la imagen o None
         """
-        album_image = album_info.get('album_image')
-        if album_image and 'url' in album_image:
-            return album_image['url']
+        image_info = album_info.get(image_key)
+        if not image_info:
+            return None
+
+        if thumbnail and 'thumbnail_url' in image_info:
+            return image_info['thumbnail_url']
+        elif 'url' in image_info:
+            return image_info['url']
+
         return None
 
     def _get_safe_filename(self, name: str) -> str:
@@ -270,7 +416,7 @@ def main():
     parser = argparse.ArgumentParser(description="Generador de Páginas Web de Álbumes")
     parser.add_argument("folder", help="Carpeta que contiene los archivos del álbum")
     parser.add_argument("-o", "--output",
-                       help="Carpeta de salida (por defecto: ./docs/albums)")
+                       help="Carpeta de salida (por defecto: ./web_output)")
     parser.add_argument("--db", help="Ruta a la base de datos SQLite")
     parser.add_argument("-v", "--verbose", action="store_true",
                        help="Modo verboso")

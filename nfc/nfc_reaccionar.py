@@ -1,97 +1,72 @@
-#!/usr/bin/env python3
-# nfc_launcher.py
-
-from smartcard.System import readers
-from smartcard.util import toHexString
+import json
 import subprocess
 import time
 import os
+from smartcard.System import readers
+from smartcard.util import toHexString
 
-# Configuración de tarjetas y comandos
-TARJETAS_CONFIG = {
-    "B2BA9C1E": {  
-        "nombre": "Tarjeta 1",
-        "comando": ["touch", "/home/pi/sonidos.txt"]
-    },
-    "YYYYYYYY": {  # Reemplaza con el UID real de tu tarjeta 2
-        "nombre": "Tarjeta 2", 
-        "comando": ["python3", "/home/pi/script1.py"],  # Ejemplo: ejecutar script
-    },
-    "ZZZZZZZZ": {  # Reemplaza con el UID real de tu tarjeta 3
-        "nombre": "Tarjeta 3",
-        "comando": ["systemctl", "restart", "nginx"],  # Ejemplo: reiniciar servicio
-    }
-}
+CONFIG_FILE = "nfc_playlist.json"
 
-def ejecutar_comando(comando):
-    """Ejecuta un comando del sistema"""
+def leer_id_logico(connection):
+    """Intenta leer el ID personalizado del bloque 4"""
     try:
-        resultado = subprocess.run(comando, capture_output=True, text=True)
-        if resultado.returncode == 0:
-            print(f"Comando ejecutado exitosamente: {' '.join(comando)}")
-            if resultado.stdout:
-                print(f"Salida: {resultado.stdout}")
-        else:
-            print(f"Error ejecutando comando: {resultado.stderr}")
-    except Exception as e:
-        print(f"Error: {e}")
+        # Comando para leer 16 bytes del bloque 4
+        command = [0xFF, 0xB0, 0x00, 0x04, 0x10]
+        data, sw1, sw2 = connection.transmit(command)
+        if sw1 == 0x90:
+            # Convertimos a hex y tomamos los primeros 8 caracteres (lo que grabamos)
+            return toHexString(data).replace(' ', '')[:8].upper()
+    except:
+        return None
+    return None
 
-def monitorear_tarjetas():
-    """Monitorea continuamente las tarjetas NFC"""
+def obtener_uid_fisico(connection):
+    """Obtiene el UID de fábrica"""
     try:
-        # Obtener lista de lectores
-        reader_list = readers()
-        if not reader_list:
-            print("No se encontraron lectores NFC")
-            return
-        
-        reader = reader_list[0]
-        print(f"Usando lector: {reader}")
-        print("Esperando tarjetas... (Ctrl+C para salir)")
-        
-        ultima_tarjeta = None
-        tiempo_ultima_lectura = 0
-        
-        while True:
-            try:
-                # Conectar a la tarjeta
-                connection = reader.createConnection()
-                connection.connect()
-                
-                # Obtener UID
-                command = [0xFF, 0xCA, 0x00, 0x00, 0x00]
-                data, sw1, sw2 = connection.transmit(command)
-                
-                if sw1 == 0x90 and sw2 == 0x00:
-                    uid = toHexString(data).replace(' ', '')
-                    tiempo_actual = time.time()
-                    
-                    # Evitar ejecuciones múltiples de la misma tarjeta
-                    if (uid != ultima_tarjeta or 
-                        tiempo_actual - tiempo_ultima_lectura > 3):
-                        
-                        print(f"Tarjeta detectada: {uid}")
-                        
-                        if uid in TARJETAS_CONFIG:
-                            config = TARJETAS_CONFIG[uid]
-                            print(f"Ejecutando comando para {config['nombre']}")
-                            ejecutar_comando(config['comando'])
-                        else:
-                            print("Tarjeta no configurada")
-                        
-                        ultima_tarjeta = uid
-                        tiempo_ultima_lectura = tiempo_actual
-                
-                connection.disconnect()
-                time.sleep(0.5)
-                
-            except Exception as e:
-                # La tarjeta se retiró o no hay tarjeta
-                time.sleep(0.5)
-                continue
-                
-    except KeyboardInterrupt:
-        print("\nSaliendo...")
+        command = [0xFF, 0xCA, 0x00, 0x00, 0x00]
+        data, sw1, sw2 = connection.transmit(command)
+        if sw1 == 0x90:
+            return toHexString(data).replace(' ', '')
+    except:
+        return None
+
+def monitorear():
+    reader_list = readers()
+    if not reader_list: return
+    reader = reader_list[0]
+    ultima_tarjeta, tiempo_ultima = None, 0
+
+    print(">>> Lector Activo (Busca IDs físicos y lógicos) <<<")
+
+    while True:
+        try:
+            connection = reader.createConnection()
+            connection.connect()
+
+            # 1. Intentar leer el ID lógico (el que pudimos haber grabado nosotros)
+            id_detectado = leer_id_logico(connection)
+
+            # 2. Si no hay ID lógico o no está en el JSON, intentar con el UID físico
+            with open(CONFIG_FILE, 'r') as f:
+                config = json.load(f)
+
+            if id_detectado not in config:
+                id_detectado = obtener_uid_fisico(connection)
+
+            ahora = time.time()
+            if id_detectado and (id_detectado != ultima_tarjeta or ahora - tiempo_ultima > 4):
+                if id_detectado in config:
+                    print(f"Tarjeta reconocida: {config[id_detectado]['nombre']}")
+                    subprocess.Popen(" ".join(config[id_detectado]['comando']), shell=True)
+                else:
+                    print(f"ID desconocido: {id_detectado}")
+
+                ultima_tarjeta, tiempo_ultima = id_detectado, ahora
+
+            connection.disconnect()
+        except:
+            pass
+        time.sleep(0.5)
 
 if __name__ == "__main__":
-    monitorear_tarjetas()
+    monitorear()

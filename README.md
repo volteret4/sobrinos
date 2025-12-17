@@ -72,8 +72,11 @@ TARJETAS_CONFIG = {
 > `curl -G -S -s --data-urlencode "cmd=REST_API_COMMAND" http://moode/command/`
 
 > Para reproducir un disco especifico usaremos
+>
 > `curl -G -S -s --data-urlencode "cmd=play_item NAS/ruta/al/directorio" http://moode_url/command/`
+>
 > Ej:
+>
 > `curl -G -S -s --data-urlencode "cmd=play_item NAS/moode/moode/M/Mogwai/" http://moode_url/command/`
 
 #### (Opcional) Crea imágenes para esas tarjetas

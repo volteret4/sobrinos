@@ -17,7 +17,7 @@ Con este proyecto podrás:
 
 ### Instalación
 
-Instala los paquetes necesarios
+Esto instala los paquetes necesarios para el uso del chip ACR122U en distro basada en debian
 
 ```bash
 sudo apt-get install libacsccid1 pcscd pcsc-tools
@@ -26,7 +26,7 @@ sudo apt-get install libacsccid1 pcscd pcsc-tools
 Activa el demonio que leerá las tarjetas
 
 ```bash
-sudo systemctl enable — now pcscd.socket
+sudo systemctl enable pcscd.socket
 ```
 
 Añade estas lineas para desactivar los módulos nfc del kernel:
@@ -38,9 +38,9 @@ install nfc /bin/false
 install pn533 /bin/false
 ```
 
-### Uso
-
 Ya te debería permitir leer tarjetas usando `pcsc_scan`.
+
+### Uso
 
 #### Identificar tarjetas
 
@@ -81,9 +81,14 @@ _CARA B_
 Con este script podrás crear una web que recopilará información sobre el disco en cuestión.
 
 ```bash
-python album_web_generator.py /ruta/al/album # creará una html y actualizará el json para el index.html
-python album_web_generator.py /ruta/al/album --db ruta/a/db.sqlite # buscará en la base de datos
-python album_web_generator.py /ruta/al/album --db ruta/a/db.sqlite -o ruta/salida # ya no se guardarán en docs/albums los htmls creados.
+# creará una html y actualizará el json para el index.html:
+python album_web_generator.py /ruta/al/album
+
+# buscará en la base de datos:
+python album_web_generator.py /ruta/al/album --db ruta/a/db.sqlite
+
+# ya no se guardarán en docs/albums los htmls creados.
+python album_web_generator.py /ruta/al/album --db ruta/a/db.sqlite -o ruta/salida
 ```
 
 Al usar el creador de portadas usa el flag `--custom-url https://tu_web.loquesea` para poder crear este QR en vez de wikipedia y genius.

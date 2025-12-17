@@ -270,7 +270,7 @@ def main():
     parser = argparse.ArgumentParser(description="Generador de Páginas Web de Álbumes")
     parser.add_argument("folder", help="Carpeta que contiene los archivos del álbum")
     parser.add_argument("-o", "--output",
-                       help="Carpeta de salida (por defecto: ./web_output)")
+                       help="Carpeta de salida (por defecto: ./docs/albums)")
     parser.add_argument("--db", help="Ruta a la base de datos SQLite")
     parser.add_argument("-v", "--verbose", action="store_true",
                        help="Modo verboso")

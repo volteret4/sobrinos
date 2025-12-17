@@ -67,7 +67,8 @@ TARJETAS_CONFIG = {
 }
 ```
 
-> En esta ocasión usaremos moodeaudio para reproducir música. Podemos usar el siguiente commando `curl` para manejar moodeaudio:
+> En esta ocasión usaremos moodeaudio para reproducir música. Podemos usar el siguiente commando `curl` para manejarlo:
+>
 > `curl -G -S -s --data-urlencode "cmd=REST_API_COMMAND" http://moode/command/`
 
 > Para reproducir un disco especifico usaremos

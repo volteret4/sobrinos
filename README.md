@@ -50,6 +50,23 @@ Con el siguiente [script](https://github.com/volteret4/sobrinos/blob/main/nfc/nf
 
 Una vez detectadas, podemos editar el siguiente [script](https://github.com/volteret4/sobrinos/blob/main/nfc/nfc_reaccionar.py) modificando la parte en que se identifica cada tarjeta con la función a realizar.
 
+```json
+TARJETAS_CONFIG = {
+    "B2BA9C1E": { # Reemplaza con el UID real de tu tarjeta 1
+        "nombre": "Tarjeta 1",
+        "comando": ["touch", "/home/pi/sonidos.txt"]  # Ejemplo: Crear archivo test
+    },
+    "YYYYYYYY": {  # Reemplaza con el UID real de tu tarjeta 2
+        "nombre": "Tarjeta 2",
+        "comando": ["curl", "/home/pi/script1.py"],  # Ejemplo: ejecutar script
+    },
+    "ZZZZZZZZ": {  # Reemplaza con el UID real de tu tarjeta 3
+        "nombre": "Tarjeta 3",
+        "comando": ["systemctl", "restart", "nginx"],  # Ejemplo: reiniciar servicio
+    }
+}
+```
+
 > En esta ocasión usaremos moodeaudio para reproducir música. Podemos usar el siguiente commando `curl` para manejar moodeaudio:
 > `curl -G -S -s --data-urlencode "cmd=REST_API_COMMAND" http://moode/command/`
 

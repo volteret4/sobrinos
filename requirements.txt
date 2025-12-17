@@ -1,0 +1,25 @@
+# Requisitos del Album Web Generator
+
+# Procesamiento de metadatos de música
+mutagen>=1.46.0
+
+# Manejo de imágenes
+Pillow>=9.0.0
+
+# APIs de música
+musicbrainzngs>=0.7.1
+requests>=2.25.1
+
+# Utilidades
+urllib3>=1.26.0
+
+# Generación de códigos QR
+qrcode[pil]>=7.0.0
+
+# Opcionales para mejores capacidades
+
+spotipy>=2.20.0  # Para API de Spotify (requiere credenciales)
+lyricsgenius>=3.0.0  # Para API de Genius (requiere token)
+
+numpy>=1.20.0        # Para procesamiento de imágenes más rápido
+lxml>=4.6.0          # Para parsing XML más rápido en musicbrainzngs

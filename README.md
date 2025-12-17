@@ -15,7 +15,7 @@ Con este proyecto podrás:
 - Dispositivo capaz de ejecutar algúna distro de linux. (raspberry pi 4 con sistema operativo raspbian es el usado porque estaba en casa, probablemente overkill)
 - Python y varios paquetes incluidos en `requirements.txt`.
 
-### Instalación
+## Instalación
 
 Esto instala los paquetes necesarios para el uso del chip ACR122U en distro basada en debian
 
@@ -40,7 +40,7 @@ install pn533 /bin/false
 
 Ya te debería permitir leer tarjetas usando `pcsc_scan`.
 
-### Uso
+## Uso
 
 #### Identificar tarjetas
 

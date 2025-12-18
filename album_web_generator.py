@@ -1,30 +1,19 @@
 #!/usr/bin/env python3
 """
-Generador de Páginas Web de Álbumes
-Crea páginas web personalizadas para cada álbum con información completa.
-
-Características:
-- Extrae información de archivos de música
-- Busca imágenes de álbum y artista
-- Obtiene letras de canciones
-- Busca enlaces relevantes en bases de datos y APIs
-- Genera HTML, CSS y JavaScript personalizados
-- Soporte para base de datos SQLite opcional
+Generador de Páginas Web de Álbumes - VERSIÓN SIMPLE PERO FUNCIONAL
 """
 
 import os
 import sys
 import argparse
-import sqlite3
 import tkinter as tk
+from tkinter import scrolledtext, simpledialog, messagebox
 from datetime import datetime
-from tkinter import simpledialog, messagebox
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple, Any
 import logging
 import json
 import urllib.parse
-from datetime import datetime
 
 # Importar módulos del proyecto
 from modules.database_manager import DatabaseManager
@@ -40,15 +29,9 @@ logger = logging.getLogger(__name__)
 
 
 class AlbumWebGenerator:
-    """Clase principal para generar páginas web de álbumes"""
+    """Generador simple pero funcional"""
 
     def __init__(self, db_path: Optional[str] = None):
-        """
-        Inicializar el generador
-
-        Args:
-            db_path: Ruta a la base de datos SQLite (opcional)
-        """
         self.db_manager = DatabaseManager(db_path) if db_path else None
         self.image_finder = ImageFinder()
         self.lyrics_finder = LyricsFinder()
@@ -57,107 +40,229 @@ class AlbumWebGenerator:
         self.album_processor = AlbumProcessor()
 
     def get_user_comment(self, album_title: str, artist: str) -> str:
-        """
-        Mostrar popup para obtener comentario del usuario
+        """Diálogo simple pero funcional para comentarios"""
 
-        Args:
-            album_title: Título del álbum
-            artist: Nombre del artista
-
-        Returns:
-            Comentario del usuario
-        """
         try:
-            # Crear ventana principal oculta
+            logger.info("Abriendo diálogo de comentario...")
+
+            # Crear ventana root
             root = tk.Tk()
-            root.withdraw()
+            root.title("Comentario del Álbum")
+            root.geometry("800x600")
 
-            # Obtener comentario mediante diálogo
-            comment = simpledialog.askstring(
-                "Comentario del Álbum",
-                f"Escribe un comentario para:\n{artist} - {album_title}",
-                parent=root
+            # Centrar ventana
+            root.update_idletasks()
+            x = (root.winfo_screenwidth() - root.winfo_width()) // 2
+            y = (root.winfo_screenheight() - root.winfo_height()) // 2
+            root.geometry(f"+{x}+{y}")
+
+            result = ""
+
+            def save_comment():
+                nonlocal result
+                result = text_widget.get("1.0", tk.END).strip()
+                logger.info(f"Comentario guardado ({len(result)} caracteres)")
+                root.quit()
+
+            def cancel_comment():
+                nonlocal result
+                result = ""
+                logger.info("Comentario cancelado")
+                root.quit()
+
+            # Frame principal
+            main_frame = tk.Frame(root, padx=20, pady=20)
+            main_frame.pack(fill=tk.BOTH, expand=True)
+
+            # Título
+            title_text = f"Comentario para: {artist} - {album_title}"
+            title_label = tk.Label(
+                main_frame,
+                text=title_text,
+                font=("Arial", 12, "bold"),
+                wraplength=700
             )
+            title_label.pack(pady=(0, 10), anchor="w")
 
-            root.destroy()
-            return comment or ""
+            # Instrucciones
+            instructions = tk.Label(
+                main_frame,
+                text="Puedes usar Markdown: **negrita**, *cursiva*, `código`, ## título, - lista, [enlace](url)",
+                font=("Arial", 9),
+                fg="gray",
+                wraplength=700
+            )
+            instructions.pack(pady=(0, 10), anchor="w")
+
+            # Área de texto
+            text_frame = tk.Frame(main_frame)
+            text_frame.pack(fill=tk.BOTH, expand=True, pady=(0, 15))
+
+            text_widget = scrolledtext.ScrolledText(
+                text_frame,
+                wrap=tk.WORD,
+                width=80,
+                height=25,
+                font=("Consolas", 11)
+            )
+            text_widget.pack(fill=tk.BOTH, expand=True)
+
+            # Frame de botones
+            button_frame = tk.Frame(main_frame)
+            button_frame.pack(fill=tk.X)
+
+            # Botones
+            cancel_btn = tk.Button(
+                button_frame,
+                text="Cancelar",
+                command=cancel_comment,
+                padx=20,
+                pady=8
+            )
+            cancel_btn.pack(side=tk.RIGHT, padx=(5, 0))
+
+            save_btn = tk.Button(
+                button_frame,
+                text="Guardar",
+                command=save_comment,
+                padx=20,
+                pady=8,
+                bg="#4CAF50",
+                fg="white",
+                font=("Arial", 9, "bold")
+            )
+            save_btn.pack(side=tk.RIGHT)
+
+            # Atajos de teclado
+            root.bind('<Control-Return>', lambda e: save_comment())
+            root.bind('<Escape>', lambda e: cancel_comment())
+
+            # Configurar cierre de ventana
+            root.protocol("WM_DELETE_WINDOW", cancel_comment)
+
+            # Foco en el área de texto
+            text_widget.focus_set()
+
+            logger.info("Diálogo abierto correctamente")
+
+            # Ejecutar bucle principal
+            root.mainloop()
+
+            # Limpiar
+            try:
+                root.destroy()
+            except:
+                pass
+
+            return result
 
         except Exception as e:
-            logger.warning(f"Error obteniendo comentario: {e}")
-            return ""
+            logger.error(f"Error en diálogo: {e}")
+
+            # Fallback ultra simple
+            try:
+                root = tk.Tk()
+                root.withdraw()
+                comment = simpledialog.askstring(
+                    "Comentario",
+                    f"Comentario para {artist} - {album_title}:",
+                    parent=root
+                )
+                root.destroy()
+                return comment or ""
+            except Exception as e2:
+                logger.error(f"Error en fallback: {e2}")
+                return ""
 
     def process_album(self, folder_path: str, output_dir: str) -> Dict[str, Any]:
-        """
-        Procesar un álbum completo y generar su página web
+        """Procesar álbum"""
+        logger.info(f"🎵 Procesando álbum: {folder_path}")
 
-        Args:
-            folder_path: Ruta a la carpeta con archivos del álbum
-            output_dir: Directorio de salida
-
-        Returns:
-            Información completa del álbum procesado
-        """
-        logger.info(f"Procesando álbum en: {folder_path}")
-
-        # 1. Extraer información básica del álbum
+        # 1. Extraer información básica
         album_info = self.album_processor.extract_album_info(folder_path)
-        logger.info(f"Álbum encontrado: {album_info['artist']} - {album_info['title']}")
+        logger.info(f"📀 Álbum encontrado: {album_info['artist']} - {album_info['title']}")
 
-        # 2. Agregar referencia a database_manager para pestañas dinámicas
-        album_info['_db_manager'] = self.db_manager
+        # 2. Obtener comentario del usuario
+        logger.info("💬 Solicitando comentario del usuario...")
+        try:
+            album_info['user_comment'] = self.get_user_comment(
+                album_info['title'],
+                album_info['artist']
+            )
 
-        # 3. Obtener comentario del usuario
-        album_info['user_comment'] = self.get_user_comment(
-            album_info['title'],
-            album_info['artist']
-        )
+            if album_info['user_comment']:
+                logger.info(f"✅ Comentario recibido ({len(album_info['user_comment'])} caracteres)")
+            else:
+                logger.info("ℹ️ Sin comentario")
+        except Exception as e:
+            logger.error(f"Error obteniendo comentario: {e}")
+            album_info['user_comment'] = ""
 
-        # 4. Buscar imágenes
-        logger.info("Buscando imágenes...")
-        album_info['album_image'] = self.image_finder.find_album_image(
-            album_info['artist'],
-            album_info['title']
-        )
-        album_info['artist_image'] = self.image_finder.find_artist_image(
-            album_info['artist'],
-            self.db_manager
-        )
+        # 3. Buscar imágenes
+        logger.info("🖼️ Buscando imágenes...")
+        try:
+            album_info['album_image'] = self.image_finder.find_album_image(
+                album_info['artist'],
+                album_info['title']
+            )
 
-        # 5. Buscar letras de canciones
-        logger.info("Buscando letras de canciones...")
-        album_info['lyrics'] = self.lyrics_finder.find_lyrics(
-            album_info['artist'],
-            album_info['tracks']
-        )
+            if album_info['album_image']:
+                logger.info(f"✅ Imagen de álbum: {album_info['album_image'].get('source', 'desconocido')}")
+            else:
+                logger.info("ℹ️ Sin imagen de álbum")
 
-        # 6. Buscar enlaces relevantes
-        logger.info("Buscando enlaces...")
-        album_info['links'] = self.link_finder.find_links(
-            album_info['artist'],
-            album_info['title'],
-            album_info.get('mbid')
-        )
+            album_info['artist_image'] = self.image_finder.find_artist_image(
+                album_info['artist'],
+                self.db_manager
+            )
 
-        # 7. Generar archivos web
-        logger.info("Generando archivos web...")
+            if album_info['artist_image']:
+                logger.info(f"✅ Imagen de artista: {album_info['artist_image'].get('source', 'desconocido')}")
+            else:
+                logger.info("ℹ️ Sin imagen de artista")
+        except Exception as e:
+            logger.error(f"Error buscando imágenes: {e}")
 
-        # Remover _db_manager antes de generar archivos (no es serializable)
-        if '_db_manager' in album_info:
-            del album_info['_db_manager']
+        # 4. Buscar letras
+        logger.info("🎤 Buscando letras...")
+        try:
+            album_info['lyrics'] = self.lyrics_finder.find_lyrics(
+                album_info['artist'],
+                album_info['tracks']
+            )
 
-        self._generate_web_files(album_info, output_dir)
+            lyrics_found = len([l for l in album_info['lyrics'].values() if l.get('lyrics')]) if album_info['lyrics'] else 0
+            logger.info(f"🎵 Letras encontradas: {lyrics_found}/{len(album_info.get('tracks', []))}")
+        except Exception as e:
+            logger.error(f"Error buscando letras: {e}")
+
+        # 5. Buscar enlaces
+        logger.info("🔗 Buscando enlaces...")
+        try:
+            album_info['links'] = self.link_finder.find_links(
+                album_info['artist'],
+                album_info['title'],
+                album_info.get('mbid')
+            )
+
+            total_links = sum(len(category) for category in album_info.get('links', {}).values())
+            logger.info(f"🌐 Enlaces encontrados: {total_links}")
+        except Exception as e:
+            logger.error(f"Error buscando enlaces: {e}")
+
+        # 6. Generar archivos web
+        logger.info("📄 Generando HTML...")
+        try:
+            self._generate_web_files(album_info, output_dir)
+            logger.info("🎉 ¡Álbum procesado exitosamente!")
+        except Exception as e:
+            logger.error(f"Error generando archivos: {e}")
+            raise
 
         return album_info
 
     def _generate_web_files(self, album_info: Dict[str, Any], output_dir: str):
-        """
-        Generar archivos HTML en la estructura docs/albums
-
-        Args:
-            album_info: Información completa del álbum
-            output_dir: Directorio base de salida
-        """
-        # Crear estructura docs/albums
+        """Generar archivos web"""
         docs_dir = Path(output_dir) / "docs"
         albums_dir = docs_dir / "albums"
         imgs_dir = docs_dir / "imgs"
@@ -167,54 +272,135 @@ class AlbumWebGenerator:
         imgs_dir.mkdir(parents=True, exist_ok=True)
         thumbnails_dir.mkdir(parents=True, exist_ok=True)
 
-        # Generar nombre seguro para archivos
         safe_name = self._get_safe_filename(
             f"{album_info['artist']} - {album_info['title']}"
         )
 
-        # Copiar y procesar imágenes
+        # Procesar imágenes
         album_info = self._process_album_images(album_info, safe_name, imgs_dir, thumbnails_dir)
 
-        # Solo generar HTML con pestañas dinámicas
+        # Generar HTML usando el generador original
         html_content = self.html_generator.generate_html_with_dynamic_tabs(
             album_info, self.db_manager
         )
+
+        # Aplicar modificaciones CSS para las mejoras
+        html_content = self._apply_css_fixes(html_content, album_info)
+
         html_path = albums_dir / f"{safe_name}.html"
         with open(html_path, 'w', encoding='utf-8') as f:
             f.write(html_content)
 
-        # Guardar información completa como JSON
+        # Guardar JSON
         json_path = albums_dir / f"{safe_name}_data.json"
         with open(json_path, 'w', encoding='utf-8') as f:
             json.dump(album_info, f, indent=2, ensure_ascii=False)
 
-        # Actualizar índice de álbumes
+        # Actualizar índice
         self._update_albums_index(album_info, safe_name, docs_dir)
 
-        logger.info(f"Archivo generado en: {albums_dir}")
-        logger.info(f"  - HTML: {html_path.name}")
-        logger.info(f"  - Data: {json_path.name}")
+        logger.info(f"📁 Archivos generados: {html_path.name}, {json_path.name}")
+
+    def _apply_css_fixes(self, html_content: str, album_info: Dict[str, Any]) -> str:
+        """Aplicar correcciones CSS al HTML generado"""
+
+        # CSS mejorado para móvil y sin placeholders
+        css_fixes = """
+        /* Mejoras responsive */
+        @media (max-width: 768px) {
+            .album-header {
+                padding: 1.5rem 0 !important;
+                margin-bottom: 1.5rem !important;
+            }
+
+            .album-hero {
+                gap: 1rem !important;
+            }
+
+            .album-title {
+                font-size: 1.5rem !important;
+                margin-bottom: 0.25rem !important;
+            }
+
+            .artist-name {
+                font-size: 1.125rem !important;
+                margin-bottom: 1rem !important;
+            }
+
+            .album-cover img {
+                width: 120px !important;
+                height: 120px !important;
+            }
+
+            .artist-image img {
+                width: 80px !important;
+                height: 80px !important;
+            }
+
+            .album-details {
+                flex-direction: column !important;
+                align-items: flex-start !important;
+                gap: 0.25rem !important;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .album-header {
+                padding: 1rem 0 !important;
+            }
+
+            .album-title {
+                font-size: 1.25rem !important;
+            }
+
+            .artist-name {
+                font-size: 1rem !important;
+            }
+
+            .album-cover img {
+                width: 100px !important;
+                height: 100px !important;
+            }
+
+            .artist-image img {
+                width: 70px !important;
+                height: 70px !important;
+            }
+        }
+
+        /* Texto con mejor contraste */
+        .album-title,
+        .artist-name {
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8) !important;
+        }
+
+        .album-details .detail-item {
+            background: rgba(0, 0, 0, 0.4) !important;
+            backdrop-filter: blur(10px) !important;
+            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        }
+        """
+
+        # Insertar CSS antes del cierre de </head>
+        if "</head>" in html_content:
+            css_insert = f"\n    <style>\n{css_fixes}\n    </style>\n</head>"
+            html_content = html_content.replace("</head>", css_insert)
+
+        return html_content
 
     def _process_album_images(self, album_info: Dict[str, Any], safe_name: str,
                              imgs_dir: Path, thumbnails_dir: Path) -> Dict[str, Any]:
-        """
-        Procesar y copiar imágenes a la estructura web
-
-        Args:
-            album_info: Información del álbum
-            safe_name: Nombre seguro para archivos
-            imgs_dir: Directorio de imágenes
-            thumbnails_dir: Directorio de thumbnails
-
-        Returns:
-            album_info actualizado con rutas web de imágenes
-        """
+        """Procesar imágenes solo si existen"""
         try:
             from PIL import Image
-            import shutil
+            import requests
+            from io import BytesIO
 
-            # Procesar imagen del álbum
-            if album_info.get('album_image') and album_info['album_image'].get('url'):
+            # Solo procesar si las imágenes tienen URLs válidas
+            if (album_info.get('album_image') and
+                album_info['album_image'].get('url') and
+                album_info['album_image']['url'].strip()):
+
                 album_info['album_image'] = self._copy_and_process_image(
                     album_info['album_image'],
                     f"{safe_name}_album",
@@ -223,8 +409,10 @@ class AlbumWebGenerator:
                     'album'
                 )
 
-            # Procesar imagen del artista
-            if album_info.get('artist_image') and album_info['artist_image'].get('url'):
+            if (album_info.get('artist_image') and
+                album_info['artist_image'].get('url') and
+                album_info['artist_image']['url'].strip()):
+
                 album_info['artist_image'] = self._copy_and_process_image(
                     album_info['artist_image'],
                     f"{safe_name}_artist",
@@ -236,44 +424,28 @@ class AlbumWebGenerator:
             return album_info
 
         except ImportError:
-            logger.warning("Pillow no está instalado. Las imágenes no se procesarán.")
+            logger.warning("⚠️ Pillow no está instalado.")
             return album_info
         except Exception as e:
-            logger.error(f"Error procesando imágenes: {e}")
+            logger.error(f"❌ Error procesando imágenes: {e}")
             return album_info
 
     def _copy_and_process_image(self, image_info: Dict[str, Any], base_name: str,
                                imgs_dir: Path, thumbnails_dir: Path,
                                image_type: str) -> Dict[str, Any]:
-        """
-        Copiar imagen original y crear thumbnail
-
-        Args:
-            image_info: Información de la imagen original
-            base_name: Nombre base para los archivos
-            imgs_dir: Directorio de imágenes
-            thumbnails_dir: Directorio de thumbnails
-            image_type: Tipo de imagen ('album' o 'artist')
-
-        Returns:
-            Información actualizada de la imagen
-        """
+        """Copiar y procesar imagen"""
         try:
             from PIL import Image
-            import shutil
             import requests
             from io import BytesIO
 
             original_url = image_info['url']
-
-            # Rutas de destino
             img_filename = f"{base_name}.jpg"
             thumb_filename = f"{base_name}_thumb.jpg"
 
             img_path = imgs_dir / img_filename
             thumb_path = thumbnails_dir / thumb_filename
 
-            # Si ya existen, no procesar de nuevo
             if img_path.exists() and thumb_path.exists():
                 return {
                     'url': f"../imgs/{img_filename}",
@@ -282,34 +454,31 @@ class AlbumWebGenerator:
                     'type': image_type
                 }
 
-            # Abrir imagen original
+            # Abrir imagen
             if original_url.startswith(('http://', 'https://')):
-                # URL remota
                 response = requests.get(original_url, timeout=10)
                 response.raise_for_status()
                 image = Image.open(BytesIO(response.content))
             elif Path(original_url).exists():
-                # Archivo local
                 image = Image.open(original_url)
             else:
-                logger.warning(f"Imagen no accesible: {original_url}")
+                logger.warning(f"⚠️ Imagen no accesible: {original_url}")
                 return image_info
 
-            # Convertir a RGB si es necesario
             if image.mode != 'RGB':
                 image = image.convert('RGB')
 
-            # Guardar imagen original redimensionada (máx 800x800)
+            # Guardar imagen (800x800 máx)
             img_copy = image.copy()
             img_copy.thumbnail((800, 800), Image.Resampling.LANCZOS)
             img_copy.save(img_path, 'JPEG', quality=90, optimize=True)
 
-            # Crear thumbnail (300x300)
+            # Thumbnail (300x300)
             thumb_copy = image.copy()
             thumb_copy.thumbnail((300, 300), Image.Resampling.LANCZOS)
             thumb_copy.save(thumb_path, 'JPEG', quality=85, optimize=True)
 
-            logger.info(f"Imágenes procesadas: {img_filename} y {thumb_filename}")
+            logger.info(f"🖼️ Procesadas: {img_filename} y {thumb_filename}")
 
             return {
                 'url': f"../imgs/{img_filename}",
@@ -319,28 +488,19 @@ class AlbumWebGenerator:
             }
 
         except Exception as e:
-            logger.error(f"Error procesando imagen {base_name}: {e}")
+            logger.error(f"❌ Error procesando imagen {base_name}: {e}")
             return image_info
 
     def _update_albums_index(self, album_info: Dict[str, Any], filename: str, docs_dir: Path):
-        """
-        Actualizar el índice de álbumes con el nuevo álbum
-
-        Args:
-            album_info: Información del álbum
-            filename: Nombre del archivo HTML generado
-            docs_dir: Directorio docs
-        """
+        """Actualizar índice de álbumes"""
         albums_data_file = docs_dir / "albums-data.json"
 
-        # Cargar datos existentes o crear nueva lista
         if albums_data_file.exists():
             with open(albums_data_file, 'r', encoding='utf-8') as f:
                 albums_data = json.load(f)
         else:
             albums_data = []
 
-        # Crear entrada para el álbum
         album_entry = {
             'filename': f"{filename}.html",
             'title': album_info.get('title', 'Álbum Desconocido'),
@@ -349,13 +509,13 @@ class AlbumWebGenerator:
             'genre': album_info.get('genre', []),
             'cover_image': self._get_web_image_path(album_info, 'album_image'),
             'thumbnail_image': self._get_web_image_path(album_info, 'album_image', thumbnail=True),
-            'artist_image': self._get_web_image_path(album_info, 'artist_image'),
             'tracks_count': len(album_info.get('tracks', [])),
             'has_lyrics': bool(album_info.get('lyrics')),
+            'has_comment': bool(album_info.get('user_comment', '').strip()),
             'date_added': str(datetime.now().isoformat())
         }
 
-        # Verificar si el álbum ya existe (evitar duplicados)
+        # Verificar si existe
         existing_index = None
         for i, existing in enumerate(albums_data):
             if (existing.get('artist') == album_entry['artist'] and
@@ -364,61 +524,17 @@ class AlbumWebGenerator:
                 break
 
         if existing_index is not None:
-            # Actualizar álbum existente
             albums_data[existing_index] = album_entry
-            logger.info(f"Álbum actualizado en el índice: {album_entry['title']}")
         else:
-            # Agregar nuevo álbum
             albums_data.append(album_entry)
-            logger.info(f"Álbum agregado al índice: {album_entry['title']}")
 
-        # Guardar datos actualizados
         with open(albums_data_file, 'w', encoding='utf-8') as f:
             json.dump(albums_data, f, indent=2, ensure_ascii=False)
 
-        logger.info(f"albums-data.json actualizado: {len(albums_data)} álbumes totales")
+        logger.info(f"📊 Total álbumes: {len(albums_data)}")
 
     def _get_web_image_path(self, album_info: Dict[str, Any], image_key: str, thumbnail: bool = False) -> Optional[str]:
-        """
-        Obtener ruta web de imagen, convirtiendo rutas locales si es necesario
-
-        Args:
-            album_info: Información del álbum
-            image_key: Clave de la imagen ('album_image' o 'artist_image')
-            thumbnail: Si obtener la versión thumbnail
-
-        Returns:
-            Ruta web de la imagen o None si no existe
-        """
-        image_info = album_info.get(image_key)
-
-        if not image_info or not isinstance(image_info, dict):
-            return None
-
-        # Si ya es una URL web relativa, usarla
-        if thumbnail and 'thumbnail_url' in image_info:
-            return image_info['thumbnail_url']
-        elif not thumbnail and 'url' in image_info:
-            url = image_info['url']
-            # Verificar si es una ruta web válida
-            if url.startswith('../imgs/') or url.startswith('../thumbnails/'):
-                return url
-
-        # Si es una ruta del sistema de archivos, no incluirla en el índice
-        return None
-
-    def _get_web_image_path(self, album_info: Dict[str, Any], image_key: str, thumbnail: bool = False) -> Optional[str]:
-        """
-        Obtener ruta web de imagen procesada
-
-        Args:
-            album_info: Información del álbum
-            image_key: Clave de la imagen ('album_image' o 'artist_image')
-            thumbnail: Si obtener la ruta del thumbnail
-
-        Returns:
-            Ruta web de la imagen o None
-        """
+        """Obtener ruta web de imagen"""
         image_info = album_info.get(image_key)
         if not image_info:
             return None
@@ -431,20 +547,10 @@ class AlbumWebGenerator:
         return None
 
     def _get_safe_filename(self, name: str) -> str:
-        """
-        Generar nombre de archivo seguro
-
-        Args:
-            name: Nombre original
-
-        Returns:
-            Nombre seguro para usar como filename
-        """
-        # Reemplazar caracteres problemáticos
+        """Nombre seguro para archivos"""
         safe_chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_. "
         safe_name = "".join(c if c in safe_chars else "_" for c in name)
 
-        # Limpiar espacios múltiples y guiones
         while "  " in safe_name:
             safe_name = safe_name.replace("  ", " ")
         while "__" in safe_name:
@@ -455,39 +561,35 @@ class AlbumWebGenerator:
 
 def main():
     """Función principal"""
+    print("🎵 Album Web Generator - VERSIÓN SIMPLE")
+    print("=" * 50)
+
     parser = argparse.ArgumentParser(description="Generador de Páginas Web de Álbumes")
     parser.add_argument("folder", help="Carpeta que contiene los archivos del álbum")
-    parser.add_argument("-o", "--output",
-                       help="Carpeta de salida (por defecto: ./web_output)")
+    parser.add_argument("-o", "--output", help="Carpeta de salida (por defecto: ./web_output)")
     parser.add_argument("--db", help="Ruta a la base de datos SQLite")
-    parser.add_argument("-v", "--verbose", action="store_true",
-                       help="Modo verboso")
+    parser.add_argument("-v", "--verbose", action="store_true", help="Modo verboso")
 
     args = parser.parse_args()
 
     if args.verbose:
         logging.getLogger().setLevel(logging.DEBUG)
 
-    # Verificar carpeta de entrada
     folder_path = Path(args.folder)
     if not folder_path.exists():
-        logger.error(f"La carpeta {folder_path} no existe")
+        logger.error(f"❌ La carpeta {folder_path} no existe")
         sys.exit(1)
 
-    # Establecer carpeta de salida
     output_dir = args.output or "."
 
     try:
-        # Crear generador
         generator = AlbumWebGenerator(args.db)
-
-        # Procesar álbum
         album_info = generator.process_album(str(folder_path), output_dir)
 
-        logger.info("¡Página web generada exitosamente!")
+        print("\n🎉 ¡GENERACIÓN COMPLETADA!")
 
     except Exception as e:
-        logger.error(f"Error procesando álbum: {e}")
+        logger.error(f"❌ Error procesando álbum: {e}")
         if args.verbose:
             import traceback
             traceback.print_exc()

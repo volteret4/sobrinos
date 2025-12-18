@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Chemical Brothers - For That Beautiful Feeling</title>
+    <meta name="description" content="Información completa del álbum For That Beautiful Feeling de The Chemical Brothers">
+
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Colores optimizados extraídos de la portada -->
+    <style>
+        :root {
+            --color-primary: #906bb2;
+            --color-secondary: #cc8ea0;
+            --color-accent: #99924c;
+        }
+
+        /* Header con colores optimizados */
+        .album-header {
+            background: linear-gradient(135deg, #906bb2, #cc8ea0);
+            color: #ffffff !important;
+        }
+
+        .album-title,
+        .artist-name {
+            color: #ffffff !important;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8) !important;
+        }
+
+        .album-details .detail-item {
+            background: rgba(0, 0, 0, 0.4) !important;
+            color: #ffffff !important;
+            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+            backdrop-filter: blur(10px) !important;
+        }
+
+        .album-details .detail-item strong {
+            color: #ffffff !important;
+        }
+
+        /* Responsive mejorado */
+        @media (max-width: 768px) {
+            .album-header {
+                padding: 1.5rem 0 !important;
+                margin-bottom: 1.5rem !important;
+            }
+
+            .album-hero {
+                gap: 1rem !important;
+            }
+
+            .album-title {
+                font-size: 1.5rem !important;
+                margin-bottom: 0.25rem !important;
+            }
+
+            .artist-name {
+                font-size: 1.125rem !important;
+                margin-bottom: 1rem !important;
+            }
+
+            .album-cover img {
+                width: 120px !important;
+                height: 120px !important;
+            }
+
+            .artist-image img {
+                width: 80px !important;
+                height: 80px !important;
+            }
+
+            .album-details {
+                flex-direction: column !important;
+                align-items: flex-start !important;
+                gap: 0.25rem !important;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .album-header {
+                padding: 1rem 0 !important;
+            }
+
+            .album-title {
+                font-size: 1.25rem !important;
+            }
+
+            .artist-name {
+                font-size: 1rem !important;
+            }
+
+            .album-cover img {
+                width: 100px !important;
+                height: 100px !important;
+            }
+
+            .artist-image img {
+                width: 70px !important;
+                height: 70px !important;
+            }
+        }
+
+        /* Layout sin imágenes */
+        .album-hero.no-images {
+            grid-template-columns: 1fr !important;
+            text-align: center !important;
+        }
+
+        .album-hero.no-images .album-info {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+    </style>
+
+    <script>
+        window.albumData = {
+  "title": "For That Beautiful Feeling",
+  "artist": "The Chemical Brothers",
+  "year": null,
+  "genre": [],
+  "total_tracks": 11,
+  "tracks_count": 11,
+  "has_lyrics": true,
+  "has_comment": false,
+  "links_count": 14
+};
+    </script>
+
+    <style>
+
+        /* Mejoras responsive */
+        @media (max-width: 768px) {
+            .album-header {
+                padding: 1.5rem 0 !important;
+                margin-bottom: 1.5rem !important;
+            }
+
+            .album-hero {
+                gap: 1rem !important;
+            }
+
+            .album-title {
+                font-size: 1.5rem !important;
+                margin-bottom: 0.25rem !important;
+            }
+
+            .artist-name {
+                font-size: 1.125rem !important;
+                margin-bottom: 1rem !important;
+            }
+
+            .album-cover img {
+                width: 120px !important;
+                height: 120px !important;
+            }
+
+            .artist-image img {
+                width: 80px !important;
+                height: 80px !important;
+            }
+
+            .album-details {
+                flex-direction: column !important;
+                align-items: flex-start !important;
+                gap: 0.25rem !important;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .album-header {
+                padding: 1rem 0 !important;
+            }
+
+            .album-title {
+                font-size: 1.25rem !important;
+            }
+
+            .artist-name {
+                font-size: 1rem !important;
+            }
+
+            .album-cover img {
+                width: 100px !important;
+                height: 100px !important;
+            }
+
+            .artist-image img {
+                width: 70px !important;
+                height: 70px !important;
+            }
+        }
+
+        /* Texto con mejor contraste */
+        .album-title,
+        .artist-name {
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8) !important;
+        }
+
+        .album-details .detail-item {
+            background: rgba(0, 0, 0, 0.4) !important;
+            backdrop-filter: blur(10px) !important;
+            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        }
+        
+    </style>
+</head>
+<body>
+    <header class="site-header">
+        <div class="container">
+            <nav class="site-nav">
+                <div class="site-logo">
+                    <a href="../index.html" style="color: inherit; text-decoration: none;">← Volver a la Colección</a>
+                </div>
+                <div class="nav-links">
+                    <a href="../index.html" class="nav-link">🏠 Inicio</a>
+                    <button class="theme-toggle" aria-label="Cambiar tema">🌙</button>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    
+    <header class="album-header">
+        <div class="container">
+            <div class="album-hero has-images">
+                <div class="album-images">
+                <div class="artist-image">
+                    <img src="/home/huan/gits/pollo/music-fuzzy/.content/artistas_img/The_Chemical_Brothers/image_1.jpg"
+                         alt="Foto de The Chemical Brothers">
+                </div></div>
+                <div class="album-info">
+                    <h1 class="album-title">For That Beautiful Feeling</h1>
+                    <h2 class="artist-name">The Chemical Brothers</h2>
+                    <div class='album-details'><span class='detail-item'><strong>Sello:</strong> EMI Records</span><span class='detail-item'><strong>Pistas:</strong> 11</span></div>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <main class="album-content">
+        <div class="container">
+            <nav class="content-nav">
+                <ul class="nav-tabs">
+                    <li><a href="#comment" class="nav-tab active" data-tab="comment">Comentario</a></li>
+                    <li><a href="#lyrics" class="nav-tab" data-tab="lyrics">Letras</a></li>
+                    <li><a href="#links" class="nav-tab" data-tab="links">Enlaces</a></li>
+                    <li><a href="#tracks" class="nav-tab" data-tab="tracks">Pistas</a></li>
+                </ul>
+            </nav>
+
+            <div class="tab-content">
+                
+                <section id="comment" class="tab-panel active">
+                    <h3>Comentario Personal</h3>
+                    <div class="comment-content">
+                        <em>No hay comentario disponible.</em>
+                    </div>
+                </section>
+                
+                <section id="lyrics" class="tab-panel">
+                    <h3>Letras de las Canciones</h3>
+                    <div class="lyrics-content">
+                        
+                    <div class="lyrics-song" onclick="toggleLyrics(this)">
+                        <h4 class="song-title">Intro <small>(Fuente: lyrics.ovh)</small></h4>
+                        <div class="lyrics-text">
+                            <p>For that beautiful feeling<br>For that beautiful feeling<br>For that beautiful feeling<br>For that beautiful feeling<br>For that beautiful feeling<br>For that beautiful feeling</p><p>For that beautiful feeling</p><p>For that beautiful feeling</p><p>For that beautiful feeling</p><p>For that beautiful feel-</p>
+                        </div>
+                    </div>
+                    <div class="lyrics-song" onclick="toggleLyrics(this)">
+                        <h4 class="song-title">Goodbye <small>(Fuente: lyrics.ovh)</small></h4>
+                        <div class="lyrics-text">
+                            <p>&#x27;Til we meet again<br>Oh my love<br>&#x27;Til we meet again<br>Oh my love<br>Oh my love<br>Oh my love</p><p></p><p>&#x27;Til we meet again</p><p>Oh my love</p><p>&#x27;Til we meet again</p><p>Oh my love</p><p>Oh my love</p><p>Oh my love</p><p></p><p>Seems so long, my love</p><p>When you say goodbye, I cry</p><p></p><p>&#x27;Til we meet again</p><p>Oh my love</p><p>&#x27;Til we meet again</p><p>Oh my love</p><p>Oh my love</p><p>Oh my love</p><p></p><p>Seems so long, my love</p><p>When you say goodbye, I cry</p><p>Seems so long, my love</p><p>When you say goodbye, I cry</p><p></p><p>Seems so long, my love</p><p>When you say goodbye, I cry</p>
+                        </div>
+                    </div>
+                    <div class="lyrics-song" onclick="toggleLyrics(this)">
+                        <h4 class="song-title">The Weight <small>(Fuente: lyrics.ovh)</small></h4>
+                        <div class="lyrics-text">
+                            <p>Who&#x27;s gonna take the weight?<br>Who&#x27;s gonna take the weight?<br>Who&#x27;s gonna take the weight?<br>Who&#x27;s gonna take the blame?<br>Watch it now</p><p>Who&#x27;s gonna take the weight?</p><p>Who&#x27;s gonna take the blame?</p><p>Watch it now</p><p>Who&#x27;s gonna take the weight?</p><p>Who&#x27;s gonna take the blame?</p><p>Watch it now</p><p>Who&#x27;s gonna take the weight?</p><p>Who&#x27;s gonna take the blame?</p><p>Watch it now</p><p></p><p>Down, out on the streets, yeah</p><p></p><p>Who&#x27;s gonna take the weight?</p><p>Who&#x27;s gonna take the blame?</p><p>Watch it now</p><p>Who&#x27;s gonna take the weight?</p><p>Who&#x27;s gonna take the blame?</p><p>Watch it now</p><p></p><p>Who&#x27;s gonna take the weight?</p><p>Who&#x27;s gonna take the blame?</p><p>Watch it now</p><p>Who&#x27;s gonna take the weight?</p><p>Who&#x27;s gonna take the blame?</p><p>Watch it now</p><p></p><p>Who&#x27;s gonna take the weight?</p><p>Who&#x27;s gonna take the blame?</p><p>Who&#x27;s gonna take the weight?</p><p>Who&#x27;s gonna take the blame?</p>
+                        </div>
+                    </div>
+                    <div class="lyrics-song" onclick="toggleLyrics(this)">
+                        <h4 class="song-title">The Darkness That You Fear (Harvest mix) <small>(Fuente: lyrics.ovh)</small></h4>
+                        <div class="lyrics-text">
+                            <p>Let your heart see the colors all around you<br>Let your heart see the colors all around you<br>Let your heart see the colors all around you<br>Let your heart see the colors all around you<br>And the darkness that you fear will disappear</p><p>I&#x27;ll be loving you, yes I will</p><p>And the darkness that you fear will disappear</p><p>I&#x27;ll be loving you</p><p>And the darkness that you fear will disappear</p><p>I&#x27;ll be loving you, yes I will</p><p>And the darkness that you fear will disappear</p><p>I&#x27;ll be loving you</p><p>And the darkness that you fear will disappear</p><p>I&#x27;ll be loving you, yes I will</p><p></p><p>Let your heart see thе colors</p><p>Let your heart see the colors</p><p></p><p>I&#x27;ll bе loving you, yes I will</p><p>I&#x27;ll be loving you</p><p>I&#x27;ll be loving you, yes I will</p><p>I&#x27;ll be loving you</p><p></p><p>Let your heart see the colors</p><p>Let your heart see the colors</p><p>Let your heart see the colors</p><p>And the darkness that you fear will disappear</p><p>And the darkness that you fear will disappear</p><p>And the darkness that you fear will disappear</p><p>And the darkness that you fear will disappear</p><p></p><p>I&#x27;ll be loving you, yes I will</p><p>I&#x27;ll be loving you</p><p>I&#x27;ll be loving you, yes I will</p><p>I&#x27;ll be loving you</p><p></p><p>Let your heart see the colors</p><p></p><p>Let your heart see the colors</p><p>Let your heart see the colors</p>
+                        </div>
+                    </div>
+                    <div class="lyrics-song" onclick="toggleLyrics(this)">
+                        <h4 class="song-title">Feels Like I Am Dreaming <small>(Fuente: lyrics.ovh)</small></h4>
+                        <div class="lyrics-text">
+                            <p>Fade it up, fade it up, fade it up, fade it up<br>Fade it up, fade it up, fade it up, fade it up<br>And I feel like I am dreaming<br>And I feel like I am dreaming<br>And I feel like I am dreaming</p><p>And I feel like I am dreaming</p><p></p><p>And I feel like I am dreaming</p><p>And I feel like I am dreaming</p><p>And I feel like I am dreaming</p><p>And I feel like I am dreaming</p><p></p><p>And I feel like I am dreaming</p><p>And I feel like I am dreaming</p><p>And I feel like I am dreaming</p><p>And I feel like I am dreaming</p>
+                        </div>
+                    </div>
+                    </div>
+                    <script>
+                    function toggleLyrics(songElement) {
+                        songElement.classList.toggle('expanded');
+                    }
+                    </script>
+                </section>
+                
+                <section id="links" class="tab-panel">
+                    <h3>Enlaces Relacionados</h3>
+                    <div class="links-content">
+                        <h4>Streaming</h4><ul><li><a href="https://open.spotify.com/artist/1GhPHrq36VKCY3ucVaZCfo" target="_blank">The Chemical Brothers en Spotify</a></li><li><a href="https://open.spotify.com/album/5cLkbqs0qo552lJvXH1JTH" target="_blank">For That Beautiful Feeling en Spotify</a></li><li><a href="https://www.youtube.com/channel/the-chemical-brothers" target="_blank">The Chemical Brothers en Youtube</a></li><li><a href="https://open.spotify.com/search/The%20Chemical%20Brothers%20For%20That%20Beautiful%20Feeling" target="_blank">The Chemical Brothers en Spotify</a></li></ul><h4>Info</h4><ul><li><a href="https://musicbrainz.org/artist/1946a82a-f927-40c2-8235-38d64f50d043" target="_blank">The Chemical Brothers en Musicbrainz</a></li><li><a href="https://www.discogs.com/artist/2290" target="_blank">The Chemical Brothers en Discogs</a></li><li><a href="https://es.wikipedia.org/wiki/The_Chemical_Brothers" target="_blank">The Chemical Brothers en Wikipedia</a></li><li><a href="https://musicbrainz.org/release/dcb82e26-5b7e-461f-931a-dff894f5a17d" target="_blank">For That Beautiful Feeling en Musicbrainz</a></li><li><a href="https://www.discogs.com/release/28203682" target="_blank">For That Beautiful Feeling en Discogs</a></li><li><a href="https://www.last.fm/music/The+Chemical+Brothers/For+That+Beautiful+Feeling" target="_blank">For That Beautiful Feeling en Lastfm</a></li><li><a href="https://www.last.fm/music/The%20Chemical%20Brothers" target="_blank">The Chemical Brothers en Lastfm</a></li><li><a href="https://musicbrainz.org/search?query=The%20Chemical%20Brothers&amp;type=artist" target="_blank">The Chemical Brothers en Musicbrainz</a></li><li><a href="https://genius.com/artists/the-chemical-brothers" target="_blank">The Chemical Brothers en Genius</a></li></ul><h4>Other</h4><ul><li><a href="https://rateyourmusic.com/artist/the-chemical-brothers" target="_blank">The Chemical Brothers en Rateyourmusic</a></li></ul>
+                    </div>
+                </section>
+                
+                <section id="tracks" class="tab-panel">
+                    <h3>Lista de Pistas</h3>
+                    <div class="tracks-content">
+                        <table class="tracks-table">
+                            <thead>
+                                <tr><th>#</th><th>Título</th><th>Duración</th></tr>
+                            </thead>
+                            <tbody>
+            <tr class="track-row">
+                <td class="track-number"></td>
+                <td class="track-title">Intro</td>
+                <td class="track-duration">1:09</td>
+            </tr>
+            <tr class="track-row">
+                <td class="track-number"></td>
+                <td class="track-title">Live Again</td>
+                <td class="track-duration">5:09</td>
+            </tr>
+            <tr class="track-row">
+                <td class="track-number"></td>
+                <td class="track-title">No Reason</td>
+                <td class="track-duration">4:52</td>
+            </tr>
+            <tr class="track-row">
+                <td class="track-number"></td>
+                <td class="track-title">Goodbye</td>
+                <td class="track-duration">5:49</td>
+            </tr>
+            <tr class="track-row">
+                <td class="track-number"></td>
+                <td class="track-title">Fountains</td>
+                <td class="track-duration">3:45</td>
+            </tr>
+            <tr class="track-row">
+                <td class="track-number"></td>
+                <td class="track-title">Magic Wand</td>
+                <td class="track-duration">2:27</td>
+            </tr>
+            <tr class="track-row">
+                <td class="track-number"></td>
+                <td class="track-title">The Weight</td>
+                <td class="track-duration">3:44</td>
+            </tr>
+            <tr class="track-row">
+                <td class="track-number"></td>
+                <td class="track-title">Skipping Like a Stone</td>
+                <td class="track-duration">4:43</td>
+            </tr>
+            <tr class="track-row">
+                <td class="track-number"></td>
+                <td class="track-title">The Darkness That You Fear (Harvest mix)</td>
+                <td class="track-duration">4:09</td>
+            </tr>
+            <tr class="track-row">
+                <td class="track-number"></td>
+                <td class="track-title">Feels Like I Am Dreaming</td>
+                <td class="track-duration">6:57</td>
+            </tr>
+            <tr class="track-row">
+                <td class="track-number"></td>
+                <td class="track-title">For That Beautiful Feeling</td>
+                <td class="track-duration">4:14</td>
+            </tr></tbody>
+                        </table>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+    
+    <footer class="album-footer">
+        <div class="container">
+            <p>Generado con Album Web Generator</p>
+        </div>
+    </footer>
+
+    <script src="../script.js"></script>
+</body>
+</html>

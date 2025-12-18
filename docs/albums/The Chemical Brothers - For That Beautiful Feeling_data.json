@@ -1,0 +1,267 @@
+{
+  "title": "For That Beautiful Feeling",
+  "artist": "The Chemical Brothers",
+  "album_artist": "The Chemical Brothers",
+  "date": "2023-09-08",
+  "year": null,
+  "genre": [],
+  "label": "EMI Records",
+  "mbid": "1946a82a-f927-40c2-8235-38d64f50d043",
+  "mbid_album": "c3eb52e3-7f3e-43bb-9fa2-55c0abb50b57",
+  "total_tracks": 11,
+  "total_discs": 1,
+  "tracks": [
+    {
+      "filename": "01 - Intro.flac",
+      "title": "Intro",
+      "artist": "The Chemical Brothers",
+      "track_number": 0,
+      "disc_number": 1,
+      "duration": 69.61333333333333,
+      "mbid": "f9bd4489-f29e-45cd-98cf-69211effd028"
+    },
+    {
+      "filename": "02 - Live Again.flac",
+      "title": "Live Again",
+      "artist": "The Chemical Brothers feat. Halo Maud",
+      "track_number": 0,
+      "disc_number": 1,
+      "duration": 309.81333333333333,
+      "mbid": "9cbaac1f-38ef-48df-afd2-70f95f0a7615"
+    },
+    {
+      "filename": "03 - No Reason.flac",
+      "title": "No Reason",
+      "artist": "The Chemical Brothers",
+      "track_number": 0,
+      "disc_number": 1,
+      "duration": 292.49333333333334,
+      "mbid": "f08647f0-1b01-4176-8916-6a7d27966d8c"
+    },
+    {
+      "filename": "04 - Goodbye.flac",
+      "title": "Goodbye",
+      "artist": "The Chemical Brothers",
+      "track_number": 0,
+      "disc_number": 1,
+      "duration": 349.64,
+      "mbid": "234ed36a-b526-4503-b285-816edd373d64"
+    },
+    {
+      "filename": "05 - Fountains.flac",
+      "title": "Fountains",
+      "artist": "The Chemical Brothers",
+      "track_number": 0,
+      "disc_number": 1,
+      "duration": 225.33333333333334,
+      "mbid": "9763972b-484f-4ad8-b838-045e10f404f4"
+    },
+    {
+      "filename": "06 - Magic Wand.flac",
+      "title": "Magic Wand",
+      "artist": "The Chemical Brothers",
+      "track_number": 0,
+      "disc_number": 1,
+      "duration": 147.57333333333332,
+      "mbid": "05436b03-54d7-4ef6-a44c-86830d515e1a"
+    },
+    {
+      "filename": "07 - The Weight.flac",
+      "title": "The Weight",
+      "artist": "The Chemical Brothers",
+      "track_number": 0,
+      "disc_number": 1,
+      "duration": 224.16,
+      "mbid": "9fbf62ae-28a3-4f72-ab04-a3417471a240"
+    },
+    {
+      "filename": "08 - Skipping Like A Stone.flac",
+      "title": "Skipping Like a Stone",
+      "artist": "The Chemical Brothers feat. Beck",
+      "track_number": 0,
+      "disc_number": 1,
+      "duration": 283.0933333333333,
+      "mbid": "ff894c23-f522-4268-a172-aa5ea9908371"
+    },
+    {
+      "filename": "09 - The Darkness That You Fear (Harvest Mix).flac",
+      "title": "The Darkness That You Fear (Harvest mix)",
+      "artist": "The Chemical Brothers",
+      "track_number": 0,
+      "disc_number": 1,
+      "duration": 249.57333333333332,
+      "mbid": "c75e3a97-bdf1-4077-aa6b-0f3453c70797"
+    },
+    {
+      "filename": "10 - Feels Like I Am Dreaming.flac",
+      "title": "Feels Like I Am Dreaming",
+      "artist": "The Chemical Brothers",
+      "track_number": 0,
+      "disc_number": 1,
+      "duration": 417.68,
+      "mbid": "12f0aca3-4e3b-4552-9adf-b97190e580aa"
+    },
+    {
+      "filename": "11 - For That Beautiful Feeling.flac",
+      "title": "For That Beautiful Feeling",
+      "artist": "The Chemical Brothers feat. Halo Maud",
+      "track_number": 0,
+      "disc_number": 1,
+      "duration": 254.97333333333333,
+      "mbid": "e4c1214c-671a-4c74-a0ec-e21678e5162c"
+    }
+  ],
+  "local_cover": null,
+  "user_comment": "",
+  "album_image": null,
+  "artist_image": {
+    "url": "/home/huan/gits/pollo/music-fuzzy/.content/artistas_img/The_Chemical_Brothers/image_1.jpg",
+    "source": "database"
+  },
+  "lyrics": {
+    "Intro": {
+      "lyrics": "For that beautiful feeling\r\nFor that beautiful feeling\r\nFor that beautiful feeling\r\nFor that beautiful feeling\r\nFor that beautiful feeling\r\nFor that beautiful feeling\n\nFor that beautiful feeling\n\nFor that beautiful feeling\n\nFor that beautiful feeling\n\nFor that beautiful feel-",
+      "source": "lyrics.ovh",
+      "url": null,
+      "confidence": "medium"
+    },
+    "Live Again": {
+      "lyrics": null,
+      "source": null,
+      "url": null,
+      "error": "No se encontraron letras"
+    },
+    "No Reason": {
+      "lyrics": null,
+      "source": null,
+      "url": null,
+      "error": "No se encontraron letras"
+    },
+    "Goodbye": {
+      "lyrics": "'Til we meet again\r\nOh my love\r\n'Til we meet again\r\nOh my love\r\nOh my love\r\nOh my love\n\n\n\n'Til we meet again\n\nOh my love\n\n'Til we meet again\n\nOh my love\n\nOh my love\n\nOh my love\n\n\n\nSeems so long, my love\n\nWhen you say goodbye, I cry\n\n\n\n'Til we meet again\n\nOh my love\n\n'Til we meet again\n\nOh my love\n\nOh my love\n\nOh my love\n\n\n\nSeems so long, my love\n\nWhen you say goodbye, I cry\n\nSeems so long, my love\n\nWhen you say goodbye, I cry\n\n\n\nSeems so long, my love\n\nWhen you say goodbye, I cry",
+      "source": "lyrics.ovh",
+      "url": null,
+      "confidence": "medium"
+    },
+    "Fountains": {
+      "lyrics": null,
+      "source": null,
+      "url": null,
+      "error": "No se encontraron letras"
+    },
+    "Magic Wand": {
+      "lyrics": null,
+      "source": null,
+      "url": null,
+      "error": "No se encontraron letras"
+    },
+    "The Weight": {
+      "lyrics": "Who's gonna take the weight?\r\nWho's gonna take the weight?\r\nWho's gonna take the weight?\r\nWho's gonna take the blame?\r\nWatch it now\n\nWho's gonna take the weight?\n\nWho's gonna take the blame?\n\nWatch it now\n\nWho's gonna take the weight?\n\nWho's gonna take the blame?\n\nWatch it now\n\nWho's gonna take the weight?\n\nWho's gonna take the blame?\n\nWatch it now\n\n\n\nDown, out on the streets, yeah\n\n\n\nWho's gonna take the weight?\n\nWho's gonna take the blame?\n\nWatch it now\n\nWho's gonna take the weight?\n\nWho's gonna take the blame?\n\nWatch it now\n\n\n\nWho's gonna take the weight?\n\nWho's gonna take the blame?\n\nWatch it now\n\nWho's gonna take the weight?\n\nWho's gonna take the blame?\n\nWatch it now\n\n\n\nWho's gonna take the weight?\n\nWho's gonna take the blame?\n\nWho's gonna take the weight?\n\nWho's gonna take the blame?",
+      "source": "lyrics.ovh",
+      "url": null,
+      "confidence": "medium"
+    },
+    "Skipping Like a Stone": {
+      "lyrics": null,
+      "source": null,
+      "url": null,
+      "error": "No se encontraron letras"
+    },
+    "The Darkness That You Fear (Harvest mix)": {
+      "lyrics": "Let your heart see the colors all around you\r\nLet your heart see the colors all around you\r\nLet your heart see the colors all around you\r\nLet your heart see the colors all around you\r\nAnd the darkness that you fear will disappear\n\nI'll be loving you, yes I will\n\nAnd the darkness that you fear will disappear\n\nI'll be loving you\n\nAnd the darkness that you fear will disappear\n\nI'll be loving you, yes I will\n\nAnd the darkness that you fear will disappear\n\nI'll be loving you\n\nAnd the darkness that you fear will disappear\n\nI'll be loving you, yes I will\n\n\n\nLet your heart see thе colors\n\nLet your heart see the colors\n\n\n\nI'll bе loving you, yes I will\n\nI'll be loving you\n\nI'll be loving you, yes I will\n\nI'll be loving you\n\n\n\nLet your heart see the colors\n\nLet your heart see the colors\n\nLet your heart see the colors\n\nAnd the darkness that you fear will disappear\n\nAnd the darkness that you fear will disappear\n\nAnd the darkness that you fear will disappear\n\nAnd the darkness that you fear will disappear\n\n\n\nI'll be loving you, yes I will\n\nI'll be loving you\n\nI'll be loving you, yes I will\n\nI'll be loving you\n\n\n\nLet your heart see the colors\n\n\n\nLet your heart see the colors\n\nLet your heart see the colors",
+      "source": "lyrics.ovh",
+      "url": null,
+      "confidence": "medium"
+    },
+    "Feels Like I Am Dreaming": {
+      "lyrics": "Fade it up, fade it up, fade it up, fade it up\r\nFade it up, fade it up, fade it up, fade it up\r\nAnd I feel like I am dreaming\r\nAnd I feel like I am dreaming\r\nAnd I feel like I am dreaming\n\nAnd I feel like I am dreaming\n\n\n\nAnd I feel like I am dreaming\n\nAnd I feel like I am dreaming\n\nAnd I feel like I am dreaming\n\nAnd I feel like I am dreaming\n\n\n\nAnd I feel like I am dreaming\n\nAnd I feel like I am dreaming\n\nAnd I feel like I am dreaming\n\nAnd I feel like I am dreaming",
+      "source": "lyrics.ovh",
+      "url": null,
+      "confidence": "medium"
+    },
+    "For That Beautiful Feeling": {
+      "lyrics": null,
+      "source": null,
+      "url": null,
+      "error": "No se encontraron letras"
+    }
+  },
+  "links": {
+    "streaming": {
+      "spotify": {
+        "url": "https://open.spotify.com/artist/1GhPHrq36VKCY3ucVaZCfo",
+        "title": "The Chemical Brothers en Spotify",
+        "source": "database"
+      },
+      "album_spotify": {
+        "url": "https://open.spotify.com/album/5cLkbqs0qo552lJvXH1JTH",
+        "title": "For That Beautiful Feeling en Spotify",
+        "source": "database"
+      },
+      "youtube_0": {
+        "url": "https://www.youtube.com/channel/the-chemical-brothers",
+        "title": "The Chemical Brothers en Youtube",
+        "source": "youtube"
+      },
+      "spotify_1": {
+        "url": "https://open.spotify.com/search/The%20Chemical%20Brothers%20For%20That%20Beautiful%20Feeling",
+        "title": "The Chemical Brothers en Spotify",
+        "source": "spotify"
+      }
+    },
+    "info": {
+      "musicbrainz": {
+        "url": "https://musicbrainz.org/artist/1946a82a-f927-40c2-8235-38d64f50d043",
+        "title": "The Chemical Brothers en Musicbrainz",
+        "source": "database"
+      },
+      "discogs": {
+        "url": "https://www.discogs.com/artist/2290",
+        "title": "The Chemical Brothers en Discogs",
+        "source": "database"
+      },
+      "wikipedia": {
+        "url": "https://es.wikipedia.org/wiki/The_Chemical_Brothers",
+        "title": "The Chemical Brothers en Wikipedia",
+        "source": "database"
+      },
+      "album_musicbrainz": {
+        "url": "https://musicbrainz.org/release/dcb82e26-5b7e-461f-931a-dff894f5a17d",
+        "title": "For That Beautiful Feeling en Musicbrainz",
+        "source": "database"
+      },
+      "album_discogs": {
+        "url": "https://www.discogs.com/release/28203682",
+        "title": "For That Beautiful Feeling en Discogs",
+        "source": "database"
+      },
+      "album_lastfm": {
+        "url": "https://www.last.fm/music/The+Chemical+Brothers/For+That+Beautiful+Feeling",
+        "title": "For That Beautiful Feeling en Lastfm",
+        "source": "database"
+      },
+      "lastfm_0": {
+        "url": "https://www.last.fm/music/The%20Chemical%20Brothers",
+        "title": "The Chemical Brothers en Lastfm",
+        "source": "lastfm"
+      },
+      "musicbrainz_1": {
+        "url": "https://musicbrainz.org/search?query=The%20Chemical%20Brothers&type=artist",
+        "title": "The Chemical Brothers en Musicbrainz",
+        "source": "musicbrainz"
+      },
+      "genius_2": {
+        "url": "https://genius.com/artists/the-chemical-brothers",
+        "title": "The Chemical Brothers en Genius",
+        "source": "genius"
+      }
+    },
+    "other": {
+      "rateyourmusic": {
+        "url": "https://rateyourmusic.com/artist/the-chemical-brothers",
+        "title": "The Chemical Brothers en Rateyourmusic",
+        "source": "database"
+      }
+    }
+  }
+}

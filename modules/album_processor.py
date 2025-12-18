@@ -27,7 +27,7 @@ class AlbumProcessor:
         # Extensiones de audio soportadas
         self.audio_extensions = {
             '.mp3', '.flac', '.m4a', '.aac', '.ogg', '.wma',
-            '.wav', '.opus', '.mp4', '.m4p', '.m4b'
+            '.wav', '.opus', '.mp4', '.m4p', '.m4b', '.dsf'
         }
 
     def extract_album_info(self, folder_path: str) -> Dict[str, Any]:

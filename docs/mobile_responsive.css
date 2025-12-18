@@ -1,0 +1,142 @@
+/* Mejoras responsivas para móvil - header más compacto */
+
+/* Reducir el header en móvil */
+@media (max-width: 768px) {
+    .album-header {
+        padding: var(--spacing-lg) 0 !important; /* Reducido de 2xl */
+        margin-bottom: var(--spacing-lg) !important; /* Reducido de 2xl */
+    }
+
+    .album-hero {
+        gap: var(--spacing-md) !important; /* Reducido de xl */
+    }
+
+    .album-title {
+        font-size: var(--font-size-2xl) !important; /* Reducido de 4xl */
+        margin-bottom: var(--spacing-xs) !important; /* Reducido */
+    }
+
+    .artist-name {
+        font-size: var(--font-size-lg) !important; /* Reducido de 2xl */
+        margin-bottom: var(--spacing-md) !important; /* Reducido de lg */
+    }
+
+    .album-images {
+        gap: var(--spacing-md) !important; /* Reducido de lg */
+    }
+
+    .album-cover img {
+        width: 120px !important; /* Reducido de 160px */
+        height: 120px !important;
+    }
+
+    .artist-image img {
+        width: 80px !important; /* Reducido de 100px */
+        height: 80px !important;
+    }
+
+    .album-details {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: var(--spacing-xs) !important;
+    }
+
+    .detail-item {
+        font-size: var(--font-size-xs) !important;
+        padding: var(--spacing-xs) !important;
+    }
+}
+
+/* Móviles muy pequeños */
+@media (max-width: 480px) {
+    .album-header {
+        padding: var(--spacing-md) 0 !important;
+        margin-bottom: var(--spacing-md) !important;
+    }
+
+    .album-hero {
+        gap: var(--spacing-sm) !important;
+    }
+
+    .album-title {
+        font-size: var(--font-size-xl) !important;
+        line-height: 1.2 !important;
+    }
+
+    .artist-name {
+        font-size: var(--font-size-base) !important;
+    }
+
+    .album-cover img {
+        width: 100px !important;
+        height: 100px !important;
+    }
+
+    .artist-image img {
+        width: 70px !important;
+        height: 70px !important;
+    }
+
+    /* Ocultar algunos detalles en móviles muy pequeños */
+    .album-details .detail-item:nth-child(n + 4) {
+        display: none !important;
+    }
+}
+
+/* Cuando no hay imágenes, centrar el contenido */
+.album-hero:not(:has(.album-images)) {
+    grid-template-columns: 1fr !important;
+    text-align: center !important;
+}
+
+.album-hero:not(:has(.album-images)) .album-info {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Estilos para cuando solo hay una imagen */
+.album-images:has(.album-cover):not(:has(.artist-image)) {
+    justify-content: center !important;
+}
+
+.album-images:has(.artist-image):not(:has(.album-cover)) {
+    justify-content: center !important;
+}
+
+/* Mejorar contraste de texto en headers dinámicos */
+.album-header .album-title,
+.album-header .artist-name {
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5) !important;
+}
+
+.album-header .detail-item {
+    background: rgba(0, 0, 0, 0.3) !important;
+    backdrop-filter: blur(10px) !important;
+}
+
+/* Evitar que las imágenes se distorsionen */
+.album-cover img,
+.artist-image img {
+    object-fit: cover !important;
+    object-position: center !important;
+}
+
+/* Mejor espaciado en el contenido principal para móvil */
+@media (max-width: 768px) {
+    .album-content {
+        margin-top: 0 !important;
+    }
+
+    .container {
+        padding: 0 var(--spacing-sm) !important;
+    }
+
+    .content-nav {
+        margin-bottom: var(--spacing-lg) !important;
+    }
+
+    .tab-panel h3 {
+        font-size: var(--font-size-lg) !important;
+        margin-bottom: var(--spacing-md) !important;
+    }
+}

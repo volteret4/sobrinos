@@ -28,5 +28,33 @@
     "tracks_count": 12,
     "has_lyrics": true,
     "date_added": "2025-12-18T15:49:07.612246"
+  },
+  {
+    "filename": "The Cure - Disintegration.html",
+    "title": "Disintegration",
+    "artist": "The Cure",
+    "year": null,
+    "genre": [
+      "New Wave"
+    ],
+    "cover_image": "https://coverartarchive.org/release/16d2ee98-4e41-4763-92ae-24519dfe8079/38966528906.jpg",
+    "thumbnail_image": "https://coverartarchive.org/release/16d2ee98-4e41-4763-92ae-24519dfe8079/38966528906.jpg",
+    "artist_image": "/home/huan/gits/pollo/music-fuzzy/.content/artistas_img/The_Cure/image_1.jpg",
+    "tracks_count": 10,
+    "has_lyrics": true,
+    "date_added": "2025-12-18T18:03:06.074543"
+  },
+  {
+    "filename": "The Chemical Brothers - For That Beautiful Feeling.html",
+    "title": "For That Beautiful Feeling",
+    "artist": "The Chemical Brothers",
+    "year": null,
+    "genre": [],
+    "cover_image": null,
+    "thumbnail_image": null,
+    "tracks_count": 11,
+    "has_lyrics": true,
+    "has_comment": false,
+    "date_added": "2025-12-18T18:36:44.765956"
   }
 ]

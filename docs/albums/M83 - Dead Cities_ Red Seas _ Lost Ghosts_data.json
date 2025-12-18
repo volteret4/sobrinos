@@ -1,0 +1,294 @@
+{
+  "title": "Dead Cities, Red Seas & Lost Ghosts",
+  "artist": "M83",
+  "album_artist": "M83",
+  "date": "2014-09",
+  "year": null,
+  "genre": [
+    "Electronic Rock"
+  ],
+  "label": "naïve",
+  "mbid": "6d7b7cd4-254b-4c25-83f6-dd20f98ceacd",
+  "mbid_album": "4194a771-5db4-47dc-8318-4d8dde354ca4",
+  "total_tracks": 12,
+  "total_discs": 1,
+  "tracks": [
+    {
+      "filename": "01 - Birds.flac",
+      "title": "Birds",
+      "artist": "M83",
+      "track_number": 0,
+      "disc_number": 1,
+      "duration": 53.946666666666665,
+      "mbid": "060b7674-6618-41a0-8266-a48d2c50e50c"
+    },
+    {
+      "filename": "02 - Unrecorded.flac",
+      "title": "Unrecorded",
+      "artist": "M83",
+      "track_number": 0,
+      "disc_number": 1,
+      "duration": 251.73333333333332,
+      "mbid": "2234145a-0960-4eae-9c85-280f9f82d992"
+    },
+    {
+      "filename": "03 - Run Into Flowers.flac",
+      "title": "Run Into Flowers",
+      "artist": "M83",
+      "track_number": 0,
+      "disc_number": 1,
+      "duration": 249.42666666666668,
+      "mbid": "ddfd893c-b877-43fb-a3fb-bcbd27ab2d5b"
+    },
+    {
+      "filename": "04 - In Church.flac",
+      "title": "In Church",
+      "artist": "M83",
+      "track_number": 0,
+      "disc_number": 1,
+      "duration": 238.18666666666667,
+      "mbid": "980feee3-32e1-48ca-9319-914f9d33d1a2"
+    },
+    {
+      "filename": "05 - Be Wild.flac",
+      "title": "Be Wild",
+      "artist": "M83",
+      "track_number": 0,
+      "disc_number": 1,
+      "duration": 199.37333333333333,
+      "mbid": "f90b6fe8-5cde-4899-a024-8a5690f57f1e"
+    },
+    {
+      "filename": "06 - America.flac",
+      "title": "America",
+      "artist": "M83",
+      "track_number": 0,
+      "disc_number": 1,
+      "duration": 186.14666666666668,
+      "mbid": "14b434c5-f22f-4a0b-92af-79fba85bc8e9"
+    },
+    {
+      "filename": "07 - On a White Lake, Near a Green Mountain.flac",
+      "title": "On a White Lake, Near a Green Mountain",
+      "artist": "M83",
+      "track_number": 0,
+      "disc_number": 1,
+      "duration": 283.81333333333333,
+      "mbid": "487a449e-d0ca-43dd-86f1-17d8d88418e9"
+    },
+    {
+      "filename": "08 - Noise.flac",
+      "title": "Noise",
+      "artist": "M83",
+      "track_number": 0,
+      "disc_number": 1,
+      "duration": 234.41333333333333,
+      "mbid": "41f1ec5d-8cd5-4b9a-b686-5b4782c6fa28"
+    },
+    {
+      "filename": "09 - Cyborg.flac",
+      "title": "Cyborg",
+      "artist": "M83",
+      "track_number": 0,
+      "disc_number": 1,
+      "duration": 228.13333333333333,
+      "mbid": "d986465f-7beb-4afe-bde9-490813a62c87"
+    },
+    {
+      "filename": "10 - 0078h.flac",
+      "title": "0078h",
+      "artist": "M83",
+      "track_number": 0,
+      "disc_number": 1,
+      "duration": 241.49333333333334,
+      "mbid": "d0a578cd-b1c9-426f-888a-e3b6eaf7b3ad"
+    },
+    {
+      "filename": "11 - Gone.flac",
+      "title": "Gone",
+      "artist": "M83",
+      "track_number": 0,
+      "disc_number": 1,
+      "duration": 367.48,
+      "mbid": "99f993b8-bc05-4b2d-b0bb-0f9299385256"
+    },
+    {
+      "filename": "12 - Beauties Can Die.flac",
+      "title": "Beauties Can Die",
+      "artist": "M83",
+      "track_number": 0,
+      "disc_number": 1,
+      "duration": 876.8533333333334,
+      "mbid": "42b2f5c5-4149-4667-b561-e97f9e4b9c60"
+    }
+  ],
+  "local_cover": null,
+  "user_comment": "gw",
+  "album_image": {
+    "url": "../imgs/M83 - Dead Cities_ Red Seas _ Lost Ghosts_album.jpg",
+    "thumbnail_url": "../thumbnails/M83 - Dead Cities_ Red Seas _ Lost Ghosts_album_thumb.jpg",
+    "source": "MusicBrainz Cover Art Archive",
+    "type": "album"
+  },
+  "artist_image": {
+    "url": "/home/huan/gits/pollo/music-fuzzy/.content/artistas_img/M83/image_1.jpg",
+    "source": "database"
+  },
+  "lyrics": {
+    "Birds": {
+      "lyrics": null,
+      "source": null,
+      "url": null,
+      "error": "No se encontraron letras"
+    },
+    "Unrecorded": {
+      "lyrics": null,
+      "source": null,
+      "url": null,
+      "error": "No se encontraron letras"
+    },
+    "Run Into Flowers": {
+      "lyrics": null,
+      "source": null,
+      "url": null,
+      "error": "No se encontraron letras"
+    },
+    "In Church": {
+      "lyrics": null,
+      "source": null,
+      "url": null,
+      "error": "No se encontraron letras"
+    },
+    "Be Wild": {
+      "lyrics": null,
+      "source": null,
+      "url": null,
+      "error": "No se encontraron letras"
+    },
+    "America": {
+      "lyrics": null,
+      "source": null,
+      "url": null,
+      "error": "No se encontraron letras"
+    },
+    "On a White Lake, Near a Green Mountain": {
+      "lyrics": null,
+      "source": null,
+      "url": null,
+      "error": "No se encontraron letras"
+    },
+    "Noise": {
+      "lyrics": null,
+      "source": null,
+      "url": null,
+      "error": "No se encontraron letras"
+    },
+    "Cyborg": {
+      "lyrics": null,
+      "source": null,
+      "url": null,
+      "error": "No se encontraron letras"
+    },
+    "0078h": {
+      "lyrics": null,
+      "source": null,
+      "url": null,
+      "error": "No se encontraron letras"
+    },
+    "Gone": {
+      "lyrics": null,
+      "source": null,
+      "url": null,
+      "error": "No se encontraron letras"
+    },
+    "Beauties Can Die": {
+      "lyrics": null,
+      "source": null,
+      "url": null,
+      "error": "No se encontraron letras"
+    }
+  },
+  "links": {
+    "streaming": {
+      "spotify": {
+        "url": "https://open.spotify.com/artist/63MQldklfxkjYDoUE4Tppz",
+        "title": "M83 en Spotify",
+        "source": "database"
+      },
+      "bandcamp": {
+        "url": "https://ilovem83.bandcamp.com",
+        "title": "M83 en Bandcamp",
+        "source": "database"
+      },
+      "youtube_0": {
+        "url": "https://www.youtube.com/channel/m83",
+        "title": "M83 en Youtube",
+        "source": "youtube"
+      },
+      "spotify_1": {
+        "url": "https://open.spotify.com/search/M83%20Dead%20Cities%2C%20Red%20Seas%20%26%20Lost%20Ghosts",
+        "title": "M83 en Spotify",
+        "source": "spotify"
+      }
+    },
+    "info": {
+      "musicbrainz": {
+        "url": "https://musicbrainz.org/artist/6d7b7cd4-254b-4c25-83f6-dd20f98ceacd",
+        "title": "M83 en Musicbrainz",
+        "source": "database"
+      },
+      "discogs": {
+        "url": "https://www.discogs.com/artist/33591",
+        "title": "M83 en Discogs",
+        "source": "database"
+      },
+      "wikipedia": {
+        "url": "https://es.wikipedia.org/wiki/M83_(banda)",
+        "title": "M83 en Wikipedia",
+        "source": "database"
+      },
+      "album_musicbrainz": {
+        "url": "https://musicbrainz.org/release/7b5db455-da86-4f7d-a302-3e995b0aec11",
+        "title": "Dead Cities, Red Seas & Lost Ghosts en Musicbrainz",
+        "source": "database"
+      },
+      "album_discogs": {
+        "url": "https://www.discogs.com/release/6024447",
+        "title": "Dead Cities, Red Seas & Lost Ghosts en Discogs",
+        "source": "database"
+      },
+      "album_lastfm": {
+        "url": "https://www.last.fm/music/M83/Dead+Cities,+Red+Seas+&+Lost+Ghosts",
+        "title": "Dead Cities, Red Seas & Lost Ghosts en Lastfm",
+        "source": "database"
+      },
+      "lastfm_0": {
+        "url": "https://www.last.fm/music/M83",
+        "title": "M83 en Lastfm",
+        "source": "lastfm"
+      },
+      "wikipedia_1": {
+        "url": "https://en.wikipedia.org/wiki/m83",
+        "title": "M83 en Wikipedia",
+        "source": "wikipedia"
+      },
+      "musicbrainz_2": {
+        "url": "https://musicbrainz.org/search?query=M83&type=artist",
+        "title": "M83 en Musicbrainz",
+        "source": "musicbrainz"
+      },
+      "genius_3": {
+        "url": "https://genius.com/artists/m83",
+        "title": "M83 en Genius",
+        "source": "genius"
+      }
+    },
+    "other": {
+      "rateyourmusic": {
+        "url": "https://rateyourmusic.com/artist/m83",
+        "title": "M83 en Rateyourmusic",
+        "source": "database"
+      }
+    }
+  }
+}

@@ -39,6 +39,31 @@ class DatabaseManager:
             logger.error(f"Error conectando a la base de datos: {e}")
             self.connection = None
 
+    def _normalize_for_search(self, text: str) -> str:
+        """Normalizar texto para búsquedas eliminando acentos y caracteres especiales"""
+        import unicodedata
+        import re
+
+        if not text:
+            return ""
+
+        # Convertir a minúsculas
+        text = text.lower()
+
+        # Eliminar acentos
+        text = unicodedata.normalize('NFD', text)
+        text = ''.join(c for c in text if unicodedata.category(c) != 'Mn')
+
+        # Reemplazar caracteres especiales
+        replacements = {"'": "", '"': "", "&": "and", "'": "", "'": ""}
+        for old, new in replacements.items():
+            text = text.replace(old, new)
+
+        # Limpiar espacios múltiples
+        text = re.sub(r'\s+', ' ', text).strip()
+
+        return text
+
     def find_artist_links(self, artist_name: str) -> Dict[str, str]:
         """
         Buscar enlaces de un artista en la base de datos

@@ -210,7 +210,7 @@ class HTMLGenerator:
                 </section>"""
 
     def _generate_lyrics_tab(self, album_info: Dict[str, Any]) -> str:
-        """Generar pestaña de letras"""
+        """Generar pestaña de letras colapsables"""
         lyrics_data = album_info.get('lyrics', {})
 
         if not lyrics_data:
@@ -239,10 +239,18 @@ class HTMLGenerator:
                     source = lyrics_info.get('source', '')
                     source_info = f" <small>(Fuente: {html.escape(source)})</small>" if source else ""
 
+                    # Generar ID único para la canción
+                    song_id = track_title.lower().replace(' ', '-').replace('(', '').replace(')', '')
+
                     lyrics_html.append(f"""
-                    <div class="lyrics-song">
-                        <h4 class="song-title">{html.escape(track_title)}{source_info}</h4>
-                        <div class="lyrics-text">
+                    <div class="lyrics-song" onclick="toggleLyrics(this)">
+                        <h4 class="song-title">
+                            {html.escape(track_title)}{source_info}
+                            <button class="copy-lyrics-btn" onclick="event.stopPropagation(); copyLyrics('{song_id}')" title="Copiar letra">
+                                📋
+                            </button>
+                        </h4>
+                        <div class="lyrics-text" id="{song_id}">
                             <p>{formatted_lyrics}</p>
                         </div>
                     </div>""")
@@ -251,7 +259,7 @@ class HTMLGenerator:
                     <div class="lyrics-song">
                         <h4 class="song-title">{html.escape(track_title)}</h4>
                         <div class="lyrics-text">
-                            <p><em>Letras no disponibles</em></p>
+                            <p><em>Letra no disponible</em></p>
                         </div>
                     </div>""")
 
@@ -261,7 +269,31 @@ class HTMLGenerator:
                     <div class="lyrics-content">
                         {''.join(lyrics_html)}
                     </div>
+                    <script>
+                    function toggleLyrics(songElement) {{
+                        songElement.classList.toggle('expanded');
+                    }}
+
+                    function copyLyrics(songId) {{
+                        const lyricsElement = document.getElementById(songId);
+                        if (lyricsElement) {{
+                            const text = lyricsElement.innerText || lyricsElement.textContent;
+                            navigator.clipboard.writeText(text).then(() => {{
+                                // Feedback visual temporal
+                                const btn = event.target;
+                                const originalText = btn.textContent;
+                                btn.textContent = '✓';
+                                setTimeout(() => {{
+                                    btn.textContent = originalText;
+                                }}, 1500);
+                            }}).catch(err => {{
+                                console.error('Error copiando texto: ', err);
+                            }});
+                        }}
+                    }}
+                    </script>
                 </section>"""
+
 
     def _generate_links_tab(self, album_info: Dict[str, Any]) -> str:
         """Generar pestaña de enlaces"""
@@ -472,3 +504,27 @@ class HTMLGenerator:
         }
 
         return safe_data
+
+    def generate_html_with_dynamic_tabs(self, album_info: Dict[str, Any],
+                                      db_manager=None,
+                                      css_filename: str = "../styles.css",
+                                      js_filename: str = "../script.js") -> str:
+        """
+        Generar página HTML completa con pestañas dinámicas
+
+        Args:
+            album_info: Información del álbum
+            db_manager: Manager de base de datos para pestañas dinámicas
+            css_filename: Nombre del archivo CSS
+            js_filename: Nombre del archivo JavaScript
+
+        Returns:
+            Código HTML completo
+        """
+        # Por ahora, generar HTML sin pestañas dinámicas para evitar errores
+        # TODO: Implementar pestañas dinámicas cuando se resuelvan dependencias
+
+        logger.info(f"Generando HTML para: {album_info['artist']} - {album_info['title']}")
+
+        # Usar el método original por ahora
+        return self.generate_html(album_info, css_filename, js_filename)

@@ -338,20 +338,21 @@ class LyricsEnhancer {
 
     const controls = document.createElement("div");
     controls.className = "lyrics-controls";
-    controls.style.cssText = `
-            margin-bottom: 20px;
-            text-align: center;
-            padding: 10px;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        `;
 
     controls.innerHTML = `
-            <span>Tamaño de texto: </span>
-            <button class="font-size-btn" data-size="small" style="margin: 0 5px; padding: 8px 12px; border: 2px solid var(--color-primary); background: white; color: var(--color-primary); border-radius: 4px; cursor: pointer; font-size: 14px;">A</button>
-            <button class="font-size-btn active" data-size="normal" style="margin: 0 5px; padding: 8px 12px; border: 2px solid var(--color-primary); background: var(--color-primary); color: white; border-radius: 4px; cursor: pointer; font-size: 16px;">A</button>
-            <button class="font-size-btn" data-size="large" style="margin: 0 5px; padding: 8px 12px; border: 2px solid var(--color-primary); background: white; color: var(--color-primary); border-radius: 4px; cursor: pointer; font-size: 18px;">A</button>
+            <div class="lyrics-font-controls">
+                <span class="font-controls-label">Tamaño:</span>
+                <button class="font-size-btn" data-size="xs">10px</button>
+                <button class="font-size-btn" data-size="sm">12px</button>
+                <button class="font-size-btn active" data-size="md">16px</button>
+                <button class="font-size-btn" data-size="lg">22px</button>
+                <button class="font-size-btn" data-size="xl">28px</button>
+                <button class="font-size-btn" data-size="xxl">36px</button>
+            </div>
+            <div class="lyrics-display-controls">
+                <button id="collapse-all-lyrics" class="control-btn">Contraer Todo</button>
+                <button id="expand-all-lyrics" class="control-btn">Expandir Todo</button>
+            </div>
         `;
 
     const h3 = lyricsPanel.querySelector("h3");
@@ -366,34 +367,67 @@ class LyricsEnhancer {
         this.changeFontSize(btn.dataset.size, buttons);
       });
     });
+
+    // Eventos para contraer/expandir
+    const collapseBtn = controls.querySelector("#collapse-all-lyrics");
+    const expandBtn = controls.querySelector("#expand-all-lyrics");
+
+    if (collapseBtn) {
+      collapseBtn.addEventListener("click", () => {
+        document.querySelectorAll(".lyrics-song.expanded").forEach((song) => {
+          this.toggleLyricsDisplay(song);
+        });
+      });
+    }
+
+    if (expandBtn) {
+      expandBtn.addEventListener("click", () => {
+        document
+          .querySelectorAll(".lyrics-song:not(.expanded)")
+          .forEach((song) => {
+            this.toggleLyricsDisplay(song);
+          });
+      });
+    }
   }
 
   changeFontSize(size, allButtons) {
     const lyricsTexts = document.querySelectorAll(".lyrics-text");
-    const sizeMap = {
-      small: "14px",
-      normal: "16px",
-      large: "18px",
-    };
 
     lyricsTexts.forEach((text) => {
-      text.style.fontSize = sizeMap[size];
+      // Remover todas las clases de tamaño
+      text.classList.remove(
+        "font-xs",
+        "font-sm",
+        "font-md",
+        "font-lg",
+        "font-xl",
+        "font-xxl",
+      );
+      // Agregar nueva clase
+      text.classList.add(`font-${size}`);
     });
 
     // Actualizar botones activos
-    allButtons.forEach((btn) => {
-      btn.classList.remove("active");
-      btn.style.background = "white";
-      btn.style.color = "var(--color-primary)";
-    });
-
+    allButtons.forEach((btn) => btn.classList.remove("active"));
     const activeBtn = Array.from(allButtons).find(
       (btn) => btn.dataset.size === size,
     );
     if (activeBtn) {
       activeBtn.classList.add("active");
-      activeBtn.style.background = "var(--color-primary)";
-      activeBtn.style.color = "white";
+    }
+  }
+
+  toggleLyricsDisplay(song) {
+    const lyricsText = song.querySelector(".lyrics-text");
+    if (!lyricsText) return;
+
+    song.classList.toggle("expanded");
+
+    if (song.classList.contains("expanded")) {
+      lyricsText.style.display = "block";
+    } else {
+      lyricsText.style.display = "none";
     }
   }
 }
@@ -627,156 +661,355 @@ class ThemeManager {
     toggleBtn.addEventListener("click", () => this.toggleTheme());
   }
 }
+
+// =============================
+// GESTOR DE ÁLBUMES MEJORADO
 // =============================
 
 class AlbumIndexManager {
   constructor() {
     this.albums = [];
-    this.init();
+    this.filteredAlbums = [];
+    this.currentFilter = "";
+    this.currentGenre = "";
   }
 
-  init() {
-    this.loadAlbumsData();
-    this.setupSearch();
+  async init() {
+    await this.loadAlbumsData();
+    this.setupEventListeners();
+    this.setupKeyboardNavigation();
   }
 
   async loadAlbumsData() {
     try {
-      // Intentar cargar datos desde el archivo JSON
+      console.log("📀 Cargando álbumes...");
+      this.showLoading(true);
+
+      // index.html está en docs/, buscar albums-data.json en la misma carpeta
       const response = await fetch("./albums-data.json");
-      if (response.ok) {
-        this.albums = await response.json();
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+      }
+
+      const data = await response.json();
+      console.log("✅ Datos cargados desde: ./albums-data.json");
+
+      if (Array.isArray(data)) {
+        this.albums = data.map((album) => this.normalizeAlbumData(album));
+        this.filteredAlbums = [...this.albums];
+
         this.renderAlbumsGrid();
         this.updateStats();
+        this.populateGenreFilter();
+        console.log(`🎵 ${this.albums.length} álbumes cargados`);
+      } else {
+        this.showNoAlbumsMessage();
       }
-    } catch (e) {
-      console.log("No se encontró archivo de datos de álbumes");
+    } catch (error) {
+      console.log("ℹ️ No se encontraron álbumes:", error.message);
+      this.showNoAlbumsMessage();
+    } finally {
+      this.showLoading(false);
     }
   }
 
-  updateStats() {
-    const albumsCount = this.albums.length;
-    const artistsCount = new Set(this.albums.map((album) => album.artist)).size;
-    const genres = this.albums
-      .flatMap((album) =>
-        Array.isArray(album.genre) ? album.genre : [album.genre],
-      )
-      .filter(Boolean);
-    const genresCount = new Set(genres).size;
+  normalizeAlbumData(album) {
+    let coverImage = album.cover_image;
+    let thumbnailImage = album.thumbnail_image;
+    let artistImage = album.artist_image;
 
-    // Actualizar contadores
-    document.getElementById("albums-count").textContent = albumsCount;
-    document.getElementById("artists-count").textContent = artistsCount;
-    document.getElementById("genres-count").textContent = genresCount;
-
-    // Actualizar estadísticas de géneros
-    const genreCounts = {};
-    genres.forEach((genre) => {
-      genreCounts[genre] = (genreCounts[genre] || 0) + 1;
-    });
-
-    const topGenres = Object.entries(genreCounts)
-      .sort(([, a], [, b]) => b - a)
-      .slice(0, 3);
-
-    const topGenresElement = document.getElementById("top-genres");
-    if (topGenresElement && topGenres.length > 0) {
-      topGenresElement.innerHTML = topGenres
-        .map(
-          ([genre, count]) => `
-                <div style="margin: 0.5rem 0; display: flex; justify-content: space-between; align-items: center;">
-                    <span>${genre}</span>
-                    <div style="background: var(--color-primary); color: white; padding: 0.25rem 0.5rem; border-radius: 12px; font-size: 0.75rem;">${count}</div>
-                </div>
-            `,
-        )
-        .join("");
+    // Convertir rutas relativas ../imgs/ a ./imgs/ (estamos en docs/)
+    if (coverImage && coverImage.startsWith("../")) {
+      coverImage = coverImage.replace("../", "./");
     }
-  }
+    if (thumbnailImage && thumbnailImage.startsWith("../")) {
+      thumbnailImage = thumbnailImage.replace("../", "./");
+    }
 
-  addAlbum(albumData) {
-    this.albums.push(albumData);
-    this.saveAlbumsData();
-    this.renderAlbumsGrid();
+    // Filtrar imagen de artista si es ruta del sistema
+    if (artistImage && artistImage.startsWith("/home/")) {
+      artistImage = null;
+    }
+
+    return {
+      ...album,
+      cover_image: coverImage,
+      thumbnail_image: thumbnailImage,
+      artist_image: artistImage,
+    };
   }
 
   renderAlbumsGrid() {
-    const grid = document.querySelector(".albums-grid");
+    const grid =
+      document.getElementById("albums-grid") ||
+      document.querySelector(".albums-grid");
     if (!grid) return;
 
-    grid.innerHTML = this.albums
-      .map((album) => {
+    if (this.filteredAlbums.length === 0) {
+      grid.innerHTML = `
+                <div style="grid-column: 1 / -1; text-align: center; padding: 3rem; background: var(--bg-secondary); border-radius: var(--border-radius-lg); border: 1px solid var(--border-color);">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">🔍</div>
+                    <h3>No se encontraron álbumes</h3>
+                    <p style="color: var(--text-muted);">Intenta cambiar los criterios de búsqueda</p>
+                </div>
+            `;
+      return;
+    }
+
+    grid.innerHTML = this.filteredAlbums
+      .map((album, index) => {
         const imageUrl =
           album.thumbnail_image ||
           album.cover_image ||
           this.getPlaceholderImage();
-        const fullImageUrl = album.cover_image || imageUrl;
+
+        // index.html está en docs/, los HTMLs están en docs/albums/
+        const albumPath = `albums/${album.filename}`;
 
         return `
-                <a href="albums/${album.filename}" class="album-card">
+                <a href="${albumPath}" class="album-card" style="animation-delay: ${index * 100}ms" tabindex="0">
                     <div class="album-card-cover">
                         <img src="${imageUrl}"
-                             alt="Portada de ${album.title}"
+                             alt="Portada de ${this.escapeHtml(album.title)}"
                              loading="lazy"
-                             onclick="event.preventDefault(); event.stopPropagation(); window.open('${fullImageUrl}', '_blank');"
-                             style="cursor: pointer;">
+                             onerror="this.src='${this.getPlaceholderImage()}'">
                     </div>
-                    <h3 class="album-card-title">${album.title}</h3>
-                    <p class="album-card-artist">${album.artist}</p>
-                    <p class="album-card-year">${album.year || ""}</p>
+                    <h3 class="album-card-title">${this.escapeHtml(album.title)}</h3>
+                    <p class="album-card-artist">${this.escapeHtml(album.artist)}</p>
+                    ${album.year ? `<p class="album-card-year">${album.year}</p>` : ""}
                 </a>
             `;
       })
       .join("");
   }
 
+  updateStats() {
+    const albumsCount = this.albums.length;
+    const artists = new Set(this.albums.map((album) => album.artist));
+    const genres = new Set();
+
+    this.albums.forEach((album) => {
+      if (Array.isArray(album.genre)) {
+        album.genre.forEach((g) => g && genres.add(g));
+      } else if (album.genre) {
+        genres.add(album.genre);
+      }
+    });
+
+    // Animar contadores
+    this.animateCounter("albums-count", albumsCount);
+    this.animateCounter("artists-count", artists.size);
+    this.animateCounter("genres-count", genres.size);
+  }
+
+  animateCounter(elementId, targetValue) {
+    const element = document.getElementById(elementId);
+    if (!element) return;
+
+    const startValue = 0;
+    const duration = 1000;
+    const startTime = performance.now();
+
+    const updateCounter = (currentTime) => {
+      const elapsed = currentTime - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      const currentValue = Math.round(
+        startValue + (targetValue - startValue) * eased,
+      );
+
+      element.textContent = currentValue;
+
+      if (progress < 1) {
+        requestAnimationFrame(updateCounter);
+      }
+    };
+
+    requestAnimationFrame(updateCounter);
+  }
+
+  populateGenreFilter() {
+    const genreFilter = document.getElementById("genre-filter");
+    if (!genreFilter) return;
+
+    const genres = new Set();
+    this.albums.forEach((album) => {
+      if (Array.isArray(album.genre)) {
+        album.genre.forEach((g) => g && genres.add(g));
+      } else if (album.genre) {
+        genres.add(album.genre);
+      }
+    });
+
+    const sortedGenres = Array.from(genres).sort();
+    genreFilter.innerHTML = '<option value="">Todos los géneros</option>';
+
+    sortedGenres.forEach((genre) => {
+      const count = this.albums.filter((album) =>
+        Array.isArray(album.genre)
+          ? album.genre.includes(genre)
+          : album.genre === genre,
+      ).length;
+
+      const option = document.createElement("option");
+      option.value = genre;
+      option.textContent = `${genre} (${count})`;
+      genreFilter.appendChild(option);
+    });
+  }
+
+  setupEventListeners() {
+    // Búsqueda
+    const searchInput = document.getElementById("search-input");
+    if (searchInput) {
+      let searchTimeout;
+      searchInput.addEventListener("input", (e) => {
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(() => {
+          this.filterAlbums(e.target.value);
+        }, 300);
+      });
+
+      searchInput.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") {
+          e.target.value = "";
+          this.filterAlbums("");
+        }
+      });
+    }
+
+    // Filtro de género
+    const genreFilter = document.getElementById("genre-filter");
+    if (genreFilter) {
+      genreFilter.addEventListener("change", (e) => {
+        this.filterByGenre(e.target.value);
+      });
+    }
+  }
+
+  setupKeyboardNavigation() {
+    document.addEventListener("keydown", (e) => {
+      // Ctrl/Cmd + F para buscar
+      if ((e.ctrlKey || e.metaKey) && e.key === "f") {
+        e.preventDefault();
+        const searchInput = document.getElementById("search-input");
+        if (searchInput) {
+          searchInput.focus();
+          searchInput.select();
+        }
+        return;
+      }
+
+      // Navegación en grid
+      const activeElement = document.activeElement;
+      if (!activeElement.classList.contains("album-card")) return;
+
+      const cards = Array.from(document.querySelectorAll(".album-card"));
+      const currentIndex = cards.indexOf(activeElement);
+      const gridElement = document.querySelector(".albums-grid");
+      if (!gridElement) return;
+
+      const gridWidth = gridElement.offsetWidth;
+      const cardWidth = 240; // aproximado incluyendo gap
+      const columns = Math.floor(gridWidth / cardWidth);
+
+      let nextIndex = -1;
+      switch (e.key) {
+        case "ArrowRight":
+          nextIndex = Math.min(currentIndex + 1, cards.length - 1);
+          break;
+        case "ArrowLeft":
+          nextIndex = Math.max(currentIndex - 1, 0);
+          break;
+        case "ArrowDown":
+          nextIndex = Math.min(currentIndex + columns, cards.length - 1);
+          break;
+        case "ArrowUp":
+          nextIndex = Math.max(currentIndex - columns, 0);
+          break;
+        case "Home":
+          nextIndex = 0;
+          break;
+        case "End":
+          nextIndex = cards.length - 1;
+          break;
+        default:
+          return;
+      }
+
+      if (nextIndex !== -1 && cards[nextIndex]) {
+        e.preventDefault();
+        cards[nextIndex].focus();
+        cards[nextIndex].scrollIntoView({ block: "nearest" });
+      }
+    });
+  }
+
+  filterAlbums(query) {
+    this.currentFilter = query.toLowerCase().trim();
+    this.applyFilters();
+  }
+
+  filterByGenre(genre) {
+    this.currentGenre = genre;
+    this.applyFilters();
+  }
+
+  applyFilters() {
+    this.filteredAlbums = this.albums.filter((album) => {
+      const matchesText =
+        !this.currentFilter ||
+        album.title.toLowerCase().includes(this.currentFilter) ||
+        album.artist.toLowerCase().includes(this.currentFilter);
+
+      const matchesGenre =
+        !this.currentGenre ||
+        (Array.isArray(album.genre)
+          ? album.genre.includes(this.currentGenre)
+          : album.genre === this.currentGenre);
+
+      return matchesText && matchesGenre;
+    });
+
+    this.renderAlbumsGrid();
+  }
+
+  showLoading(show) {
+    const loadingEl = document.getElementById("loading-message");
+    if (loadingEl) {
+      loadingEl.style.display = show ? "block" : "none";
+    }
+  }
+
+  showNoAlbumsMessage() {
+    const noAlbumsEl = document.getElementById("no-albums-message");
+    if (noAlbumsEl) {
+      noAlbumsEl.style.display = "block";
+    }
+  }
+
+  escapeHtml(text) {
+    const div = document.createElement("div");
+    div.textContent = text || "";
+    return div.innerHTML;
+  }
+
   getPlaceholderImage() {
     return "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300' viewBox='0 0 300 300'%3E%3Crect width='300' height='300' fill='%23ddd'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dy='.3em' font-family='Arial, sans-serif' font-size='18' fill='%23999'%3EÁlbum%3C/text%3E%3C/svg%3E";
   }
 
+  // Métodos de compatibilidad con el código existente
   setupSearch() {
-    const searchInput = document.querySelector(".search-input");
-    if (!searchInput) return;
-
-    searchInput.addEventListener(
-      "input",
-      Utils.debounce((e) => {
-        this.filterAlbums(e.target.value);
-      }, 300),
-    );
+    this.setupEventListeners();
   }
 
-  filterAlbums(query) {
-    const filteredAlbums = this.albums.filter(
-      (album) =>
-        album.title.toLowerCase().includes(query.toLowerCase()) ||
-        album.artist.toLowerCase().includes(query.toLowerCase()),
-    );
-
-    const grid = document.querySelector(".albums-grid");
-    if (!grid) return;
-
-    grid.innerHTML = filteredAlbums
-      .map(
-        (album) => `
-            <a href="albums/${album.filename}" class="album-card">
-                <div class="album-card-cover">
-                    <img src="${album.cover_image || this.getPlaceholderImage()}"
-                         alt="Portada de ${album.title}"
-                         loading="lazy">
-                </div>
-                <h3 class="album-card-title">${album.title}</h3>
-                <p class="album-card-artist">${album.artist}</p>
-                <p class="album-card-year">${album.year || ""}</p>
-            </a>
-        `,
-      )
-      .join("");
-  }
-
-  async saveAlbumsData() {
-    // En un entorno real, esto haría una petición al servidor
-    console.log("Datos de álbumes actualizados:", this.albums);
+  addAlbum(albumData) {
+    this.albums.push(albumData);
+    this.filteredAlbums = [...this.albums];
+    this.renderAlbumsGrid();
+    this.updateStats();
+    this.populateGenreFilter();
   }
 }
 
@@ -792,7 +1025,7 @@ let albumIndexManager;
 let themeManager;
 
 // Inicializar cuando el DOM esté listo
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", async function () {
   console.log("🎵 Album Web Generator cargando...");
 
   // Inicializar tema oscuro (siempre)
@@ -809,6 +1042,7 @@ document.addEventListener("DOMContentLoaded", function () {
   } else if (document.querySelector(".albums-grid")) {
     // Página índice de álbumes
     albumIndexManager = new AlbumIndexManager();
+    await albumIndexManager.init();
   }
 
   // Inicializar funciones adicionales
@@ -846,6 +1080,17 @@ window.AlbumWebGenerator = {
   addAlbum: (albumData) => albumIndexManager?.addAlbum(albumData),
   utils: Utils,
 };
+
+// Funciones globales para compatibilidad
+function toggleLyrics(songElement) {
+  songElement.classList.toggle("expanded");
+  const lyricsText = songElement.querySelector(".lyrics-text");
+  if (lyricsText) {
+    lyricsText.style.display = songElement.classList.contains("expanded")
+      ? "block"
+      : "none";
+  }
+}
 
 // Manejo de errores globales
 window.addEventListener("error", (e) => {

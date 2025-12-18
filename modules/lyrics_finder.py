@@ -9,8 +9,25 @@ import time
 from typing import Dict, List, Optional, Any
 import urllib.parse
 import re
+import unicodedata
 
 logger = logging.getLogger(__name__)
+
+
+def normalize_text(text: str) -> str:
+    """Normalizar texto para búsquedas"""
+    if not text:
+        return ""
+
+    text = text.lower()
+    text = unicodedata.normalize('NFD', text)
+    text = ''.join(c for c in text if unicodedata.category(c) != 'Mn')
+
+    replacements = {"'": "", '"': "", "&": "and", "'": "", "'": ""}
+    for old, new in replacements.items():
+        text = text.replace(old, new)
+
+    return re.sub(r'\s+', ' ', text).strip()
 
 
 class LyricsFinder:

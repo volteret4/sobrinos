@@ -8,7 +8,53 @@ import requests
 import time
 from typing import Dict, List, Optional, Any
 import urllib.parse
+import re
+import unicodedata
 from .database_manager import DatabaseManager
+
+
+def normalize_text(text: str) -> str:
+    """
+    Normalizar texto para búsquedas eliminando tildes, apostrofes y caracteres especiales
+
+    Args:
+        text: Texto a normalizar
+
+    Returns:
+        Texto normalizado
+    """
+    if not text:
+        return ""
+
+    # Convertir a minúsculas
+    text = text.lower()
+
+    # Eliminar acentos y diacríticos
+    text = unicodedata.normalize('NFD', text)
+    text = ''.join(c for c in text if unicodedata.category(c) != 'Mn')
+
+    # Reemplazar caracteres especiales comunes
+    replacements = {
+        "'": "",
+        "'": "",
+        "`": "",
+        "'": "",
+        '"': "",
+        '"': "",
+        '"': "",
+        "–": "-",
+        "—": "-",
+        "…": "...",
+        "&": "and",
+    }
+
+    for old, new in replacements.items():
+        text = text.replace(old, new)
+
+    # Limpiar espacios múltiples
+    text = re.sub(r'\s+', ' ', text).strip()
+
+    return text
 
 try:
     import musicbrainzngs
@@ -68,19 +114,184 @@ class LinkFinder:
             db_links = self._search_database_links(artist, album)
             all_links.update(db_links)
 
-        # 2. Buscar en MusicBrainz/Wikidata
-        mb_links = self._search_musicbrainz_links(artist, album, mbid)
-        all_links.update(mb_links)
-
-        # 3. Completar con búsquedas automáticas
-        auto_links = self._search_automatic_links(artist, album)
-        for category, links in auto_links.items():
+        # 2. Construir enlaces verificando existencia (sin búsquedas)
+        constructed_links = self._construct_verified_links(artist, album)
+        for category, links in constructed_links.items():
             if category not in all_links:
                 all_links[category] = {}
             all_links[category].update(links)
 
         self._cache[cache_key] = all_links
         return all_links
+
+    def _construct_verified_links(self, artist: str, album: str) -> Dict[str, Dict[str, str]]:
+        """
+        Construir enlaces típicos y verificar si existen con código 200
+
+        Args:
+            artist: Nombre del artista
+            album: Título del álbum
+
+        Returns:
+            Enlaces verificados organizados por categoría
+        """
+        all_links = {}
+
+        # Normalizar nombres para URLs
+        normalized_artist = normalize_text(artist).replace(' ', '-').replace('--', '-')
+        normalized_album = normalize_text(album).replace(' ', '-').replace('--', '-')
+
+        # Definir patrones de URL por servicio
+        url_patterns = {
+            'lastfm': {
+                'category': 'info',
+                'urls': [
+                    f"https://www.last.fm/music/{urllib.parse.quote(artist)}",
+                    f"https://www.last.fm/music/{urllib.parse.quote(artist)}/{urllib.parse.quote(album)}"
+                ]
+            },
+            'youtube': {
+                'category': 'streaming',
+                'urls': [
+                    f"https://www.youtube.com/channel/{normalized_artist}",
+                    f"https://www.youtube.com/results?search_query={urllib.parse.quote(f'{artist} {album}')}"
+                ]
+            },
+            'spotify': {
+                'category': 'streaming',
+                'urls': [
+                    f"https://open.spotify.com/artist/{normalized_artist}",
+                    f"https://open.spotify.com/search/{urllib.parse.quote(f'{artist} {album}')}"
+                ]
+            },
+            'discogs': {
+                'category': 'info',
+                'urls': [
+                    f"https://www.discogs.com/artist/{normalized_artist}",
+                    f"https://www.discogs.com/search/?q={urllib.parse.quote(f'{artist} {album}')}&type=all"
+                ]
+            },
+            'wikipedia': {
+                'category': 'info',
+                'urls': [
+                    f"https://en.wikipedia.org/wiki/{normalized_artist}",
+                    f"https://es.wikipedia.org/wiki/{normalized_artist}"
+                ]
+            },
+            'musicbrainz': {
+                'category': 'info',
+                'urls': [
+                    f"https://musicbrainz.org/search?query={urllib.parse.quote(artist)}&type=artist"
+                ]
+            },
+            'genius': {
+                'category': 'info',
+                'urls': [
+                    f"https://genius.com/artists/{normalized_artist}"
+                ]
+            },
+            'rateyourmusic': {
+                'category': 'info',
+                'urls': [
+                    f"https://rateyourmusic.com/artist/{normalized_artist}"
+                ]
+            }
+        }
+
+        # Verificar cada URL
+        for service, config in url_patterns.items():
+            category = config['category']
+
+            for url in config['urls']:
+                if self._verify_url_exists(url):
+                    if category not in all_links:
+                        all_links[category] = {}
+
+                    # Determinar título del enlace
+                    if 'album' in url.lower() or album.lower() in url.lower():
+                        title = f"{album} en {service.title()}"
+                    else:
+                        title = f"{artist} en {service.title()}"
+
+                    all_links[category][f"{service}_{len(all_links.get(category, {}))}"] = {
+                        'url': url,
+                        'title': title,
+                        'source': service
+                    }
+
+                    # Solo tomar el primer enlace válido por servicio
+                    break
+
+        return all_links
+
+    def _verify_url_exists(self, url: str) -> bool:
+        """
+        Verificar si una URL existe (código 200) usando requests
+
+        Args:
+            url: URL a verificar
+
+        Returns:
+            True si la URL existe, False en caso contrario
+        """
+        try:
+            # Rate limiting
+            current_time = time.time()
+            if current_time - self._last_request_time < self._min_request_interval:
+                time.sleep(self._min_request_interval - (current_time - self._last_request_time))
+
+            response = self.session.head(url, timeout=10, allow_redirects=True)
+            self._last_request_time = time.time()
+
+            # Considerar códigos de éxito
+            if response.status_code in [200, 301, 302]:
+                logger.debug(f"✅ URL válida: {url} (código: {response.status_code})")
+                return True
+            else:
+                logger.debug(f"❌ URL no válida: {url} (código: {response.status_code})")
+                return False
+
+        except Exception as e:
+            logger.debug(f"❌ Error verificando URL {url}: {e}")
+            return False
+
+    def _construct_rateyourmusic_link(self, artist: str, album: str = None) -> Dict[str, Dict[str, str]]:
+        """
+        Construir y validar enlaces de RateYourMusic
+
+        Args:
+            artist: Nombre del artista
+            album: Título del álbum (opcional)
+
+        Returns:
+            Enlaces válidos de RateYourMusic
+        """
+        try:
+            # Normalizar nombre del artista para URL
+            normalized_artist = normalize_text(artist).replace(' ', '-').replace('--', '-')
+
+            # Construir URL del artista
+            artist_url = f"https://rateyourmusic.com/artist/{normalized_artist}"
+
+            # Verificar si la página existe
+            response = self.session.get(artist_url, timeout=10)
+
+            if response.status_code == 200:
+                logger.info(f"RateYourMusic encontrado para {artist}: {artist_url}")
+                return {
+                    'rateyourmusic': {
+                        'url': artist_url,
+                        'title': f"{artist} en RateYourMusic",
+                        'source': 'rateyourmusic'
+                    }
+                }
+            else:
+                logger.debug(f"RateYourMusic no encontrado para {artist} (código: {response.status_code})")
+                return {}
+
+        except Exception as e:
+            logger.warning(f"Error verificando RateYourMusic para {artist}: {e}")
+            return {}
 
     def _search_database_links(self, artist: str, album: str) -> Dict[str, Dict[str, str]]:
         """

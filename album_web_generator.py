@@ -17,6 +17,7 @@ import sys
 import argparse
 import sqlite3
 import tkinter as tk
+from datetime import datetime
 from tkinter import simpledialog, messagebox
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple, Any
@@ -102,13 +103,16 @@ class AlbumWebGenerator:
         album_info = self.album_processor.extract_album_info(folder_path)
         logger.info(f"Álbum encontrado: {album_info['artist']} - {album_info['title']}")
 
-        # 2. Obtener comentario del usuario
+        # 2. Agregar referencia a database_manager para pestañas dinámicas
+        album_info['_db_manager'] = self.db_manager
+
+        # 3. Obtener comentario del usuario
         album_info['user_comment'] = self.get_user_comment(
             album_info['title'],
             album_info['artist']
         )
 
-        # 3. Buscar imágenes
+        # 4. Buscar imágenes
         logger.info("Buscando imágenes...")
         album_info['album_image'] = self.image_finder.find_album_image(
             album_info['artist'],
@@ -119,14 +123,14 @@ class AlbumWebGenerator:
             self.db_manager
         )
 
-        # 4. Buscar letras de canciones
+        # 5. Buscar letras de canciones
         logger.info("Buscando letras de canciones...")
         album_info['lyrics'] = self.lyrics_finder.find_lyrics(
             album_info['artist'],
             album_info['tracks']
         )
 
-        # 5. Buscar enlaces relevantes
+        # 6. Buscar enlaces relevantes
         logger.info("Buscando enlaces...")
         album_info['links'] = self.link_finder.find_links(
             album_info['artist'],
@@ -134,8 +138,13 @@ class AlbumWebGenerator:
             album_info.get('mbid')
         )
 
-        # 6. Generar archivos web
+        # 7. Generar archivos web
         logger.info("Generando archivos web...")
+
+        # Remover _db_manager antes de generar archivos (no es serializable)
+        if '_db_manager' in album_info:
+            del album_info['_db_manager']
+
         self._generate_web_files(album_info, output_dir)
 
         return album_info
@@ -166,8 +175,10 @@ class AlbumWebGenerator:
         # Copiar y procesar imágenes
         album_info = self._process_album_images(album_info, safe_name, imgs_dir, thumbnails_dir)
 
-        # Solo generar HTML (CSS y JS son globales)
-        html_content = self.html_generator.generate_html(album_info)
+        # Solo generar HTML con pestañas dinámicas
+        html_content = self.html_generator.generate_html_with_dynamic_tabs(
+            album_info, self.db_manager
+        )
         html_path = albums_dir / f"{safe_name}.html"
         with open(html_path, 'w', encoding='utf-8') as f:
             f.write(html_content)
@@ -364,6 +375,37 @@ class AlbumWebGenerator:
         # Guardar datos actualizados
         with open(albums_data_file, 'w', encoding='utf-8') as f:
             json.dump(albums_data, f, indent=2, ensure_ascii=False)
+
+        logger.info(f"albums-data.json actualizado: {len(albums_data)} álbumes totales")
+
+    def _get_web_image_path(self, album_info: Dict[str, Any], image_key: str, thumbnail: bool = False) -> Optional[str]:
+        """
+        Obtener ruta web de imagen, convirtiendo rutas locales si es necesario
+
+        Args:
+            album_info: Información del álbum
+            image_key: Clave de la imagen ('album_image' o 'artist_image')
+            thumbnail: Si obtener la versión thumbnail
+
+        Returns:
+            Ruta web de la imagen o None si no existe
+        """
+        image_info = album_info.get(image_key)
+
+        if not image_info or not isinstance(image_info, dict):
+            return None
+
+        # Si ya es una URL web relativa, usarla
+        if thumbnail and 'thumbnail_url' in image_info:
+            return image_info['thumbnail_url']
+        elif not thumbnail and 'url' in image_info:
+            url = image_info['url']
+            # Verificar si es una ruta web válida
+            if url.startswith('../imgs/') or url.startswith('../thumbnails/'):
+                return url
+
+        # Si es una ruta del sistema de archivos, no incluirla en el índice
+        return None
 
     def _get_web_image_path(self, album_info: Dict[str, Any], image_key: str, thumbnail: bool = False) -> Optional[str]:
         """

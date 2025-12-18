@@ -1,17 +1,32 @@
 [
   {
-    "filename": "Derby Motoreta_s Burrito Kachimba - Bolsa Amarilla y Piedra Potente.html",
-    "title": "Bolsa Amarilla y Piedra Potente",
-    "artist": "Derby Motoreta’s Burrito Kachimba",
-    "year": "2024",
+    "filename": "Extremoduro - La ley innata.html",
+    "title": "La ley innata",
+    "artist": "Extremoduro",
+    "year": null,
     "genre": [
-      "Musiques du monde"
+      "Hard Rock"
     ],
-    "cover_image": "../imgs/Derby Motoreta_s Burrito Kachimba - Bolsa Amarilla y Piedra Potente_album.jpg",
-    "thumbnail_image": "../thumbnails/Derby Motoreta_s Burrito Kachimba - Bolsa Amarilla y Piedra Potente_album_thumb.jpg",
-    "artist_image": "/home/huan/gits/pollo/music-fuzzy/.content/artistas_img/Derby_Motoretas_Burrito_Kachimba/image_1.jpg",
+    "cover_image": "./imgs/Extremoduro - La ley innata_album.jpg",
+    "thumbnail_image": "./thumbnails/Extremoduro - La ley innata_album_thumb.jpg",
+    "artist_image": "/home/huan/gits/pollo/music-fuzzy/.content/artistas_img/Extremoduro/image_1.jpg",
+    "tracks_count": 6,
+    "has_lyrics": true,
+    "date_added": "2025-12-18T14:36:04.187133"
+  },
+  {
+    "filename": "M83 - Dead Cities_ Red Seas _ Lost Ghosts.html",
+    "title": "Dead Cities, Red Seas & Lost Ghosts",
+    "artist": "M83",
+    "year": null,
+    "genre": [
+      "Electronic Rock"
+    ],
+    "cover_image": "../imgs/M83 - Dead Cities_ Red Seas _ Lost Ghosts_album.jpg",
+    "thumbnail_image": "../thumbnails/M83 - Dead Cities_ Red Seas _ Lost Ghosts_album_thumb.jpg",
+    "artist_image": "/home/huan/gits/pollo/music-fuzzy/.content/artistas_img/M83/image_1.jpg",
     "tracks_count": 12,
     "has_lyrics": true,
-    "date_added": "2025-12-17T23:42:37.937191"
+    "date_added": "2025-12-18T15:49:07.612246"
   }
 ]

@@ -1,0 +1,114 @@
+[
+  {
+    "title": "El rey león",
+    "type": "movie",
+    "year": "1994",
+    "slug": "el_rey_león",
+    "web_url": "https://volteret4.github.io/sobrinos/cine.html#el_rey_león",
+    "tmdb_url": "https://www.themoviedb.org/movie/8587",
+    "front": "docs/cine/El_rey_león_20260310_cara_A.png",
+    "back": "docs/cine/El_rey_león_20260310_cara_B.png",
+    "tmdb_id": 8587,
+    "tmdb_rating": 8.3,
+    "tmdb_votos": 19448,
+    "sinopsis": "La sabana africana es el escenario en el que tienen lugar las aventuras de Simba, un pequeño león que es el heredero del trono. Sin embargo, se ve forzado a exiliarse al ser injustamente acusado de la muerte de su padre. Durante su destierro, hará buenas amistades y, finalmente, regresará para recuperar lo que legítimamente le corresponde.",
+    "generos": [
+      "Familia",
+      "Animación",
+      "Drama",
+      "Aventura"
+    ],
+    "tmdb_poster": "https://image.tmdb.org/t/p/w500/b0MxU37dNmMwKtoPVYPKOZSIrIn.jpg",
+    "tmdb_poster_hd": "https://image.tmdb.org/t/p/w1280/b0MxU37dNmMwKtoPVYPKOZSIrIn.jpg",
+    "tmdb_backdrop": "https://image.tmdb.org/t/p/w1280/6GF9uJs7AnbcJvyfoZyjZv063Oo.jpg",
+    "reparto": [
+      "Matthew Broderick",
+      "Moira Kelly",
+      "Nathan Lane",
+      "Ernie Sabella",
+      "James Earl Jones",
+      "Jeremy Irons"
+    ],
+    "estudios": [
+      "Walt Disney Pictures",
+      "Walt Disney Feature Animation"
+    ],
+    "tmdb_titulo": "El rey león",
+    "tmdb_año": "1994",
+    "duracion_min": 85,
+    "director": "Roger Allers"
+  },
+  {
+    "title": "Aladdin",
+    "type": "movie",
+    "year": "1992",
+    "slug": "aladdin",
+    "web_url": "https://volteret4.github.io/sobrinos/cine.html#aladdin",
+    "tmdb_url": "https://www.themoviedb.org/movie/812",
+    "front": "docs/cine/Aladdin_20260310_cara_A.png",
+    "back": "docs/cine/Aladdin_20260310_cara_B.png",
+    "tmdb_id": 812,
+    "tmdb_rating": 7.7,
+    "tmdb_votos": 11881,
+    "sinopsis": "Aladdín es un ingenioso joven que vive en una extrema pobreza, y que sueña con casarse con la bella hija del sultán, la princesa Jasmine. El destino interviene cuando el astuto visir del Sultán, Jafar, recluta a Aladdín para que le ayude a recuperar una lámpara mágica de las profundidades de la Cueva de las Maravillas. Aladdín encuentra una lámpara maravillosa con un genio dentro, y sus deseos comienzan a hacerse realidad.",
+    "generos": [
+      "Animación",
+      "Familia",
+      "Aventura",
+      "Fantasía",
+      "Romance"
+    ],
+    "tmdb_poster": "https://image.tmdb.org/t/p/w500/5ALwczKzFxbsiMDlHuy7aREDCzr.jpg",
+    "tmdb_poster_hd": "https://image.tmdb.org/t/p/w1280/5ALwczKzFxbsiMDlHuy7aREDCzr.jpg",
+    "tmdb_backdrop": "https://image.tmdb.org/t/p/w1280/nenJjvfe2Eq8uBMXFJnWj5mw4bi.jpg",
+    "reparto": [
+      "Scott Weinger",
+      "Robin Williams",
+      "Linda Larkin",
+      "Jonathan Freeman",
+      "Gilbert Gottfried",
+      "Douglas Seale"
+    ],
+    "estudios": [
+      "Walt Disney Feature Animation"
+    ],
+    "tmdb_titulo": "Aladdin",
+    "tmdb_año": "1992",
+    "duracion_min": 87,
+    "director": "John Musker"
+  },
+  {
+    "title": "La Patrulla Canina",
+    "type": "series",
+    "year": "2013",
+    "slug": "la_patrulla_canina",
+    "web_url": "https://volteret4.github.io/sobrinos/cine.html#la_patrulla_canina",
+    "tmdb_url": "https://www.themoviedb.org/tv/57532",
+    "front": "docs/cine/La_Patrulla_Canina_20260310_cara_A.png",
+    "back": "docs/cine/La_Patrulla_Canina_20260310_cara_B.png",
+    "tmdb_id": 57532,
+    "tmdb_rating": 7.0,
+    "tmdb_votos": 797,
+    "sinopsis": "Protagonizada por 6 heroicos cachorros: Chase, Marshall, Rocky, Zuma, Rubble y Skye, que son entrenados y dirigidos por Ryder, un niño de 10 años que los rescató y les enseñó a utilizar sus habilidades para ayudar a los demás, formando la patrulla canina.",
+    "generos": [
+      "Animación",
+      "Kids"
+    ],
+    "tmdb_poster": "https://image.tmdb.org/t/p/w500/aTDo8zoo3wOW789rWYfHT83ufJ9.jpg",
+    "tmdb_poster_hd": "https://image.tmdb.org/t/p/w1280/aTDo8zoo3wOW789rWYfHT83ufJ9.jpg",
+    "tmdb_backdrop": "https://image.tmdb.org/t/p/w1280/7OrV2aAH5Yp7hA9zCCvUloLvZtl.jpg",
+    "reparto": [
+      "Kai Harris",
+      "Ron Pardo"
+    ],
+    "estudios": [
+      "Spin Master",
+      "TVOKids",
+      "Nickelodeon Productions"
+    ],
+    "tmdb_titulo": "La Patrulla Canina",
+    "tmdb_año": "2013",
+    "temporadas": 13,
+    "episodios": 549
+  }
+]

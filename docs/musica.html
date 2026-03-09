@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="es" data-theme="light">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Mi Colección Musical</title>
+        <meta
+            name="description"
+            content="Colección personal de álbumes musicales generada con Album Web Generator"
+        />
+
+        <link rel="stylesheet" href="styles.css" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+            rel="stylesheet"
+        />
+    </head>
+
+    <body>
+        <!-- Header -->
+        <header class="site-header">
+            <div class="container">
+                <nav class="site-nav">
+                    <div class="site-logo">
+                        <span class="logo-icon">🎵</span>
+                        <span class="logo-text">Mi Colección Musical</span>
+                    </div>
+                    <div class="nav-links">
+                        <a href="index.html" class="nav-link">← Inicio</a>
+                        <button class="theme-toggle" aria-label="Cambiar tema">
+                            🌙
+                        </button>
+                    </div>
+                </nav>
+            </div>
+        </header>
+
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <div class="container">
+                <div class="hero-content">
+                    <h1 class="hero-title">Mi Colección Musical</h1>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contenido Principal -->
+        <main class="main-content">
+            <div class="container">
+                <!-- Controles -->
+                <section class="controls-section">
+                    <div class="controls-grid">
+                        <input
+                            type="text"
+                            id="search-input"
+                            placeholder="Buscar álbumes o artistas..."
+                            class="search-input"
+                        />
+                        <select id="genre-filter" class="genre-filter">
+                            <option value="">Todos los géneros</option>
+                        </select>
+                    </div>
+                </section>
+
+                <!-- Grid de Álbumes -->
+                <section class="albums-section">
+                    <h2>Mis Álbumes</h2>
+
+                    <div class="albums-grid" id="albums-grid">
+                        <!-- Dinámico via JavaScript -->
+                    </div>
+
+                    <!-- Estado de carga -->
+                    <div
+                        id="loading-message"
+                        class="loading-message"
+                        style="display: none"
+                    >
+                        <p>Cargando álbumes...</p>
+                    </div>
+
+                    <!-- Mensaje si no hay álbumes -->
+                    <div
+                        id="no-albums-message"
+                        class="no-albums-message"
+                        style="display: none"
+                    >
+                        <h3>¡Aún no hay álbumes!</h3>
+                        <p>
+                            Usa
+                            <code
+                                >python album_web_generator.py
+                                /ruta/a/album</code
+                            >
+                            para agregar tu primer álbum
+                        </p>
+                    </div>
+                </section>
+                <!-- Estadísticas -->
+                <section class="stats-section">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-number" id="albums-count">0</div>
+                            <div class="stat-label">Álbumes</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="artists-count">0</div>
+                            <div class="stat-label">Artistas</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="genres-count">0</div>
+                            <div class="stat-label">Géneros</div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="site-footer">
+            <div class="container">
+                <p>disfruta</p>
+            </div>
+        </footer>
+
+        <script src="script.js"></script>
+    </body>
+</html>

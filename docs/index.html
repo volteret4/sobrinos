@@ -3,12 +3,7 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Mi Colección Musical</title>
-        <meta
-            name="description"
-            content="Colección personal de álbumes musicales generada con Album Web Generator"
-        />
-
+        <title>Mi Colección</title>
         <link rel="stylesheet" href="styles.css" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -16,108 +11,144 @@
             href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
             rel="stylesheet"
         />
+        <style>
+            .hub-section {
+                min-height: calc(100vh - var(--header-height) - 100px);
+                display: flex;
+                align-items: center;
+                padding: var(--spacing-3xl) 0;
+            }
+            .hub-grid {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: var(--spacing-2xl);
+                width: 100%;
+            }
+            @media (max-width: 768px) {
+                .hub-grid { grid-template-columns: 1fr; }
+            }
+            .hub-card {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                text-decoration: none;
+                color: inherit;
+                background: var(--bg-secondary);
+                border: 2px solid var(--border-color);
+                border-radius: var(--border-radius-xl);
+                padding: var(--spacing-3xl) var(--spacing-2xl);
+                text-align: center;
+                transition: all var(--transition-normal);
+                box-shadow: var(--shadow-md);
+                min-height: 340px;
+                position: relative;
+                overflow: hidden;
+            }
+            .hub-card::before {
+                content: '';
+                position: absolute;
+                inset: 0;
+                opacity: 0;
+                transition: opacity var(--transition-normal);
+                pointer-events: none;
+            }
+            .hub-card--music::before {
+                background: linear-gradient(135deg, rgba(59,130,246,0.08), rgba(139,92,246,0.08));
+            }
+            .hub-card--cine::before {
+                background: linear-gradient(135deg, rgba(245,158,11,0.08), rgba(239,68,68,0.08));
+            }
+            .hub-card:hover {
+                transform: translateY(-8px);
+                box-shadow: var(--shadow-xl);
+            }
+            .hub-card:hover::before { opacity: 1; }
+            .hub-card--music:hover { border-color: var(--color-primary); }
+            .hub-card--cine:hover  { border-color: var(--color-accent);  }
+            .hub-icon {
+                font-size: 5rem;
+                margin-bottom: var(--spacing-xl);
+                line-height: 1;
+                position: relative;
+                z-index: 1;
+            }
+            .hub-title {
+                font-size: var(--font-size-3xl);
+                font-weight: 700;
+                margin-bottom: var(--spacing-md);
+                position: relative;
+                z-index: 1;
+            }
+            .hub-card--music .hub-title { color: var(--color-primary); }
+            .hub-card--cine  .hub-title { color: var(--color-accent);  }
+            .hub-desc {
+                font-size: var(--font-size-base);
+                color: var(--text-muted);
+                max-width: 300px;
+                line-height: 1.6;
+                margin: 0;
+                position: relative;
+                z-index: 1;
+            }
+            .hub-arrow {
+                margin-top: var(--spacing-xl);
+                font-size: var(--font-size-2xl);
+                opacity: 0;
+                transform: translateX(-8px);
+                transition: all var(--transition-normal);
+                position: relative;
+                z-index: 1;
+            }
+            .hub-card:hover .hub-arrow {
+                opacity: 1;
+                transform: translateX(0);
+            }
+            .site-footer {
+                padding: var(--spacing-xl) 0;
+                text-align: center;
+                color: var(--text-muted);
+                font-size: var(--font-size-sm);
+                border-top: 1px solid var(--border-color);
+            }
+        </style>
     </head>
-
     <body>
-        <!-- Header -->
         <header class="site-header">
             <div class="container">
                 <nav class="site-nav">
                     <div class="site-logo">
-                        <span class="logo-icon">🎵</span>
-                        <span class="logo-text">Mi Colección Musical</span>
+                        <span class="logo-icon">📼</span>
+                        <span class="logo-text">Mi Colección</span>
                     </div>
                     <div class="nav-links">
-                        <button class="theme-toggle" aria-label="Cambiar tema">
-                            🌙
-                        </button>
+                        <button class="theme-toggle" aria-label="Cambiar tema">🌙</button>
                     </div>
                 </nav>
             </div>
         </header>
 
-        <!-- Hero Section -->
-        <section class="hero-section">
-            <div class="container">
-                <div class="hero-content">
-                    <h1 class="hero-title">Mi Colección Musical</h1>
-                </div>
-            </div>
-        </section>
-
-        <!-- Contenido Principal -->
         <main class="main-content">
             <div class="container">
-                <!-- Controles -->
-                <section class="controls-section">
-                    <div class="controls-grid">
-                        <input
-                            type="text"
-                            id="search-input"
-                            placeholder="Buscar álbumes o artistas..."
-                            class="search-input"
-                        />
-                        <select id="genre-filter" class="genre-filter">
-                            <option value="">Todos los géneros</option>
-                        </select>
-                    </div>
-                </section>
-
-                <!-- Grid de Álbumes -->
-                <section class="albums-section">
-                    <h2>Mis Álbumes</h2>
-
-                    <div class="albums-grid" id="albums-grid">
-                        <!-- Dinámico via JavaScript -->
-                    </div>
-
-                    <!-- Estado de carga -->
-                    <div
-                        id="loading-message"
-                        class="loading-message"
-                        style="display: none"
-                    >
-                        <p>Cargando álbumes...</p>
-                    </div>
-
-                    <!-- Mensaje si no hay álbumes -->
-                    <div
-                        id="no-albums-message"
-                        class="no-albums-message"
-                        style="display: none"
-                    >
-                        <h3>¡Aún no hay álbumes!</h3>
-                        <p>
-                            Usa
-                            <code
-                                >python album_web_generator.py
-                                /ruta/a/album</code
-                            >
-                            para agregar tu primer álbum
-                        </p>
-                    </div>
-                </section>
-                <!-- Estadísticas -->
-                <section class="stats-section">
-                    <div class="stats-grid">
-                        <div class="stat-card">
-                            <div class="stat-number" id="albums-count">0</div>
-                            <div class="stat-label">Álbumes</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-number" id="artists-count">0</div>
-                            <div class="stat-label">Artistas</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-number" id="genres-count">0</div>
-                            <div class="stat-label">Géneros</div>
-                        </div>
+                <section class="hub-section">
+                    <div class="hub-grid">
+                        <a href="musica.html" class="hub-card hub-card--music">
+                            <div class="hub-icon">🎵</div>
+                            <h2 class="hub-title">Música</h2>
+                            <p class="hub-desc">Álbumes asociados a tarjetas NFC con información completa, letras y enlaces</p>
+                            <span class="hub-arrow">→</span>
+                        </a>
+                        <a href="cine.html" class="hub-card hub-card--cine">
+                            <div class="hub-icon">🎬</div>
+                            <h2 class="hub-title">Cine</h2>
+                            <p class="hub-desc">Películas y series asociadas a tarjetas NFC para reproducir al instante</p>
+                            <span class="hub-arrow">→</span>
+                        </a>
                     </div>
                 </section>
             </div>
         </main>
 
-        <!-- Footer -->
         <footer class="site-footer">
             <div class="container">
                 <p>disfruta</p>

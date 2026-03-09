@@ -1,2 +1,12 @@
 modules/__pycache__
 modules/__pycache__/*
+__pycache__/
+
+# Secretos en plano — NUNCA commitear
+.env
+secrets.yaml
+
+# secrets.enc.yaml SÍ se commitea (cifrado con SOPS)
+.env
+.sops.yaml
+test

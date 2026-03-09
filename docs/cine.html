@@ -1,0 +1,632 @@
+<!doctype html>
+<html lang="es" data-theme="light">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Mi Colección de Cine</title>
+        <link rel="stylesheet" href="styles.css" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+            rel="stylesheet"
+        />
+        <style>
+            /* Hero de cine: gradiente cálido */
+            .hero-section--cine {
+                background: linear-gradient(135deg, #b45309, #dc2626);
+            }
+
+            /* Controles */
+            .type-filter {
+                width: 100%;
+                padding: var(--spacing-md);
+                border: 1px solid var(--border-color);
+                border-radius: var(--border-radius-md);
+                font-size: var(--font-size-base);
+                background: var(--bg-primary);
+                color: var(--text-primary);
+            }
+
+            /* Badge película/serie */
+            .media-badge {
+                display: inline-block;
+                font-size: var(--font-size-xs);
+                font-weight: 700;
+                letter-spacing: 0.05em;
+                text-transform: uppercase;
+                padding: 2px var(--spacing-sm);
+                border-radius: var(--border-radius-sm);
+                margin-bottom: var(--spacing-sm);
+            }
+            .media-badge--movie  { background: #d1fae5; color: #065f46; }
+            .media-badge--series { background: #dbeafe; color: #1e40af; }
+            [data-theme="dark"] .media-badge--movie  { background: #065f46; color: #d1fae5; }
+            [data-theme="dark"] .media-badge--series { background: #1e3a8a; color: #bfdbfe; }
+
+            /* Enlace externo en la tarjeta */
+            .card-external-link {
+                display: inline-flex;
+                align-items: center;
+                gap: 4px;
+                margin-top: var(--spacing-sm);
+                font-size: var(--font-size-xs);
+                color: var(--color-primary);
+                text-decoration: none;
+                font-weight: 500;
+            }
+            .card-external-link:hover { color: var(--color-accent); }
+
+            /* Modal de detalle */
+            .modal-overlay {
+                display: none;
+                position: fixed;
+                inset: 0;
+                background: rgba(0,0,0,0.75);
+                z-index: 200;
+                align-items: center;
+                justify-content: center;
+                padding: var(--spacing-xl);
+                overflow-y: auto;
+            }
+            .modal-overlay.open { display: flex; }
+
+            .modal {
+                background: var(--bg-secondary);
+                border-radius: var(--border-radius-xl);
+                padding: var(--spacing-xl);
+                max-width: 820px;
+                width: 100%;
+                position: relative;
+                box-shadow: var(--shadow-xl);
+                animation: fadeIn var(--transition-normal) ease-out;
+                my: auto;
+            }
+            .modal-close {
+                position: absolute;
+                top: var(--spacing-md);
+                right: var(--spacing-md);
+                font-size: var(--font-size-xl);
+                background: var(--bg-primary);
+                border: 1px solid var(--border-color);
+                border-radius: var(--border-radius-md);
+                width: 36px;
+                height: 36px;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: var(--text-primary);
+            }
+
+            /* Layout: póster izq + info der */
+            .modal-layout {
+                display: grid;
+                grid-template-columns: 180px 1fr;
+                gap: var(--spacing-xl);
+                align-items: start;
+            }
+            @media (max-width: 560px) {
+                .modal-layout { grid-template-columns: 1fr; }
+            }
+            .modal-poster {
+                width: 100%;
+                border-radius: var(--border-radius-md);
+                box-shadow: var(--shadow-lg);
+            }
+            .modal-info { min-width: 0; }
+
+            .modal-header {
+                margin-bottom: var(--spacing-md);
+                padding-right: var(--spacing-2xl);
+            }
+            .modal-title {
+                font-size: var(--font-size-2xl);
+                font-weight: 700;
+                line-height: 1.2;
+                margin: var(--spacing-xs) 0 0;
+            }
+            .modal-year {
+                font-size: var(--font-size-sm);
+                color: var(--text-muted);
+                margin: 2px 0 0;
+            }
+
+            .modal-rating {
+                display: flex;
+                align-items: center;
+                gap: var(--spacing-sm);
+                margin: var(--spacing-sm) 0;
+                font-size: var(--font-size-sm);
+            }
+            .rating-stars { color: #f59e0b; letter-spacing: 1px; }
+            .rating-value { font-weight: 700; font-size: var(--font-size-base); }
+            .rating-votes { color: var(--text-muted); }
+
+            .modal-genres {
+                display: flex;
+                flex-wrap: wrap;
+                gap: var(--spacing-xs);
+                margin: var(--spacing-sm) 0;
+            }
+            .genre-pill {
+                font-size: var(--font-size-xs);
+                padding: 2px 10px;
+                border-radius: 999px;
+                background: var(--bg-primary);
+                border: 1px solid var(--border-color);
+                color: var(--text-secondary);
+            }
+
+            .modal-sinopsis {
+                font-size: var(--font-size-sm);
+                line-height: 1.6;
+                color: var(--text-secondary);
+                margin: var(--spacing-md) 0;
+            }
+
+            .modal-meta {
+                display: flex;
+                flex-direction: column;
+                gap: var(--spacing-xs);
+                font-size: var(--font-size-sm);
+                margin: var(--spacing-sm) 0;
+            }
+            .modal-meta-row { display: flex; gap: var(--spacing-sm); }
+            .modal-meta-label {
+                font-weight: 600;
+                color: var(--text-muted);
+                white-space: nowrap;
+                min-width: 80px;
+            }
+            .modal-meta-value { color: var(--text-primary); }
+
+            .modal-actions {
+                margin-top: var(--spacing-lg);
+                display: flex;
+                gap: var(--spacing-md);
+                flex-wrap: wrap;
+            }
+            .btn-primary {
+                display: inline-flex;
+                align-items: center;
+                gap: 6px;
+                padding: var(--spacing-sm) var(--spacing-lg);
+                background: var(--color-primary);
+                color: white;
+                border-radius: var(--border-radius-md);
+                font-weight: 600;
+                font-size: var(--font-size-sm);
+                text-decoration: none;
+                transition: background var(--transition-fast);
+            }
+            .btn-primary:hover { background: #2563eb; color: white; }
+            .btn-secondary {
+                display: inline-flex;
+                align-items: center;
+                gap: 6px;
+                padding: var(--spacing-sm) var(--spacing-lg);
+                background: var(--bg-primary);
+                color: var(--text-primary);
+                border: 1px solid var(--border-color);
+                border-radius: var(--border-radius-md);
+                font-weight: 600;
+                font-size: var(--font-size-sm);
+                text-decoration: none;
+                cursor: pointer;
+                transition: background var(--transition-fast);
+            }
+            .btn-secondary:hover { background: var(--bg-tertiary, var(--bg-secondary)); }
+
+            /* Tarjetas físicas (colapsadas) */
+            .modal-cards-toggle { margin-top: var(--spacing-lg); }
+            .modal-cards-toggle summary {
+                cursor: pointer;
+                font-size: var(--font-size-sm);
+                color: var(--text-muted);
+                user-select: none;
+            }
+            .modal-cards-grid {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: var(--spacing-md);
+                margin-top: var(--spacing-md);
+            }
+            @media (max-width: 400px) {
+                .modal-cards-grid { grid-template-columns: 1fr; }
+            }
+            .modal-card-side { text-align: center; }
+            .modal-card-side p {
+                font-size: var(--font-size-xs);
+                color: var(--text-muted);
+                margin-bottom: var(--spacing-xs);
+                font-weight: 600;
+                text-transform: uppercase;
+                letter-spacing: 0.05em;
+            }
+            .modal-card-side img {
+                width: 100%;
+                border-radius: var(--border-radius-md);
+                box-shadow: var(--shadow-md);
+            }
+
+            /* Estado vacío */
+            .no-items-message {
+                background: var(--bg-secondary);
+                border: 2px dashed var(--border-color);
+                border-radius: var(--border-radius-lg);
+                padding: var(--spacing-3xl);
+                text-align: center;
+            }
+            .no-items-message::before {
+                content: "🎬";
+                font-size: 4rem;
+                display: block;
+                margin-bottom: var(--spacing-lg);
+                opacity: 0.5;
+            }
+        </style>
+    </head>
+
+    <body>
+        <header class="site-header">
+            <div class="container">
+                <nav class="site-nav">
+                    <div class="site-logo">
+                        <span class="logo-icon">🎬</span>
+                        <span class="logo-text">Mi Colección de Cine</span>
+                    </div>
+                    <div class="nav-links">
+                        <a href="index.html" class="nav-link">← Inicio</a>
+                        <button class="theme-toggle" aria-label="Cambiar tema">🌙</button>
+                    </div>
+                </nav>
+            </div>
+        </header>
+
+        <section class="hero-section hero-section--cine">
+            <div class="container">
+                <div class="hero-content">
+                    <h1 class="hero-title">Mi Colección de Cine</h1>
+                </div>
+            </div>
+        </section>
+
+        <main class="main-content">
+            <div class="container">
+                <!-- Controles -->
+                <section class="controls-section">
+                    <div class="controls-grid">
+                        <input
+                            type="text"
+                            id="search-input"
+                            placeholder="Buscar películas o series..."
+                            class="search-input"
+                        />
+                        <select id="type-filter" class="type-filter">
+                            <option value="">Todo</option>
+                            <option value="movie">Películas</option>
+                            <option value="series">Series</option>
+                        </select>
+                    </div>
+                </section>
+
+                <!-- Grid -->
+                <section class="albums-section">
+                    <h2>Mi Colección</h2>
+                    <div class="albums-grid" id="cine-grid"></div>
+                    <div id="no-items-message" class="no-items-message" style="display:none">
+                        <h3>Aún no hay elementos</h3>
+                        <p>Usa <code>python nfc/nfc_tarjetas_cine.py /carpeta/posters</code> para generar tarjetas</p>
+                    </div>
+                </section>
+
+                <!-- Estadísticas -->
+                <section class="stats-section">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-number" id="total-count">0</div>
+                            <div class="stat-label">Total</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="movies-count">0</div>
+                            <div class="stat-label">Películas</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="series-count">0</div>
+                            <div class="stat-label">Series</div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+
+        <!-- Modal detalle -->
+        <div class="modal-overlay" id="modal-overlay">
+            <div class="modal" id="modal">
+                <button class="modal-close" id="modal-close" aria-label="Cerrar">✕</button>
+                <div class="modal-layout">
+                    <img id="modal-poster" class="modal-poster" src="" alt="Póster" />
+                    <div class="modal-info">
+                        <div class="modal-header">
+                            <span id="modal-badge" class="media-badge"></span>
+                            <h3 class="modal-title" id="modal-title"></h3>
+                            <p class="modal-year" id="modal-year"></p>
+                        </div>
+                        <div class="modal-rating" id="modal-rating"></div>
+                        <div class="modal-genres" id="modal-genres"></div>
+                        <p class="modal-sinopsis" id="modal-sinopsis"></p>
+                        <div class="modal-meta" id="modal-meta"></div>
+                        <div class="modal-actions" id="modal-actions"></div>
+                    </div>
+                </div>
+                <!-- Tarjetas físicas (colapsadas) -->
+                <details class="modal-cards-toggle" id="modal-cards-toggle" style="display:none">
+                    <summary>Ver tarjetas físicas (cara A / cara B)</summary>
+                    <div class="modal-cards-grid">
+                        <div class="modal-card-side">
+                            <p>Cara A — Póster</p>
+                            <img id="modal-front" src="" alt="Cara A" />
+                        </div>
+                        <div class="modal-card-side">
+                            <p>Cara B — Título + QR</p>
+                            <img id="modal-back" src="" alt="Cara B" />
+                        </div>
+                    </div>
+                </details>
+            </div>
+        </div>
+
+        <footer class="site-footer">
+            <div class="container"><p>disfruta</p></div>
+        </footer>
+
+        <script src="script.js"></script>
+        <script>
+        (function () {
+            // ── Normaliza rutas del JSON (generadas con prefijo "docs/") ──
+            function normalizePath(p) {
+                if (!p) return '';
+                return p.replace(/^docs\//, './');
+            }
+
+            function escapeHtml(s) {
+                const d = document.createElement('div');
+                d.textContent = s || '';
+                return d.innerHTML;
+            }
+
+            function animateCounter(id, target) {
+                const el = document.getElementById(id);
+                if (!el) return;
+                const start = performance.now();
+                const duration = 800;
+                const update = (now) => {
+                    const t = Math.min((now - start) / duration, 1);
+                    const eased = 1 - Math.pow(1 - t, 3);
+                    el.textContent = Math.round(target * eased);
+                    if (t < 1) requestAnimationFrame(update);
+                };
+                requestAnimationFrame(update);
+            }
+
+            // ── Estado ──
+            let allItems = [];
+            let filtered = [];
+            let currentSearch = '';
+            let currentType = '';
+
+            // ── Render ──
+            function render() {
+                const grid = document.getElementById('cine-grid');
+                const noItems = document.getElementById('no-items-message');
+
+                if (filtered.length === 0) {
+                    grid.innerHTML = '';
+                    noItems.style.display = 'block';
+                    return;
+                }
+                noItems.style.display = 'none';
+
+                grid.innerHTML = filtered.map((item, i) => {
+                    const front = normalizePath(item.front);
+                    const slug  = item.slug || item.title.toLowerCase().replace(/[^\w\s-]/g,'').replace(/\s+/g,'_');
+                    const badgeClass = item.type === 'series' ? 'media-badge--series' : 'media-badge--movie';
+                    const badgeText  = item.type === 'series' ? 'Serie' : 'Película';
+                    return `
+                        <div class="album-card" id="${escapeHtml(slug)}"
+                             style="cursor:pointer; animation-delay:${i * 80}ms"
+                             onclick="openModal(${i})" tabindex="0"
+                             onkeydown="if(event.key==='Enter')openModal(${i})">
+                            <div class="album-card-cover">
+                                <img src="${escapeHtml(front)}"
+                                     alt="Póster de ${escapeHtml(item.title)}"
+                                     loading="lazy"
+                                     onerror="this.parentElement.style.display='none'">
+                            </div>
+                            <span class="media-badge ${badgeClass}">${badgeText}</span>
+                            <h3 class="album-card-title">${escapeHtml(item.title)}</h3>
+                            ${item.year ? `<p class="album-card-year">${escapeHtml(item.year)}</p>` : ''}
+                        </div>`;
+                }).join('');
+            }
+
+            // ── Filtrado ──
+            function applyFilters() {
+                filtered = allItems.filter(item => {
+                    const matchText = !currentSearch ||
+                        item.title.toLowerCase().includes(currentSearch);
+                    const matchType = !currentType || item.type === currentType;
+                    return matchText && matchType;
+                });
+                render();
+            }
+
+            // ── Modal ──
+            function starsHtml(rating) {
+                const full = Math.round(rating / 2);
+                return '★'.repeat(full) + '☆'.repeat(5 - full);
+            }
+
+            window.openModal = function(index) {
+                const item = filtered[index];
+                if (!item) return;
+
+                // Badge
+                const badge = document.getElementById('modal-badge');
+                badge.textContent = item.type === 'series' ? 'Serie' : 'Película';
+                badge.className = 'media-badge ' + (item.type === 'series' ? 'media-badge--series' : 'media-badge--movie');
+
+                // Título y año
+                document.getElementById('modal-title').textContent = item.title;
+                const yearEl = document.getElementById('modal-year');
+                const yearParts = [];
+                if (item.year) yearParts.push(item.year);
+                if (item.duracion_min) yearParts.push(`${item.duracion_min} min`);
+                if (item.temporadas)  yearParts.push(`${item.temporadas} temporada${item.temporadas > 1 ? 's' : ''}`);
+                if (item.episodios)   yearParts.push(`${item.episodios} episodios`);
+                yearEl.textContent = yearParts.join('  ·  ');
+
+                // Póster (prioridad: tmdb_poster > cara A)
+                const posterEl = document.getElementById('modal-poster');
+                const posterUrl = item.tmdb_poster || normalizePath(item.front);
+                if (posterUrl) {
+                    posterEl.src = posterUrl;
+                    posterEl.style.display = '';
+                } else {
+                    posterEl.style.display = 'none';
+                }
+
+                // Rating
+                const ratingEl = document.getElementById('modal-rating');
+                if (item.tmdb_rating && item.tmdb_rating > 0) {
+                    ratingEl.innerHTML = `
+                        <span class="rating-stars">${starsHtml(item.tmdb_rating)}</span>
+                        <span class="rating-value">${item.tmdb_rating}</span>
+                        <span class="rating-votes">${item.tmdb_votos ? `(${item.tmdb_votos.toLocaleString()} votos)` : ''}</span>`;
+                    ratingEl.style.display = '';
+                } else {
+                    ratingEl.style.display = 'none';
+                }
+
+                // Géneros
+                const genresEl = document.getElementById('modal-genres');
+                if (item.generos && item.generos.length) {
+                    genresEl.innerHTML = item.generos
+                        .map(g => `<span class="genre-pill">${escapeHtml(g)}</span>`)
+                        .join('');
+                    genresEl.style.display = '';
+                } else {
+                    genresEl.style.display = 'none';
+                }
+
+                // Sinopsis
+                const sinopsisEl = document.getElementById('modal-sinopsis');
+                if (item.sinopsis) {
+                    sinopsisEl.textContent = item.sinopsis;
+                    sinopsisEl.style.display = '';
+                } else {
+                    sinopsisEl.style.display = 'none';
+                }
+
+                // Meta: director, reparto
+                const metaEl = document.getElementById('modal-meta');
+                const metaRows = [];
+                if (item.director) {
+                    metaRows.push(`<div class="modal-meta-row">
+                        <span class="modal-meta-label">Director</span>
+                        <span class="modal-meta-value">${escapeHtml(item.director)}</span>
+                    </div>`);
+                }
+                if (item.reparto && item.reparto.length) {
+                    metaRows.push(`<div class="modal-meta-row">
+                        <span class="modal-meta-label">Reparto</span>
+                        <span class="modal-meta-value">${item.reparto.slice(0, 4).map(escapeHtml).join(', ')}</span>
+                    </div>`);
+                }
+                metaEl.innerHTML = metaRows.join('');
+
+                // Acciones
+                const actionsEl = document.getElementById('modal-actions');
+                const btns = [];
+                if (item.tmdb_url) {
+                    btns.push(`<a href="${escapeHtml(item.tmdb_url)}" target="_blank" rel="noopener" class="btn-primary">🎬 TMDB</a>`);
+                }
+                actionsEl.innerHTML = btns.join('');
+
+                // Tarjetas físicas (colapsadas)
+                const cardsToggle = document.getElementById('modal-cards-toggle');
+                if (item.front && item.back) {
+                    document.getElementById('modal-front').src = normalizePath(item.front);
+                    document.getElementById('modal-back').src  = normalizePath(item.back);
+                    cardsToggle.style.display = '';
+                    cardsToggle.open = false;
+                } else {
+                    cardsToggle.style.display = 'none';
+                }
+
+                document.getElementById('modal-overlay').classList.add('open');
+            };
+
+            function closeModal() {
+                document.getElementById('modal-overlay').classList.remove('open');
+            }
+
+            document.getElementById('modal-close').addEventListener('click', closeModal);
+            document.getElementById('modal-overlay').addEventListener('click', function(e) {
+                if (e.target === this) closeModal();
+            });
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') closeModal();
+            });
+
+            // ── Carga de datos ──
+            async function loadData() {
+                try {
+                    const res = await fetch('./cine/tarjetas_video_info.json');
+                    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                    allItems = await res.json();
+                    filtered = [...allItems];
+
+                    // Estadísticas
+                    const movies = allItems.filter(i => i.type === 'movie').length;
+                    const series = allItems.filter(i => i.type === 'series').length;
+                    animateCounter('total-count',  allItems.length);
+                    animateCounter('movies-count', movies);
+                    animateCounter('series-count', series);
+
+                    render();
+
+                    // ── Hash anchor: abrir modal si hay #slug en la URL ──
+                    const hash = location.hash.slice(1);
+                    if (hash) {
+                        const idx = filtered.findIndex(it =>
+                            (it.slug || '') === hash ||
+                            it.title.toLowerCase().replace(/[^\w\s-]/g,'').replace(/\s+/g,'_') === hash
+                        );
+                        if (idx >= 0) {
+                            document.getElementById(hash)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                            setTimeout(() => openModal(idx), 400);
+                        }
+                    }
+                } catch (e) {
+                    console.log('No se encontraron datos de cine:', e.message);
+                    document.getElementById('no-items-message').style.display = 'block';
+                }
+            }
+
+            // ── Eventos de filtrado ──
+            document.getElementById('search-input').addEventListener('input', function(e) {
+                currentSearch = e.target.value.toLowerCase().trim();
+                applyFilters();
+            });
+            document.getElementById('type-filter').addEventListener('change', function(e) {
+                currentType = e.target.value;
+                applyFilters();
+            });
+
+            loadData();
+        })();
+        </script>
+    </body>
+</html>

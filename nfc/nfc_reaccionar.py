@@ -2,23 +2,28 @@ import json
 import subprocess
 import time
 import os
+import sys
 from smartcard.System import readers
 from smartcard.util import toHexString
 
+# Importar KodiAPIManager desde reproductores/
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
+from reproductores.kodi_api_manager import KodiAPIManager
+
 CONFIG_FILE = "nfc_playlist.json"
+
 
 def leer_id_logico(connection):
     """Intenta leer el ID personalizado del bloque 4"""
     try:
-        # Comando para leer 16 bytes del bloque 4
         command = [0xFF, 0xB0, 0x00, 0x04, 0x10]
         data, sw1, sw2 = connection.transmit(command)
         if sw1 == 0x90:
-            # Convertimos a hex y tomamos los primeros 8 caracteres (lo que grabamos)
             return toHexString(data).replace(' ', '')[:8].upper()
     except:
         return None
     return None
+
 
 def obtener_uid_fisico(connection):
     """Obtiene el UID de fábrica"""
@@ -30,9 +35,30 @@ def obtener_uid_fisico(connection):
     except:
         return None
 
+
+def ejecutar_accion(entrada, config):
+    """Ejecuta la acción correspondiente según el reproductor configurado."""
+    reproductor = entrada.get("reproductor", "")
+
+    if reproductor == "kodi":
+        kodi_cfg = config.get("_kodi", {})
+        kodi = KodiAPIManager(
+            host=kodi_cfg.get("host", "localhost"),
+            port=kodi_cfg.get("port", 8080),
+            username=kodi_cfg.get("usuario", ""),
+            password=kodi_cfg.get("password", ""),
+        )
+        exito = kodi.play_file(entrada["ruta"])
+        if not exito:
+            print(f"Error: Kodi no pudo reproducir '{entrada['ruta']}'")
+    else:
+        subprocess.Popen(" ".join(entrada["comando"]), shell=True)
+
+
 def monitorear():
     reader_list = readers()
-    if not reader_list: return
+    if not reader_list:
+        return
     reader = reader_list[0]
     ultima_tarjeta, tiempo_ultima = None, 0
 
@@ -56,8 +82,10 @@ def monitorear():
             ahora = time.time()
             if id_detectado and (id_detectado != ultima_tarjeta or ahora - tiempo_ultima > 4):
                 if id_detectado in config:
-                    print(f"Tarjeta reconocida: {config[id_detectado]['nombre']}")
-                    subprocess.Popen(" ".join(config[id_detectado]['comando']), shell=True)
+                    entrada = config[id_detectado]
+                    reproductor = entrada.get("reproductor", "desconocido")
+                    print(f"Tarjeta reconocida: {entrada['nombre']} [{reproductor}]")
+                    ejecutar_accion(entrada, config)
                 else:
                     print(f"ID desconocido: {id_detectado}")
 
@@ -67,6 +95,7 @@ def monitorear():
         except:
             pass
         time.sleep(0.5)
+
 
 if __name__ == "__main__":
     monitorear()

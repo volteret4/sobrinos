@@ -345,9 +345,14 @@ class VideoCardGenerator:
         if custom and Path(custom).exists():
             candidates.append(custom)
         candidates += [
+            # Arch Linux
             "/usr/share/fonts/TTF/DejaVuSans.ttf",
             "/usr/share/fonts/TTF/DejaVuSans-Bold.ttf",
             "/usr/share/fonts/TTF/FiraCode-Bold.ttf",
+            # Debian / Raspberry Pi OS
+            "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
+            "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",
+            "/usr/share/fonts/truetype/liberation/LiberationSans-Regular.ttf",
         ]
         loaded = False
         for fp in candidates:

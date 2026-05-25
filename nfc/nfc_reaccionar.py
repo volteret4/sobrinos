@@ -120,7 +120,7 @@ def monitorear():
             connection.disconnect()
         except Exception as e:
             err = str(e)
-            if "No card" not in err and "removeCard" not in err:
+            if "No card" not in err and "removeCard" not in err and "No smart card" not in err:
                 print(f"  [!] {err}")
         time.sleep(0.5)
 

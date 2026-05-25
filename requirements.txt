@@ -1,25 +1,26 @@
-# Requisitos del Album Web Generator
+# ── NFC ─────────────────────────────────────────────────────────────────────
+pyscard>=2.0.0          # Lector NFC ACR122U (smartcard.System / smartcard.util)
 
-# Procesamiento de metadatos de música
-mutagen>=1.46.0
-
-# Manejo de imágenes
-Pillow>=9.0.0
-
-# APIs de música
-musicbrainzngs>=0.7.1
-requests>=2.25.1
-
-# Utilidades
+# ── Kodi / reproductores ─────────────────────────────────────────────────────
+requests>=2.25.1        # Cliente HTTP para Kodi JSON-RPC y APIs externas
 urllib3>=1.26.0
 
-# Generación de códigos QR
-qrcode[pil]>=7.0.0
+# ── Metadatos de música ──────────────────────────────────────────────────────
+mutagen>=1.46.0         # Lectura de tags de archivos de audio
+musicbrainzngs>=0.7.1   # Portadas y metadatos desde MusicBrainz
 
-# Opcionales para mejores capacidades
+# ── Imágenes ─────────────────────────────────────────────────────────────────
+Pillow>=9.0.0
+numpy>=1.20.0           # Procesamiento de imágenes más rápido
 
-spotipy>=2.20.0  # Para API de Spotify (requiere credenciales)
-lyricsgenius>=3.0.0  # Para API de Genius (requiere token)
+# ── Generación de tarjetas NFC ───────────────────────────────────────────────
+qrcode[pil]>=7.0.0      # Códigos QR en portadas
+reportlab>=4.0.0        # Generación de PDF para impresión (imprimir_tarjetas.py)
+cairosvg>=2.5.0         # Render de logos SVG (nfc_tarjetas_cine.py)
 
-numpy>=1.20.0        # Para procesamiento de imágenes más rápido
-lxml>=4.6.0          # Para parsing XML más rápido en musicbrainzngs
+# ── Web de álbumes ───────────────────────────────────────────────────────────
+lxml>=4.6.0             # Parsing XML más rápido en musicbrainzngs
+
+# ── APIs opcionales (requieren credenciales en secrets.enc.yaml) ─────────────
+spotipy>=2.20.0         # Spotify
+lyricsgenius>=3.0.0     # Genius (letras)

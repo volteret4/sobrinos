@@ -359,6 +359,50 @@ class KodiAPIManager:
         result = self._send_request("Player.Open", params)
         return "result" in result and result["result"] == "OK"
 
+    def play_album(self, album_id: int) -> bool:
+        """Carga todas las canciones del álbum en orden y empieza a reproducir."""
+        params = {
+            "filter": {"albumid": album_id},
+            "properties": ["title", "track"],
+            "sort": {"method": "track", "order": "ascending"},
+        }
+        result = self._send_request("AudioLibrary.GetSongs", params)
+        songs = result.get("result", {}).get("songs", [])
+        if not songs:
+            return False
+        self.clear_playlist(0)
+        for song in songs:
+            self.add_to_playlist(0, {"songid": song["songid"]})
+        return self.play_playlist(0, 0)
+
+    def play_artist_discography(self, artist_id: int) -> bool:
+        """Carga toda la discografía del artista en la playlist y reproduce."""
+        albums = self.get_albums(artist_id)
+        if not albums:
+            return False
+        self.clear_playlist(0)
+        for album in albums:
+            songs = self.get_songs(album["albumid"])
+            for song in songs:
+                self.add_to_playlist(0, {"songid": song["songid"]})
+        return self.play_playlist(0, 0)
+
+    def play_next_episode(self, tvshow_id: int) -> bool:
+        """Reproduce el primer episodio no visto de la serie. Si todos vistos, empieza desde el principio."""
+        params = {
+            "tvshowid": tvshow_id,
+            "properties": ["title", "season", "episode", "playcount"],
+            "sort": {"method": "episode", "order": "ascending"},
+        }
+        result = self._send_request("VideoLibrary.GetEpisodes", params)
+        episodes = result.get("result", {}).get("episodes", [])
+        if not episodes:
+            return False
+        for ep in episodes:
+            if ep.get("playcount", 0) == 0:
+                return self.play_episode(ep["episodeid"])
+        return self.play_episode(episodes[0]["episodeid"])
+
     # === FUNCIONES AUXILIARES ===
 
     def get_player_status(self) -> Dict:

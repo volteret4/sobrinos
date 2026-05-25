@@ -42,9 +42,23 @@ def ejecutar_accion(entrada, config):
 
     if reproductor == "kodi":
         kodi = _kodi_from_env()
-        exito = kodi.play_file(entrada["ruta"])
+        tipo = entrada.get("tipo", "fichero")
+        kodi_id = entrada.get("kodi_id")
+        nombre = entrada.get("nombre", "")
+
+        if tipo == "pelicula":
+            exito = kodi.play_movie(kodi_id)
+        elif tipo == "serie":
+            exito = kodi.play_next_episode(kodi_id)
+        elif tipo == "album":
+            exito = kodi.play_album(kodi_id)
+        elif tipo == "artista":
+            exito = kodi.play_artist_discography(kodi_id)
+        else:  # fichero (entradas antiguas)
+            exito = kodi.play_file(entrada.get("ruta", ""))
+
         if not exito:
-            print(f"Error: Kodi no pudo reproducir '{entrada['ruta']}'")
+            print(f"Error: Kodi no pudo reproducir '{nombre}' (tipo={tipo})")
     else:
         subprocess.Popen(" ".join(entrada["comando"]), shell=True)
 

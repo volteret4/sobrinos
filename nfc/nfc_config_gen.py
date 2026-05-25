@@ -1,9 +1,13 @@
 import json
 import os
+import sys
 import time
 import uuid
 from smartcard.System import readers
 from smartcard.util import toHexString
+
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
+from reproductores.kodi_api_manager import KodiAPIManager
 
 CONFIG_FILE = "nfc_playlist.json"
 
@@ -96,6 +100,75 @@ def seleccionar_reproductor():
     return REPRODUCTORES.get(sel, REPRODUCTORES["3"])
 
 
+CATEGORIAS_KODI = {
+    "1": "pelicula",
+    "2": "serie",
+    "3": "album",
+    "4": "artista",
+}
+
+
+def _mostrar_lista(items, fmt):
+    for idx, item in enumerate(items, 1):
+        print(f"    {idx:3}. {fmt(item)}")
+
+
+def seleccionar_de_kodi(kodi):
+    """Navega la biblioteca de Kodi y devuelve (tipo, kodi_id, nombre)."""
+    print("\n  ¿Qué quieres asociar?")
+    print("    1. Película")
+    print("    2. Serie")
+    print("    3. Álbum")
+    print("    4. Artista (discografía completa)")
+    sel = input("  Categoría: ").strip()
+    tipo = CATEGORIAS_KODI.get(sel)
+    if not tipo:
+        print("  Opción no válida.")
+        return None
+
+    filtro = input("  Buscar (Enter para ver todos): ").strip().lower()
+    print("  Consultando Kodi...")
+
+    if tipo == "pelicula":
+        raw = kodi.get_movies()
+        items = [(m["movieid"], m["title"], str(m.get("year", ""))) for m in raw]
+        fmt = lambda i: f"{i[1]} ({i[2]})"
+    elif tipo == "serie":
+        raw = kodi.get_tv_shows()
+        items = [(s["tvshowid"], s["title"], str(s.get("year", ""))) for s in raw]
+        fmt = lambda i: f"{i[1]} ({i[2]})"
+    elif tipo == "album":
+        raw = kodi.get_albums()
+        items = [(a["albumid"], a["title"], ", ".join(a.get("artist", []))) for a in raw]
+        fmt = lambda i: f"{i[1]} — {i[2]}"
+    else:  # artista
+        raw = kodi.get_music_artists()
+        items = [(a["artistid"], a["label"], "") for a in raw]
+        fmt = lambda i: i[1]
+
+    if filtro:
+        items = [i for i in items if filtro in i[1].lower()]
+
+    if not items:
+        print("  No se encontraron resultados.")
+        return None
+
+    print(f"\n  {len(items)} resultado(s):")
+    _mostrar_lista(items, fmt)
+
+    try:
+        num = int(input("\n  Selecciona número: ").strip())
+        if 1 <= num <= len(items):
+            kodi_id, nombre, _ = items[num - 1]
+            print(f"  ✓ Seleccionado: {fmt(items[num - 1])}")
+            return tipo, kodi_id, nombre
+    except ValueError:
+        pass
+
+    print("  Selección inválida.")
+    return None
+
+
 def main():
     print("--- Generador Universal con Gestión de IDs Únicos ---")
     config_total = cargar_config()
@@ -142,16 +215,22 @@ def main():
                 player = seleccionar_reproductor()
 
                 if player["tipo"] == "kodi":
-                    configurar_kodi(config_total)
-                    ruta = input("  Ruta en Kodi (ej. smb://nas/Music/Artist/Album/ o /ruta/local/): ").strip()
-                    if not ruta:
-                        print("Ruta vacía, cancelando.")
+                    kodi_cfg = configurar_kodi(config_total)
+                    kodi = KodiAPIManager(
+                        host=kodi_cfg.get("host", "localhost"),
+                        port=int(kodi_cfg.get("port", 8080)),
+                        username=kodi_cfg.get("usuario", ""),
+                        password=kodi_cfg.get("password", ""),
+                    )
+                    resultado = seleccionar_de_kodi(kodi)
+                    if resultado is None:
                         continue
-                    nombre_meta = ruta.rstrip("/").split("/")[-1]
+                    tipo, kodi_id, nombre_meta = resultado
                     entrada = {
                         "nombre": nombre_meta,
                         "reproductor": "kodi",
-                        "ruta": ruta,
+                        "tipo": tipo,
+                        "kodi_id": kodi_id,
                     }
 
                 elif player["tipo"] == "http":

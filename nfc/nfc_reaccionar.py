@@ -36,15 +36,34 @@ def obtener_uid_fisico(connection):
         return None
 
 
+def _kodi_con_fallback(config):
+    """Crea KodiAPIManager: primero intenta sops/env, si no hay host usa _kodi del JSON."""
+    try:
+        kodi = _kodi_from_env()
+        if kodi.base_url != "http://localhost:8080/jsonrpc":
+            return kodi
+    except Exception:
+        pass
+    kodi_cfg = config.get("_kodi", {})
+    return KodiAPIManager(
+        host=kodi_cfg.get("host", "localhost"),
+        port=int(kodi_cfg.get("port", 8080)),
+        username=kodi_cfg.get("usuario", ""),
+        password=kodi_cfg.get("password", ""),
+    )
+
+
 def ejecutar_accion(entrada, config):
     """Ejecuta la acción correspondiente según el reproductor configurado."""
     reproductor = entrada.get("reproductor", "")
 
     if reproductor == "kodi":
-        kodi = _kodi_from_env()
+        kodi = _kodi_con_fallback(config)
         tipo = entrada.get("tipo", "fichero")
         kodi_id = entrada.get("kodi_id")
         nombre = entrada.get("nombre", "")
+
+        print(f"  → Kodi {kodi.base_url} | tipo={tipo} id={kodi_id}")
 
         if tipo == "pelicula":
             exito = kodi.play_movie(kodi_id)
@@ -57,8 +76,7 @@ def ejecutar_accion(entrada, config):
         else:  # fichero (entradas antiguas)
             exito = kodi.play_file(entrada.get("ruta", ""))
 
-        if not exito:
-            print(f"Error: Kodi no pudo reproducir '{nombre}' (tipo={tipo})")
+        print(f"  {'✓ OK' if exito else '✗ Error'}: {nombre}")
     else:
         subprocess.Popen(" ".join(entrada["comando"]), shell=True)
 
@@ -100,8 +118,10 @@ def monitorear():
                 ultima_tarjeta, tiempo_ultima = id_detectado, ahora
 
             connection.disconnect()
-        except:
-            pass
+        except Exception as e:
+            err = str(e)
+            if "No card" not in err and "removeCard" not in err:
+                print(f"  [!] {err}")
         time.sleep(0.5)
 
 

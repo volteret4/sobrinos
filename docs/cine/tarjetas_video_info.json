@@ -110,5 +110,227 @@
     "tmdb_año": "2013",
     "temporadas": 13,
     "episodios": 549
+  },
+  {
+    "title": "Los Trotamúsicos",
+    "type": "series",
+    "year": "1989",
+    "slug": "los_trotamúsicos",
+    "web_url": "https://volteret4.github.io/sobrinos/cine.html#los_trotamúsicos",
+    "tmdb_url": "https://www.themoviedb.org/tv/39822",
+    "front": "docs/cine/Los_Trotamúsicos_20260525_cara_A.png",
+    "back": "docs/cine/Los_Trotamúsicos_20260525_cara_B.png",
+    "tmdb_id": 39822,
+    "tmdb_rating": 7.0,
+    "tmdb_votos": 2,
+    "sinopsis": "La serie sigue la historia de cuatro animales amigos: el valeroso gallo Koki, el cándido burro Tonto, el sagaz perro Lupo y el gato Burlón, que forman un grupo musical en el que tocan respectivamente la guitarra, la batería, la trompeta y el saxofón.",
+    "generos": [
+      "Animación",
+      "Comedia"
+    ],
+    "tmdb_poster": "https://image.tmdb.org/t/p/w500/ogorqSGbfxB6Zm1k0k8dIm1BTmg.jpg",
+    "tmdb_poster_hd": "https://image.tmdb.org/t/p/w1280/ogorqSGbfxB6Zm1k0k8dIm1BTmg.jpg",
+    "tmdb_backdrop": "https://image.tmdb.org/t/p/w1280/fG4h4xPViCQYXt1ZGHLd2fkuDjl.jpg",
+    "reparto": [
+      "Eduardo Jover",
+      "Rafael Alonso Naranjo Jr.",
+      "Gonzalo Durán",
+      "Claudio Serrano",
+      "Simón Ramírez Fernández"
+    ],
+    "tmdb_titulo": "Los Trotamúsicos",
+    "tmdb_año": "1989",
+    "temporadas": 1,
+    "episodios": 26
+  },
+  {
+    "title": "Los rescatadores en Cangurolandia",
+    "type": "movie",
+    "year": "1990",
+    "slug": "los_rescatadores_en_cangurolandia",
+    "web_url": "https://volteret4.github.io/sobrinos/cine.html#los_rescatadores_en_cangurolandia",
+    "tmdb_url": "https://www.themoviedb.org/movie/11135",
+    "front": "docs/cine/Los_rescatadores_en_Cangurolandia_20260525_cara_A.png",
+    "back": "docs/cine/Los_rescatadores_en_Cangurolandia_20260525_cara_B.png",
+    "tmdb_id": 11135,
+    "tmdb_rating": 6.6,
+    "tmdb_votos": 1391,
+    "sinopsis": "Esta vez, nuestros ratoncitos agentes secretos se encuentran en el corazón de la indomable selva australiana cuando tienen que acudir en ayuda de Cody, un jovencito que lucha por salvar un águila de un despiadado cazador furtivo.",
+    "generos": [
+      "Animación",
+      "Familia",
+      "Aventura"
+    ],
+    "tmdb_poster": "https://image.tmdb.org/t/p/w500/hyuP9jI0Q6bBDEvvsYD8ka27QD0.jpg",
+    "tmdb_poster_hd": "https://image.tmdb.org/t/p/w1280/hyuP9jI0Q6bBDEvvsYD8ka27QD0.jpg",
+    "tmdb_backdrop": "https://image.tmdb.org/t/p/w1280/nOAmKHegzi3uXZ8tkYiiZWBdUl5.jpg",
+    "reparto": [
+      "Bob Newhart",
+      "Eva Gabor",
+      "John Candy",
+      "Tristan Rogers",
+      "Adam Ryen",
+      "George C. Scott"
+    ],
+    "estudios": [
+      "Silver Screen Partners IV",
+      "Walt Disney Feature Animation"
+    ],
+    "tmdb_titulo": "Los rescatadores en Cangurolandia",
+    "tmdb_año": "1990",
+    "duracion_min": 77,
+    "director": "Mike Gabriel"
+  },
+  {
+    "title": "Toy Story",
+    "type": "movie",
+    "year": "1995",
+    "slug": "toy_story",
+    "web_url": "https://volteret4.github.io/sobrinos/cine.html#toy_story",
+    "tmdb_url": "https://www.themoviedb.org/movie/862",
+    "front": "docs/cine/Toy_Story_20260525_cara_A.png",
+    "back": "docs/cine/Toy_Story_20260525_cara_B.png",
+    "tmdb_id": 862,
+    "tmdb_rating": 8.0,
+    "tmdb_votos": 19862,
+    "sinopsis": "Los juguetes de Andy, un niño de seis años, temen que haya llegado su hora y que un nuevo regalo de cumpleaños les sustituya en el corazón de su dueño. Woody, un vaquero que ha sido hasta ahora el juguete favorito de Andy, trata de tranquilizarlos hasta que aparece Buzz Lightyear, un héroe espacial dotado de todo tipo de avances tecnológicos. Woody es relegado a un segundo plano, pero su constante rivalidad se transformará en una gran amistad cuando ambos se pierden en la ciudad sin saber cómo volver a casa.",
+    "generos": [
+      "Familia",
+      "Comedia",
+      "Animación",
+      "Aventura"
+    ],
+    "tmdb_poster": "https://image.tmdb.org/t/p/w500/jvn7wy3RSNEXnFSXLpH2of2LcV6.jpg",
+    "tmdb_poster_hd": "https://image.tmdb.org/t/p/w1280/jvn7wy3RSNEXnFSXLpH2of2LcV6.jpg",
+    "tmdb_backdrop": "https://image.tmdb.org/t/p/w1280/3Rfvhy1Nl6sSGJwyjb0QiZzZYlB.jpg",
+    "reparto": [
+      "Tom Hanks",
+      "Tim Allen",
+      "Don Rickles",
+      "Jim Varney",
+      "Wallace Shawn",
+      "John Ratzenberger"
+    ],
+    "estudios": [
+      "Pixar"
+    ],
+    "tmdb_titulo": "Toy Story",
+    "tmdb_año": "1995",
+    "duracion_min": 77,
+    "director": "John Lasseter"
+  },
+  {
+    "title": "Harry Potter y la piedra filosofal",
+    "type": "movie",
+    "year": "2001",
+    "slug": "harry_potter_y_la_piedra_filosofal",
+    "web_url": "https://volteret4.github.io/sobrinos/cine.html#harry_potter_y_la_piedra_filosofal",
+    "tmdb_url": "https://www.themoviedb.org/movie/671",
+    "front": "docs/cine/Harry_Potter_y_la_piedra_filosofal_20260525_cara_A.png",
+    "back": "docs/cine/Harry_Potter_y_la_piedra_filosofal_20260525_cara_B.png",
+    "tmdb_id": 671,
+    "tmdb_rating": 7.9,
+    "tmdb_votos": 29547,
+    "sinopsis": "Harry Potter es un huérfano que vive con sus desagradables tíos, los Dursley, y su repelente primo Dudley. Se acerca su undécimo cumpleaños y tiene pocas esperanzas de recibir algún regalo, ya que nunca nadie se acuerda de él. Sin embargo, pocos días antes de su cumpleaños, una serie de misteriosas cartas dirigidas a él y escritas con una estridente tinta verde rompen la monotonía de su vida: Harry es un mago y sus padres también lo eran.",
+    "generos": [
+      "Aventura",
+      "Fantasía"
+    ],
+    "tmdb_poster": "https://image.tmdb.org/t/p/w500/3MKK7vAJLtSkBTABMTjxf6TOCo3.jpg",
+    "tmdb_poster_hd": "https://image.tmdb.org/t/p/w1280/3MKK7vAJLtSkBTABMTjxf6TOCo3.jpg",
+    "tmdb_backdrop": "https://image.tmdb.org/t/p/w1280/1XAC6RPT01UX9EQGy2JVn5c8pgy.jpg",
+    "reparto": [
+      "Daniel Radcliffe",
+      "Rupert Grint",
+      "Emma Watson",
+      "Richard Harris",
+      "Tom Felton",
+      "Alan Rickman"
+    ],
+    "estudios": [
+      "Warner Bros. Pictures",
+      "Heyday Films",
+      "1492 Pictures"
+    ],
+    "tmdb_titulo": "Harry Potter y la piedra filosofal",
+    "tmdb_año": "2001",
+    "duracion_min": 152,
+    "director": "Chris Columbus"
+  },
+  {
+    "title": "El libro de la selva",
+    "type": "movie",
+    "year": "1967",
+    "slug": "el_libro_de_la_selva",
+    "web_url": "https://volteret4.github.io/sobrinos/cine.html#el_libro_de_la_selva",
+    "tmdb_url": "https://www.themoviedb.org/movie/9325",
+    "front": "docs/cine/El_libro_de_la_selva_20260525_cara_A.png",
+    "back": "docs/cine/El_libro_de_la_selva_20260525_cara_B.png",
+    "tmdb_id": 9325,
+    "tmdb_rating": 7.3,
+    "tmdb_votos": 6655,
+    "sinopsis": "Tras la muerte de sus padres, Mowgli, un niño de apenas dos años, queda abandonado en la selva y es recogido por una manada de lobos. En el seno de la manada, Mowgli es criado como un lobo más hasta que crece y empieza a desenvolverse por sí mismo en la selva.",
+    "generos": [
+      "Familia",
+      "Animación",
+      "Aventura"
+    ],
+    "tmdb_poster": "https://image.tmdb.org/t/p/w500/1w8wk8htVPW5cdCYnRU4bt5y5Fw.jpg",
+    "tmdb_poster_hd": "https://image.tmdb.org/t/p/w1280/1w8wk8htVPW5cdCYnRU4bt5y5Fw.jpg",
+    "tmdb_backdrop": "https://image.tmdb.org/t/p/w1280/zj8XS0l1cWStpKnuD1LFMB3VoV1.jpg",
+    "reparto": [
+      "Bruce Reitherman",
+      "Phil Harris",
+      "Sebastian Cabot",
+      "George Sanders",
+      "Sterling Holloway",
+      "Louis Prima"
+    ],
+    "estudios": [
+      "Walt Disney Productions"
+    ],
+    "tmdb_titulo": "El libro de la selva",
+    "tmdb_año": "1967",
+    "duracion_min": 78,
+    "director": "Wolfgang Reitherman"
+  },
+  {
+    "title": "La bella y la bestia",
+    "type": "movie",
+    "year": "1991",
+    "slug": "la_bella_y_la_bestia",
+    "web_url": "https://volteret4.github.io/sobrinos/cine.html#la_bella_y_la_bestia",
+    "tmdb_url": "https://www.themoviedb.org/movie/10020",
+    "front": "docs/cine/La_bella_y_la_bestia_20260525_cara_A.png",
+    "back": "docs/cine/La_bella_y_la_bestia_20260525_cara_B.png",
+    "tmdb_id": 10020,
+    "tmdb_rating": 7.7,
+    "tmdb_votos": 10662,
+    "sinopsis": "Una hermosa joven llamada Bella acepta alojarse en un castillo con una bestia a cambio de la libertad de su padre. La bestia es, en realidad, un príncipe encantado. Para romper el hechizo, deberá ganarse el amor de una preciosa dama antes de que caiga el último pétalo de una rosa encantada.",
+    "generos": [
+      "Romance",
+      "Familia",
+      "Animación",
+      "Fantasía"
+    ],
+    "tmdb_poster": "https://image.tmdb.org/t/p/w500/1FxMtEUc6DP1MXsTBftOFaoCVVO.jpg",
+    "tmdb_poster_hd": "https://image.tmdb.org/t/p/w1280/1FxMtEUc6DP1MXsTBftOFaoCVVO.jpg",
+    "tmdb_backdrop": "https://image.tmdb.org/t/p/w1280/fW4ZCoEZRBqLAJGFQ2g5AdAfPQR.jpg",
+    "reparto": [
+      "Paige O'Hara",
+      "Robby Benson",
+      "Richard White",
+      "Jerry Orbach",
+      "David Ogden Stiers",
+      "Angela Lansbury"
+    ],
+    "estudios": [
+      "Silver Screen Partners IV",
+      "Walt Disney Pictures"
+    ],
+    "tmdb_titulo": "La bella y la bestia",
+    "tmdb_año": "1991",
+    "duracion_min": 84,
+    "director": "Gary Trousdale"
   }
 ]

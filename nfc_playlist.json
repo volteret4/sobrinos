@@ -1,0 +1,14 @@
+{
+    "_kodi": {
+        "host": "192.168.1.135",
+        "port": 8080,
+        "usuario": "kodi",
+        "password": "popollo33"
+    },
+    "7C839C1E": {
+        "nombre": "Léon: The Professional",
+        "reproductor": "kodi",
+        "tipo": "pelicula",
+        "kodi_id": 4
+    }
+}

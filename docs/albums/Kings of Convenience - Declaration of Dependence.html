@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kings of Convenience - Declaration of Dependence</title>
+    <meta name="description" content="Información completa del álbum Declaration of Dependence de Kings of Convenience">
+
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Colores optimizados extraídos de la portada -->
+    <style>
+        :root {
+            --color-primary: #6bb280;
+            --color-secondary: #8eadcc;
+            --color-accent: #824c99;
+        }
+
+        /* Header con colores optimizados */
+        .album-header {
+            background: linear-gradient(135deg, #6bb280, #8eadcc);
+            color: #ffffff !important;
+        }
+
+        .album-title,
+        .artist-name {
+            color: #ffffff !important;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8) !important;
+        }
+
+        .album-details .detail-item {
+            background: rgba(0, 0, 0, 0.4) !important;
+            color: #ffffff !important;
+            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+            backdrop-filter: blur(10px) !important;
+        }
+
+        .album-details .detail-item strong {
+            color: #ffffff !important;
+        }
+
+        /* Responsive mejorado */
+        @media (max-width: 768px) {
+            .album-header {
+                padding: 1.5rem 0 !important;
+                margin-bottom: 1.5rem !important;
+            }
+
+            .album-hero {
+                gap: 1rem !important;
+            }
+
+            .album-title {
+                font-size: 1.5rem !important;
+                margin-bottom: 0.25rem !important;
+            }
+
+            .artist-name {
+                font-size: 1.125rem !important;
+                margin-bottom: 1rem !important;
+            }
+
+            .album-cover img {
+                width: 120px !important;
+                height: 120px !important;
+            }
+
+            .artist-image img {
+                width: 80px !important;
+                height: 80px !important;
+            }
+
+            .album-details {
+                flex-direction: column !important;
+                align-items: flex-start !important;
+                gap: 0.25rem !important;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .album-header {
+                padding: 1rem 0 !important;
+            }
+
+            .album-title {
+                font-size: 1.25rem !important;
+            }
+
+            .artist-name {
+                font-size: 1rem !important;
+            }
+
+            .album-cover img {
+                width: 100px !important;
+                height: 100px !important;
+            }
+
+            .artist-image img {
+                width: 70px !important;
+                height: 70px !important;
+            }
+        }
+
+        /* Layout sin imágenes */
+        .album-hero.no-images {
+            grid-template-columns: 1fr !important;
+            text-align: center !important;
+        }
+
+        .album-hero.no-images .album-info {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+    </style>
+
+    <script>
+        window.albumData = {
+  "title": "Declaration of Dependence",
+  "artist": "Kings of Convenience",
+  "year": null,
+  "genre": [
+    "Ballad"
+  ],
+  "total_tracks": 13,
+  "tracks_count": 13,
+  "has_lyrics": true,
+  "has_comment": true,
+  "links_count": 11
+};
+    </script>
+
+    <style>
+
+        /* Mejoras responsive */
+        @media (max-width: 768px) {
+            .album-header {
+                padding: 1.5rem 0 !important;
+                margin-bottom: 1.5rem !important;
+            }
+
+            .album-hero {
+                gap: 1rem !important;
+            }
+
+            .album-title {
+                font-size: 1.5rem !important;
+                margin-bottom: 0.25rem !important;
+            }
+
+            .artist-name {
+                font-size: 1.125rem !important;
+                margin-bottom: 1rem !important;
+            }
+
+            .album-cover img {
+                width: 120px !important;
+                height: 120px !important;
+            }
+
+            .artist-image img {
+                width: 80px !important;
+                height: 80px !important;
+            }
+
+            .album-details {
+                flex-direction: column !important;
+                align-items: flex-start !important;
+                gap: 0.25rem !important;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .album-header {
+                padding: 1rem 0 !important;
+            }
+
+            .album-title {
+                font-size: 1.25rem !important;
+            }
+
+            .artist-name {
+                font-size: 1rem !important;
+            }
+
+            .album-cover img {
+                width: 100px !important;
+                height: 100px !important;
+            }
+
+            .artist-image img {
+                width: 70px !important;
+                height: 70px !important;
+            }
+        }
+
+        /* Texto con mejor contraste */
+        .album-title,
+        .artist-name {
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8) !important;
+        }
+
+        .album-details .detail-item {
+            background: rgba(0, 0, 0, 0.4) !important;
+            backdrop-filter: blur(10px) !important;
+            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        }
+        
+    </style>
+</head>
+<body>
+    <header class="site-header">
+        <div class="container">
+            <nav class="site-nav">
+                <div class="site-logo">
+                    <a href="../index.html" style="color: inherit; text-decoration: none;">← Volver a la Colección</a>
+                </div>
+                <div class="nav-links">
+                    <a href="../index.html" class="nav-link">🏠 Inicio</a>
+                    <button class="theme-toggle" aria-label="Cambiar tema">🌙</button>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    
+    <header class="album-header">
+        <div class="container">
+            <div class="album-hero has-images">
+                <div class="album-images">
+                <div class="artist-image">
+                    <img src="/home/huan/gits/pollo/music-fuzzy/.content/artistas_img/Kings_of_Convenience/image_1.jpg"
+                         alt="Foto de Kings of Convenience">
+                </div></div>
+                <div class="album-info">
+                    <h1 class="album-title">Declaration of Dependence</h1>
+                    <h2 class="artist-name">Kings of Convenience</h2>
+                    <div class='album-details'><span class='detail-item'><strong>Género:</strong> Ballad</span><span class='detail-item'><strong>Pistas:</strong> 13</span></div>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <main class="album-content">
+        <div class="container">
+            <nav class="content-nav">
+                <ul class="nav-tabs">
+                    <li><a href="#comment" class="nav-tab active" data-tab="comment">Comentario</a></li>
+                    <li><a href="#lyrics" class="nav-tab" data-tab="lyrics">Letras</a></li>
+                    <li><a href="#links" class="nav-tab" data-tab="links">Enlaces</a></li>
+                    <li><a href="#tracks" class="nav-tab" data-tab="tracks">Pistas</a></li>
+                </ul>
+            </nav>
+
+            <div class="tab-content">
+                
+                <section id="comment" class="tab-panel active">
+                    <h3>Comentario Personal</h3>
+                    <div class="comment-content">
+                        <p># Kings of Convenience</p><p>Son un grupo divertidísimo formado por dos amigos con una sensibilidad muy especial en sus composiciones, tanto por las letras como por sus cuidadas producciones.</p>
+                    </div>
+                </section>
+                
+                <section id="lyrics" class="tab-panel">
+                    <h3>Letras de las Canciones</h3>
+                    <div class="lyrics-content">
+                        
+                    </div>
+                    <script>
+                    function toggleLyrics(songElement) {
+                        songElement.classList.toggle('expanded');
+                    }
+                    </script>
+                </section>
+                
+                <section id="links" class="tab-panel">
+                    <h3>Enlaces Relacionados</h3>
+                    <div class="links-content">
+                        <h4>Streaming</h4><ul><li><a href="https://open.spotify.com/artist/41AbNVba2ccpmcc9QtOJE7" target="_blank">Kings of Convenience en Spotify</a></li><li><a href="https://www.youtube.com/channel/kings-of-convenience" target="_blank">Kings of Convenience en Youtube</a></li><li><a href="https://open.spotify.com/search/Kings%20of%20Convenience%20Declaration%20of%20Dependence" target="_blank">Kings of Convenience en Spotify</a></li></ul><h4>Info</h4><ul><li><a href="https://musicbrainz.org/artist/cf0f4547-ffbd-4011-98ad-0bec9ba022db" target="_blank">Kings of Convenience en Musicbrainz</a></li><li><a href="https://www.discogs.com/artist/12634" target="_blank">Kings of Convenience en Discogs</a></li><li><a href="https://es.wikipedia.org/wiki/Kings_Of_Convenience" target="_blank">Kings of Convenience en Wikipedia</a></li><li><a href="https://www.last.fm/music/Kings%20of%20Convenience" target="_blank">Kings of Convenience en Lastfm</a></li><li><a href="https://www.discogs.com/search/?q=Kings%20of%20Convenience%20Declaration%20of%20Dependence&amp;type=all" target="_blank">Kings of Convenience en Discogs</a></li><li><a href="https://musicbrainz.org/search?query=Kings%20of%20Convenience&amp;type=artist" target="_blank">Kings of Convenience en Musicbrainz</a></li><li><a href="https://genius.com/artists/kings-of-convenience" target="_blank">Kings of Convenience en Genius</a></li></ul><h4>Other</h4><ul><li><a href="https://rateyourmusic.com/artist/kings-of-convenience" target="_blank">Kings of Convenience en Rateyourmusic</a></li></ul>
+                    </div>
+                </section>
+                
+                <section id="tracks" class="tab-panel">
+                    <h3>Lista de Pistas</h3>
+                    <div class="tracks-content">
+                        <table class="tracks-table">
+                            <thead>
+                                <tr><th>#</th><th>Título</th><th>Duración</th></tr>
+                            </thead>
+                            <tbody>
+            <tr class="track-row">
+                <td class="track-number"></td>
+                <td class="track-title">Mrs. Cold</td>
+                <td class="track-duration">3:07</td>
+            </tr>
+            <tr class="track-row">
+                <td class="track-number"></td>
+                <td class="track-title">Me in You</td>
+                <td class="track-duration">3:08</td>
+            </tr>
+            <tr class="track-row">
+                <td class="track-number"></td>
+                <td class="track-title">Boat Behind</td>
+                <td class="track-duration">3:40</td>
+            </tr>
+            <tr class="track-row">
+                <td class="track-number"></td>
+                <td class="track-title">Rule My World</td>
+                <td class="track-duration">3:31</td>
+            </tr>
+            <tr class="track-row">
+                <td class="track-number"></td>
+                <td class="track-title">My Ship Isn&#x27;t Pretty</td>
+                <td class="track-duration">3:47</td>
+            </tr>
+            <tr class="track-row">
+                <td class="track-number"></td>
+                <td class="track-title">24-25</td>
+                <td class="track-duration">3:41</td>
+            </tr>
+            <tr class="track-row">
+                <td class="track-number"></td>
+                <td class="track-title">Renegade</td>
+                <td class="track-duration">4:15</td>
+            </tr>
+            <tr class="track-row">
+                <td class="track-number"></td>
+                <td class="track-title">Power of Not Knowing</td>
+                <td class="track-duration">2:22</td>
+            </tr>
+            <tr class="track-row">
+                <td class="track-number"></td>
+                <td class="track-title">Peacetime Resistance</td>
+                <td class="track-duration">2:53</td>
+            </tr>
+            <tr class="track-row">
+                <td class="track-number"></td>
+                <td class="track-title">Freedom and Its Owner</td>
+                <td class="track-duration">3:23</td>
+            </tr>
+            <tr class="track-row">
+                <td class="track-number"></td>
+                <td class="track-title">Riot on an Empty Street</td>
+                <td class="track-duration">4:06</td>
+            </tr>
+            <tr class="track-row">
+                <td class="track-number"></td>
+                <td class="track-title">Second to Numb</td>
+                <td class="track-duration">3:35</td>
+            </tr>
+            <tr class="track-row">
+                <td class="track-number"></td>
+                <td class="track-title">Scars on Land</td>
+                <td class="track-duration">3:43</td>
+            </tr></tbody>
+                        </table>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+    
+    <footer class="album-footer">
+        <div class="container">
+            <p>Generado con Album Web Generator</p>
+        </div>
+    </footer>
+
+    <script src="../script.js"></script>
+</body>
+</html>

@@ -56,5 +56,20 @@
     "has_lyrics": true,
     "has_comment": false,
     "date_added": "2025-12-18T18:36:44.765956"
+  },
+  {
+    "filename": "Kings of Convenience - Declaration of Dependence.html",
+    "title": "Declaration of Dependence",
+    "artist": "Kings of Convenience",
+    "year": null,
+    "genre": [
+      "Ballad"
+    ],
+    "cover_image": null,
+    "thumbnail_image": null,
+    "tracks_count": 13,
+    "has_lyrics": true,
+    "has_comment": true,
+    "date_added": "2026-03-10T01:29:09.920025"
   }
 ]

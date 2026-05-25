@@ -1,0 +1,284 @@
+{
+  "title": "Declaration of Dependence",
+  "artist": "Kings of Convenience",
+  "album_artist": "Kings of Convenience",
+  "date": "2009-10",
+  "year": null,
+  "genre": [
+    "Ballad"
+  ],
+  "label": null,
+  "mbid": "cf0f4547-ffbd-4011-98ad-0bec9ba022db",
+  "mbid_album": "5155bc06-4050-43c9-bf7c-279430fb579a",
+  "total_tracks": 13,
+  "total_discs": 1,
+  "tracks": [
+    {
+      "filename": "01. Mrs. Cold.flac",
+      "title": "Mrs. Cold",
+      "artist": "Kings of Convenience",
+      "track_number": 0,
+      "disc_number": 1,
+      "duration": 187.09963541666667,
+      "mbid": "37ce8fdc-7d96-482d-9378-9616c1c6b022"
+    },
+    {
+      "filename": "02. Me In You.flac",
+      "title": "Me in You",
+      "artist": "Kings of Convenience",
+      "track_number": 0,
+      "disc_number": 1,
+      "duration": 188.93030208333334,
+      "mbid": "286b598c-cb66-424e-ba94-20fe94e97528"
+    },
+    {
+      "filename": "03. Boat Behind.flac",
+      "title": "Boat Behind",
+      "artist": "Kings of Convenience",
+      "track_number": 0,
+      "disc_number": 1,
+      "duration": 220.64810416666666,
+      "mbid": "a25e251c-099c-45aa-a862-5ee1be22829c"
+    },
+    {
+      "filename": "04. Rule My World.flac",
+      "title": "Rule My World",
+      "artist": "Kings of Convenience",
+      "track_number": 0,
+      "disc_number": 1,
+      "duration": 211.69591666666668,
+      "mbid": "2df91ca8-3b94-495a-8d5d-35f3b53871f0"
+    },
+    {
+      "filename": "05. My Ship Isn't Pretty.flac",
+      "title": "My Ship Isn't Pretty",
+      "artist": "Kings of Convenience",
+      "track_number": 0,
+      "disc_number": 1,
+      "duration": 227.32820833333332,
+      "mbid": "e5f2ce7a-b21d-4f74-a528-a8a5c205a72e"
+    },
+    {
+      "filename": "06. 24-25.flac",
+      "title": "24-25",
+      "artist": "Kings of Convenience",
+      "track_number": 0,
+      "disc_number": 1,
+      "duration": 221.83966666666666,
+      "mbid": "a04aab00-16d1-4a89-ba28-07340b644c79"
+    },
+    {
+      "filename": "07. Renegade.flac",
+      "title": "Renegade",
+      "artist": "Kings of Convenience",
+      "track_number": 0,
+      "disc_number": 1,
+      "duration": 255.79161458333334,
+      "mbid": "f4e1bf45-b919-4d83-a26f-86f54008ebfe"
+    },
+    {
+      "filename": "08. Power Of Not Knowing.flac",
+      "title": "Power of Not Knowing",
+      "artist": "Kings of Convenience",
+      "track_number": 0,
+      "disc_number": 1,
+      "duration": 142.99459375,
+      "mbid": "ba5d6e0a-5c65-4a23-9fdf-8d5733c0feff"
+    },
+    {
+      "filename": "09. Peacetime Resistance.flac",
+      "title": "Peacetime Resistance",
+      "artist": "Kings of Convenience",
+      "track_number": 0,
+      "disc_number": 1,
+      "duration": 173.3043125,
+      "mbid": "079daeed-5983-4b85-98cf-e6965b60a1eb"
+    },
+    {
+      "filename": "10. Freedom And Its Owner.flac",
+      "title": "Freedom and Its Owner",
+      "artist": "Kings of Convenience",
+      "track_number": 0,
+      "disc_number": 1,
+      "duration": 203.32741666666666,
+      "mbid": "75214332-e6ff-40f0-a313-9b0ed4d47b9c"
+    },
+    {
+      "filename": "11. Riot On An Empty Street.flac",
+      "title": "Riot on an Empty Street",
+      "artist": "Kings of Convenience",
+      "track_number": 0,
+      "disc_number": 1,
+      "duration": 246.98419791666666,
+      "mbid": "de27c3cb-89ef-4a2d-b20f-281e4090ce4e"
+    },
+    {
+      "filename": "12. Second To Numb.flac",
+      "title": "Second to Numb",
+      "artist": "Kings of Convenience",
+      "track_number": 0,
+      "disc_number": 1,
+      "duration": 215.12798958333335,
+      "mbid": "3b26efcd-5be3-4c34-9c93-02a4c832d1b8"
+    },
+    {
+      "filename": "13. Scars On Land.flac",
+      "title": "Scars on Land",
+      "artist": "Kings of Convenience",
+      "track_number": 0,
+      "disc_number": 1,
+      "duration": 223.8159375,
+      "mbid": "44d2facc-aeb1-4fcb-800a-fa5d1b03e50d"
+    }
+  ],
+  "local_cover": null,
+  "user_comment": "# Kings of Convenience\n\nSon un grupo divertidísimo formado por dos amigos con una sensibilidad muy especial en sus composiciones, tanto por las letras como por sus cuidadas producciones.",
+  "album_image": null,
+  "artist_image": {
+    "url": "/home/huan/gits/pollo/music-fuzzy/.content/artistas_img/Kings_of_Convenience/image_1.jpg",
+    "source": "database"
+  },
+  "lyrics": {
+    "Mrs. Cold": {
+      "lyrics": null,
+      "source": null,
+      "url": null,
+      "error": "No se encontraron letras"
+    },
+    "Me in You": {
+      "lyrics": null,
+      "source": null,
+      "url": null,
+      "error": "No se encontraron letras"
+    },
+    "Boat Behind": {
+      "lyrics": null,
+      "source": null,
+      "url": null,
+      "error": "No se encontraron letras"
+    },
+    "Rule My World": {
+      "lyrics": null,
+      "source": null,
+      "url": null,
+      "error": "No se encontraron letras"
+    },
+    "My Ship Isn't Pretty": {
+      "lyrics": null,
+      "source": null,
+      "url": null,
+      "error": "No se encontraron letras"
+    },
+    "24-25": {
+      "lyrics": null,
+      "source": null,
+      "url": null,
+      "error": "No se encontraron letras"
+    },
+    "Renegade": {
+      "lyrics": null,
+      "source": null,
+      "url": null,
+      "error": "No se encontraron letras"
+    },
+    "Power of Not Knowing": {
+      "lyrics": null,
+      "source": null,
+      "url": null,
+      "error": "No se encontraron letras"
+    },
+    "Peacetime Resistance": {
+      "lyrics": null,
+      "source": null,
+      "url": null,
+      "error": "No se encontraron letras"
+    },
+    "Freedom and Its Owner": {
+      "lyrics": null,
+      "source": null,
+      "url": null,
+      "error": "No se encontraron letras"
+    },
+    "Riot on an Empty Street": {
+      "lyrics": null,
+      "source": null,
+      "url": null,
+      "error": "No se encontraron letras"
+    },
+    "Second to Numb": {
+      "lyrics": null,
+      "source": null,
+      "url": null,
+      "error": "No se encontraron letras"
+    },
+    "Scars on Land": {
+      "lyrics": null,
+      "source": null,
+      "url": null,
+      "error": "No se encontraron letras"
+    }
+  },
+  "links": {
+    "streaming": {
+      "spotify": {
+        "url": "https://open.spotify.com/artist/41AbNVba2ccpmcc9QtOJE7",
+        "title": "Kings of Convenience en Spotify",
+        "source": "database"
+      },
+      "youtube_0": {
+        "url": "https://www.youtube.com/channel/kings-of-convenience",
+        "title": "Kings of Convenience en Youtube",
+        "source": "youtube"
+      },
+      "spotify_1": {
+        "url": "https://open.spotify.com/search/Kings%20of%20Convenience%20Declaration%20of%20Dependence",
+        "title": "Kings of Convenience en Spotify",
+        "source": "spotify"
+      }
+    },
+    "info": {
+      "musicbrainz": {
+        "url": "https://musicbrainz.org/artist/cf0f4547-ffbd-4011-98ad-0bec9ba022db",
+        "title": "Kings of Convenience en Musicbrainz",
+        "source": "database"
+      },
+      "discogs": {
+        "url": "https://www.discogs.com/artist/12634",
+        "title": "Kings of Convenience en Discogs",
+        "source": "database"
+      },
+      "wikipedia": {
+        "url": "https://es.wikipedia.org/wiki/Kings_Of_Convenience",
+        "title": "Kings of Convenience en Wikipedia",
+        "source": "database"
+      },
+      "lastfm_0": {
+        "url": "https://www.last.fm/music/Kings%20of%20Convenience",
+        "title": "Kings of Convenience en Lastfm",
+        "source": "lastfm"
+      },
+      "discogs_1": {
+        "url": "https://www.discogs.com/search/?q=Kings%20of%20Convenience%20Declaration%20of%20Dependence&type=all",
+        "title": "Kings of Convenience en Discogs",
+        "source": "discogs"
+      },
+      "musicbrainz_2": {
+        "url": "https://musicbrainz.org/search?query=Kings%20of%20Convenience&type=artist",
+        "title": "Kings of Convenience en Musicbrainz",
+        "source": "musicbrainz"
+      },
+      "genius_3": {
+        "url": "https://genius.com/artists/kings-of-convenience",
+        "title": "Kings of Convenience en Genius",
+        "source": "genius"
+      }
+    },
+    "other": {
+      "rateyourmusic": {
+        "url": "https://rateyourmusic.com/artist/kings-of-convenience",
+        "title": "Kings of Convenience en Rateyourmusic",
+        "source": "database"
+      }
+    }
+  }
+}

@@ -8,7 +8,7 @@ from smartcard.util import toHexString
 
 # Importar KodiAPIManager desde reproductores/
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
-from reproductores.kodi_api_manager import KodiAPIManager
+from reproductores.kodi_api_manager import KodiAPIManager, _kodi_from_env
 
 CONFIG_FILE = "nfc_playlist.json"
 
@@ -41,13 +41,7 @@ def ejecutar_accion(entrada, config):
     reproductor = entrada.get("reproductor", "")
 
     if reproductor == "kodi":
-        kodi_cfg = config.get("_kodi", {})
-        kodi = KodiAPIManager(
-            host=kodi_cfg.get("host", "localhost"),
-            port=kodi_cfg.get("port", 8080),
-            username=kodi_cfg.get("usuario", ""),
-            password=kodi_cfg.get("password", ""),
-        )
+        kodi = _kodi_from_env()
         exito = kodi.play_file(entrada["ruta"])
         if not exito:
             print(f"Error: Kodi no pudo reproducir '{entrada['ruta']}'")

@@ -5,9 +5,21 @@ Requiere que Kodi tenga habilitada la interfaz JSON-RPC en Configuración > Serv
 """
 
 import json
+import os
 import requests
 from typing import Dict, List, Optional, Any
 import time
+
+def _kodi_from_env() -> "KodiAPIManager":
+    """Crea un KodiAPIManager con los valores del secrets.enc.yaml (vía sops_dot_env)."""
+    from sops_dot_env import load_sops_env
+    load_sops_env()
+    return KodiAPIManager(
+        host=os.getenv("KODI_HOST", "localhost"),
+        port=int(os.getenv("KODI_PORT", "8080")),
+        username=os.getenv("KODI_USER", ""),
+        password=os.getenv("KODI_PASSWORD", ""),
+    )
 
 class KodiAPIManager:
     def __init__(self, host: str = "localhost", port: int = 8080, username: str = "", password: str = ""):

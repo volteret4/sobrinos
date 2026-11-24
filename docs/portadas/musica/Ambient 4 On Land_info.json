@@ -1,0 +1,44 @@
+{
+  "artist": "Brian Eno",
+  "album": "Ambient 4: On Land",
+  "date": "1987-01",
+  "label": "Editions EG",
+  "genres": [
+    "Ambient"
+  ],
+  "mbid": "ceae0e07-e2dc-43fe-ab2d-9568c0da4490",
+  "tracks": [
+    {
+      "number": 1,
+      "title": "Lizard Point"
+    },
+    {
+      "number": 2,
+      "title": "The Lost Day"
+    },
+    {
+      "number": 3,
+      "title": "Tal Coat"
+    },
+    {
+      "number": 4,
+      "title": "Shadow"
+    },
+    {
+      "number": 5,
+      "title": "Lantern Marsh"
+    },
+    {
+      "number": 6,
+      "title": "Unfamiliar Wind (Leeks Hills)"
+    },
+    {
+      "number": 7,
+      "title": "A Clearing"
+    },
+    {
+      "number": 8,
+      "title": "Dunwich Beach, Autumn, 1960"
+    }
+  ]
+}

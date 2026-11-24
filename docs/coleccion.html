@@ -1,0 +1,434 @@
+<!doctype html>
+<html lang="es" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mi Colección</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    .controls-grid {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: var(--spacing-md);
+      margin-bottom: var(--spacing-lg);
+      align-items: center;
+    }
+    @media (max-width: 600px) { .controls-grid { grid-template-columns: 1fr; } }
+
+    .cat-select {
+      padding: var(--spacing-md);
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius-md);
+      font-size: var(--font-size-base);
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      min-width: 190px;
+      cursor: pointer;
+    }
+
+    .col-stats {
+      font-size: var(--font-size-sm);
+      color: var(--text-muted);
+      margin-bottom: var(--spacing-lg);
+    }
+
+    /* ── Grid ── */
+    .col-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: var(--spacing-lg);
+    }
+
+    /* ── Tarjeta ── */
+    .col-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius-lg);
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+      display: flex;
+      flex-direction: column;
+    }
+    .col-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+    .col-card:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 2px; }
+
+    .col-card__cover {
+      aspect-ratio: 2/3;
+      overflow: hidden;
+      background: var(--bg-primary);
+      position: relative;
+    }
+    .col-card__cover img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .col-card__placeholder {
+      width: 100%; height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      color: var(--text-muted);
+    }
+    .col-card__badge {
+      position: absolute;
+      top: var(--spacing-sm);
+      left: var(--spacing-sm);
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      padding: 2px 6px;
+      border-radius: var(--border-radius-sm);
+    }
+    .badge--pelicula { background: #d1fae5; color: #065f46; }
+    .badge--serie    { background: #dbeafe; color: #1e40af; }
+    .badge--album    { background: #ede9fe; color: #5b21b6; }
+    [data-theme="dark"] .badge--pelicula { background: #065f46; color: #d1fae5; }
+    [data-theme="dark"] .badge--serie    { background: #1e3a8a; color: #bfdbfe; }
+    [data-theme="dark"] .badge--album    { background: #4c1d95; color: #ede9fe; }
+
+    .col-card__body {
+      padding: var(--spacing-md);
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .col-card__title {
+      font-size: var(--font-size-sm);
+      font-weight: 600;
+      line-height: 1.3;
+      color: var(--text-primary);
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .col-card__sub  { font-size: var(--font-size-xs); color: var(--text-muted); }
+    .col-card__rating { font-size: var(--font-size-xs); color: #d97706; font-weight: 600; }
+
+    /* ── Modal ── */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.75);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+      padding: var(--spacing-xl);
+      overflow-y: auto;
+    }
+    .modal-overlay.open { display: flex; }
+
+    .modal {
+      background: var(--bg-secondary);
+      border-radius: var(--border-radius-xl);
+      padding: var(--spacing-xl);
+      max-width: 720px;
+      width: 100%;
+      position: relative;
+      box-shadow: var(--shadow-xl);
+      margin: auto;
+    }
+    .modal-close {
+      position: absolute;
+      top: var(--spacing-md);
+      right: var(--spacing-md);
+      background: var(--bg-primary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius-md);
+      width: 36px; height: 36px;
+      cursor: pointer;
+      font-size: var(--font-size-base);
+      color: var(--text-primary);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .modal-layout {
+      display: grid;
+      grid-template-columns: 150px 1fr;
+      gap: var(--spacing-xl);
+    }
+    @media (max-width: 500px) { .modal-layout { grid-template-columns: 1fr; } }
+    .modal-poster { width: 100%; border-radius: var(--border-radius-md); display: block; }
+    .modal-title  { font-size: var(--font-size-2xl); font-weight: 700; margin: var(--spacing-sm) 0; }
+    .modal-meta   { font-size: var(--font-size-sm); color: var(--text-muted); margin-bottom: var(--spacing-md); }
+    .modal-tags   { display: flex; flex-wrap: wrap; gap: var(--spacing-sm); margin-bottom: var(--spacing-md); }
+    .modal-tag {
+      font-size: var(--font-size-xs);
+      padding: 2px var(--spacing-sm);
+      border-radius: var(--border-radius-sm);
+      background: var(--bg-primary);
+      border: 1px solid var(--border-color);
+      color: var(--text-secondary);
+    }
+    .modal-reparto { font-size: var(--font-size-xs); color: var(--text-muted); margin-bottom: var(--spacing-md); }
+    .modal-sinopsis { font-size: var(--font-size-sm); color: var(--text-secondary); line-height: 1.7; margin-bottom: var(--spacing-lg); }
+    .modal-link {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--spacing-sm);
+      padding: var(--spacing-sm) var(--spacing-lg);
+      background: var(--color-primary);
+      color: white;
+      border-radius: var(--border-radius-md);
+      text-decoration: none;
+      font-size: var(--font-size-sm);
+      font-weight: 500;
+    }
+    .modal-link:hover { opacity: 0.9; }
+
+    .col-empty {
+      grid-column: 1/-1;
+      text-align: center;
+      padding: var(--spacing-3xl);
+      color: var(--text-muted);
+      font-size: var(--font-size-lg);
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <nav class="site-nav">
+        <div class="site-logo">
+          <span class="logo-icon">📦</span>
+          <span class="logo-text">Mi Colección</span>
+        </div>
+        <div class="nav-links">
+          <button class="theme-toggle" aria-label="Cambiar tema">🌙</button>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <div class="container">
+      <div class="controls-grid">
+        <input type="text" id="search" class="search-input" placeholder="Buscar título, artista, director…">
+        <select id="cat-filter" class="cat-select">
+          <option value="">Toda la colección</option>
+          <option value="pelicula">Películas</option>
+          <option value="serie">Series</option>
+          <option value="album">Álbumes</option>
+        </select>
+      </div>
+      <p id="stats" class="col-stats"></p>
+      <div id="grid" class="col-grid"></div>
+    </div>
+  </main>
+
+  <!-- Modal cine -->
+  <div id="modal" class="modal-overlay" role="dialog" aria-modal="true">
+    <div class="modal">
+      <button class="modal-close" id="modal-close" aria-label="Cerrar">✕</button>
+      <div class="modal-layout">
+        <div>
+          <img id="modal-poster" class="modal-poster" src="" alt="">
+        </div>
+        <div>
+          <span id="modal-badge" class="col-card__badge" style="position:static;display:inline-block;margin-bottom:var(--spacing-sm)"></span>
+          <h2 id="modal-title" class="modal-title"></h2>
+          <p id="modal-meta" class="modal-meta"></p>
+          <div id="modal-tags" class="modal-tags"></div>
+          <p id="modal-reparto" class="modal-reparto"></p>
+          <p id="modal-sinopsis" class="modal-sinopsis"></p>
+          <a id="modal-link" class="modal-link" href="#" target="_blank" rel="noopener">Ver en TMDB ↗</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ── Tema ─────────────────────────────────────────────────────────────────
+    const html     = document.documentElement;
+    const themeBtn = document.querySelector('.theme-toggle');
+
+    function aplicarTema(t) {
+      html.setAttribute('data-theme', t);
+      themeBtn.textContent = t === 'dark' ? '☀️' : '🌙';
+      localStorage.setItem('theme', t);
+    }
+    aplicarTema(localStorage.getItem('theme') || 'light');
+    themeBtn.addEventListener('click', () =>
+      aplicarTema(html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark')
+    );
+
+    // ── Estado ────────────────────────────────────────────────────────────────
+    const BADGES = {
+      pelicula: { label: 'Película', cls: 'badge--pelicula' },
+      serie:    { label: 'Serie',    cls: 'badge--serie'    },
+      album:    { label: 'Álbum',    cls: 'badge--album'    },
+    };
+    const ICONOS = { pelicula: '🎬', serie: '📺', album: '🎵' };
+
+    let todos     = [];
+    let filtrados = [];
+
+    // ── Carga ─────────────────────────────────────────────────────────────────
+    async function cargar() {
+      document.getElementById('stats').textContent = 'Cargando…';
+
+      const [rAlbumes, rCine] = await Promise.allSettled([
+        fetch('./albums-data.json').then(r => r.ok ? r.json() : []),
+        fetch('./cine/tarjetas_video_info.json').then(r => r.ok ? r.json() : []),
+      ]);
+
+      const albumes = rAlbumes.status === 'fulfilled' ? rAlbumes.value : [];
+      const cine    = rCine.status    === 'fulfilled' ? rCine.value    : [];
+
+      const normAlbumes = albumes.map(a => ({
+        categoria:   'album',
+        titulo:      a.title,
+        subtitulo:   a.artist || '',
+        año:         a.year   || '',
+        imagen:      a.thumbnail_image || a.cover_image || null,
+        url_interna: `albums/${a.filename}`,
+        generos:     Array.isArray(a.genre) ? a.genre : (a.genre ? [a.genre] : []),
+        rating:      null,
+        sinopsis:    null,
+        director:    null,
+        reparto:     null,
+        url_externa: null,
+      }));
+
+      const normCine = cine.map(c => ({
+        categoria:   c.type === 'series' ? 'serie' : 'pelicula',
+        titulo:      c.title,
+        subtitulo:   c.director || c.year || '',
+        año:         c.year     || '',
+        imagen:      c.tmdb_poster || (c.front ? c.front.replace(/^docs\//, '') : null),
+        url_interna: null,
+        generos:     c.generos  || [],
+        rating:      c.tmdb_rating || null,
+        sinopsis:    c.sinopsis || null,
+        director:    c.director || null,
+        reparto:     Array.isArray(c.reparto) ? c.reparto.slice(0, 5).join(', ') : null,
+        url_externa: c.tmdb_url || null,
+      }));
+
+      todos = [...normAlbumes, ...normCine];
+      filtrar();
+    }
+
+    // ── Filtrado ──────────────────────────────────────────────────────────────
+    function filtrar() {
+      const texto = document.getElementById('search').value.toLowerCase().trim();
+      const cat   = document.getElementById('cat-filter').value;
+
+      filtrados = todos.filter(item => {
+        const matchCat  = !cat || item.categoria === cat;
+        const haystack  = [item.titulo, item.subtitulo, item.año, ...item.generos].join(' ').toLowerCase();
+        const matchText = !texto || haystack.includes(texto);
+        return matchCat && matchText;
+      });
+
+      render();
+    }
+
+    // ── Render ────────────────────────────────────────────────────────────────
+    function render() {
+      const grid  = document.getElementById('grid');
+      const stats = document.getElementById('stats');
+
+      const total = todos.length;
+      const n     = filtrados.length;
+
+      if (total === 0) { stats.textContent = 'Colección vacía.'; grid.innerHTML = ''; return; }
+      stats.textContent = n === total
+        ? `${total} elemento${total !== 1 ? 's' : ''}`
+        : `${n} de ${total}`;
+
+      if (n === 0) {
+        grid.innerHTML = '<p class="col-empty">Sin resultados.</p>';
+        return;
+      }
+
+      grid.innerHTML = filtrados.map((item, i) => {
+        const b    = BADGES[item.categoria] || { label: item.categoria, cls: '' };
+        const icon = ICONOS[item.categoria] || '📦';
+        const img  = item.imagen
+          ? `<img src="${item.imagen}" alt="${escHtml(item.titulo)}" loading="lazy"
+               onerror="this.outerHTML='<div class=col-card__placeholder>${icon}</div>'">`
+          : `<div class="col-card__placeholder">${icon}</div>`;
+        const rating = item.rating ? `<div class="col-card__rating">★ ${item.rating.toFixed(1)}</div>` : '';
+
+        return `
+          <div class="col-card" data-i="${i}" role="button" tabindex="0" aria-label="${escHtml(item.titulo)}">
+            <div class="col-card__cover">
+              ${img}
+              <span class="col-card__badge ${b.cls}">${b.label}</span>
+            </div>
+            <div class="col-card__body">
+              <div class="col-card__title">${escHtml(item.titulo)}</div>
+              <div class="col-card__sub">${escHtml(item.subtitulo)}</div>
+              ${rating}
+            </div>
+          </div>`;
+      }).join('');
+
+      grid.querySelectorAll('.col-card').forEach(el => {
+        const open = () => abrirItem(+el.dataset.i);
+        el.addEventListener('click', open);
+        el.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); } });
+      });
+    }
+
+    // ── Abrir ítem ────────────────────────────────────────────────────────────
+    function abrirItem(i) {
+      const item = filtrados[i];
+      if (!item) return;
+
+      if (item.categoria === 'album') {
+        window.location.href = item.url_interna;
+        return;
+      }
+
+      const b = BADGES[item.categoria] || { label: item.categoria, cls: '' };
+      document.getElementById('modal-badge').className   = `col-card__badge ${b.cls}`;
+      document.getElementById('modal-badge').textContent = b.label;
+      document.getElementById('modal-title').textContent    = item.titulo;
+      document.getElementById('modal-poster').src           = item.imagen || '';
+      document.getElementById('modal-poster').alt           = item.titulo;
+      document.getElementById('modal-sinopsis').textContent = item.sinopsis || '';
+      document.getElementById('modal-link').href            = item.url_externa || '#';
+
+      const metaParts = [item.año, item.director, item.rating ? `★ ${item.rating.toFixed(1)}` : ''].filter(Boolean);
+      document.getElementById('modal-meta').textContent = metaParts.join(' · ');
+
+      document.getElementById('modal-tags').innerHTML =
+        item.generos.map(g => `<span class="modal-tag">${escHtml(g)}</span>`).join('');
+
+      const rep = document.getElementById('modal-reparto');
+      rep.textContent = item.reparto ? `🎭 ${item.reparto}` : '';
+
+      document.getElementById('modal').classList.add('open');
+    }
+
+    function cerrarModal() {
+      document.getElementById('modal').classList.remove('open');
+    }
+
+    document.getElementById('modal-close').addEventListener('click', cerrarModal);
+    document.getElementById('modal').addEventListener('click', e => { if (e.target === e.currentTarget) cerrarModal(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') cerrarModal(); });
+
+    // ── Helpers ───────────────────────────────────────────────────────────────
+    function escHtml(s) {
+      return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    // ── Arranque ──────────────────────────────────────────────────────────────
+    document.getElementById('search').addEventListener('input', filtrar);
+    document.getElementById('cat-filter').addEventListener('change', filtrar);
+
+    cargar();
+  </script>
+</body>
+</html>

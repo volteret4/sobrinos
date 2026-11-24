@@ -33,6 +33,8 @@ El programa espera a que pongas una tarjeta en el lector y luego te guía:
 
 Para series, al escanear la tarjeta se reproduce automáticamente el **primer episodio no visto**.
 
+Las tarjetas guardan la **ruta** del archivo o carpeta tal como la ve Kodi, no su id. Asócialas contra el Kodi donde se van a usar y con el perfil que tenga ese contenido. Las antiguas con `kodi_id` hay que volver a asociarlas.
+
 ---
 
 ## 2. Monitorear el lector (modo producción)

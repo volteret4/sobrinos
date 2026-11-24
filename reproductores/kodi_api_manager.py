@@ -115,7 +115,7 @@ class KodiAPIManager:
     def get_tv_shows(self) -> List[Dict]:
         """Obtener todas las series de TV"""
         params = {
-            "properties": ["title", "year", "rating", "plot", "thumbnail", "fanart"]
+            "properties": ["title", "year", "rating", "plot", "file", "thumbnail", "fanart"]
         }
         result = self._send_request("VideoLibrary.GetTVShows", params)
         return result.get("result", {}).get("tvshows", [])
@@ -338,6 +338,30 @@ class KodiAPIManager:
         params = {"item": {"episodeid": episode_id}}
         result = self._send_request("Player.Open", params)
         return "result" in result and result["result"] == "OK"
+
+    def play_next_episode_by_path(self, ruta: str) -> bool:
+        """Reproduce el primer episodio no visto de la carpeta de una serie. Si todos vistos, el primero."""
+        result = self._send_request("VideoLibrary.GetEpisodes", {
+            "filter": {"field": "path", "operator": "startswith", "value": ruta},
+            "properties": ["season", "episode", "playcount"],
+        })
+        # Especiales (temporada 0) al final
+        episodes = sorted(result.get("result", {}).get("episodes", []),
+                          key=lambda e: (e["season"] == 0, e["season"], e["episode"]))
+        if not episodes:
+            return False
+        pendiente = next((e for e in episodes if e.get("playcount", 0) == 0), episodes[0])
+        return self.play_episode(pendiente["episodeid"])
+
+    def play_music_paths(self, rutas: List[str]) -> bool:
+        """Encola archivos o carpetas (acabadas en /) de música, en orden, y empieza a reproducir."""
+        if not rutas:
+            return False
+        self.clear_playlist(0)
+        for ruta in rutas:
+            item = {"directory": ruta, "media": "music"} if ruta.endswith("/") else {"file": ruta}
+            self.add_to_playlist(0, item)
+        return self.play_playlist(0, 0)
 
     def play_song(self, song_id: int) -> bool:
         """Reproducir canción por ID"""

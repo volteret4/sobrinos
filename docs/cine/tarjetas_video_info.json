@@ -332,5 +332,119 @@
     "tmdb_año": "1991",
     "duracion_min": 84,
     "director": "Gary Trousdale"
+  },
+  {
+    "title": "Vaiana",
+    "type": "movie",
+    "year": "2016",
+    "slug": "vaiana",
+    "web_url": "https://volteret4.github.io/sobrinos/cine.html#vaiana",
+    "tmdb_url": "https://www.themoviedb.org/movie/277834",
+    "front": "docs/cine/Vaiana_20260525_cara_A.png",
+    "back": "docs/cine/Vaiana_20260525_cara_B.png",
+    "tmdb_id": 277834,
+    "tmdb_rating": 7.6,
+    "tmdb_votos": 13712,
+    "sinopsis": "Una gran aventura acerca de una enérgica adolescente que se embarca en una misión audaz para salvar a su pueblo de una antigua y misteriosa amenaza, en un viaje de autodescubrimiento. La acompañará el arrogante semidiós Maui, quien la guiará en su travesía por el océano en un viaje lleno de acción, plagado de temibles criaturas e imposibles desafíos para restaurar el orden perdido.",
+    "generos": [
+      "Aventura",
+      "Comedia",
+      "Familia",
+      "Animación"
+    ],
+    "tmdb_poster": "https://image.tmdb.org/t/p/w500/y6wkgEH1gTWAafH9Bc7cNNut0Kf.jpg",
+    "tmdb_poster_hd": "https://image.tmdb.org/t/p/w1280/y6wkgEH1gTWAafH9Bc7cNNut0Kf.jpg",
+    "tmdb_backdrop": "https://image.tmdb.org/t/p/w1280/iYLKMV7PIBtFmtygRrhSiyzcVsF.jpg",
+    "reparto": [
+      "Auliʻi Cravalho",
+      "Dwayne Johnson",
+      "Rachel House",
+      "Temuera Morrison",
+      "Jemaine Clement",
+      "Nicole Scherzinger"
+    ],
+    "estudios": [
+      "Walt Disney Animation Studios"
+    ],
+    "tmdb_titulo": "Vaiana",
+    "tmdb_año": "2016",
+    "duracion_min": 107,
+    "director": "Ron Clements"
+  },
+  {
+    "title": "Up",
+    "type": "movie",
+    "year": "2009",
+    "slug": "up",
+    "web_url": "https://volteret4.github.io/sobrinos/cine.html#up",
+    "tmdb_url": "https://www.themoviedb.org/movie/14160",
+    "front": "docs/cine/Up_20260525_cara_A.png",
+    "back": "docs/cine/Up_20260525_cara_B.png",
+    "tmdb_id": 14160,
+    "tmdb_rating": 8.0,
+    "tmdb_votos": 21641,
+    "sinopsis": "Tras atar miles de globos a su casa, Carl Fredricksen, un vendedor de globos jubilado, se embarca en el mundo de los sueños de la infancia. Pero sin que Carl lo sepa, Russell, un explorador de 8 años, se encuentra en el lugar equivocado en el momento equivocado: el porche delantero de la casa. El dúo más improbable conoce a fantásticos amigos como Dug, un perro con un collar especial que le permite hablar, y Kevin, un pájaro de cuatro metros de altura que no vuela. Atrapados en la selva, Carl se da cuenta de que a veces las mayores aventuras de la vida son las que menos esperabas.",
+    "generos": [
+      "Animación",
+      "Comedia",
+      "Familia",
+      "Aventura"
+    ],
+    "tmdb_poster": "https://image.tmdb.org/t/p/w500/1N0LtzUueXrlnpL466jQBJ6iAuj.jpg",
+    "tmdb_poster_hd": "https://image.tmdb.org/t/p/w1280/1N0LtzUueXrlnpL466jQBJ6iAuj.jpg",
+    "tmdb_backdrop": "https://image.tmdb.org/t/p/w1280/hGGC9gKo7CFE3fW07RA587e5kol.jpg",
+    "reparto": [
+      "Ed Asner",
+      "Christopher Plummer",
+      "Jordan Nagai",
+      "Bob Peterson",
+      "Delroy Lindo",
+      "Jerome Ranft"
+    ],
+    "estudios": [
+      "Pixar"
+    ],
+    "tmdb_titulo": "Up",
+    "tmdb_año": "2009",
+    "duracion_min": 96,
+    "director": "Pete Docter"
+  },
+  {
+    "title": "Tod y Toby",
+    "type": "movie",
+    "year": "1981",
+    "slug": "tod_y_toby",
+    "web_url": "https://volteret4.github.io/sobrinos/cine.html#tod_y_toby",
+    "tmdb_url": "https://www.themoviedb.org/movie/10948",
+    "front": "docs/cine/Tod_y_Toby_20260525_cara_A.png",
+    "back": "docs/cine/Tod_y_Toby_20260525_cara_B.png",
+    "tmdb_id": 10948,
+    "tmdb_rating": 7.1,
+    "tmdb_votos": 3472,
+    "sinopsis": "La aventura y la diversión de este clásico de la Disney comienzan cuando una adorable viuda adopta un precioso cachorro de zorro llamado Tod. El travieso zorro pronto se encuentra con Toby, un adorable cachorro de perro de caza. Así se hace los dos inseparables amigos... sin saber que por su naturaleza deberían ser enemigos. Bajo la mirada vigilante de Mamá Búho, Tod y Toby juegan y se divierten en el bosque, inconscientes de que en el futuro tendrán que enfrentarse y poner su amistad a prueba.",
+    "generos": [
+      "Aventura",
+      "Animación",
+      "Drama",
+      "Familia"
+    ],
+    "tmdb_poster": "https://image.tmdb.org/t/p/w500/33jyy4W2usMrY796udOjcbMwput.jpg",
+    "tmdb_poster_hd": "https://image.tmdb.org/t/p/w1280/33jyy4W2usMrY796udOjcbMwput.jpg",
+    "tmdb_backdrop": "https://image.tmdb.org/t/p/w1280/lNmIAX1IuPIEPMHhLBEm4wmhYX0.jpg",
+    "reparto": [
+      "Mickey Rooney",
+      "Kurt Russell",
+      "Pearl Bailey",
+      "Jack Albertson",
+      "Sandy Duncan",
+      "Jeanette Nolan"
+    ],
+    "estudios": [
+      "Walt Disney Productions"
+    ],
+    "tmdb_titulo": "Tod y Toby",
+    "tmdb_año": "1981",
+    "duracion_min": 90,
+    "director": "Ted Berman"
   }
 ]

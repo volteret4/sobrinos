@@ -1,0 +1,56 @@
+{
+  "artist": "The Chemical Brothers",
+  "album": "For That Beautiful Feeling",
+  "date": "2023-09-08",
+  "label": "EMI, Republic Records, Virgin",
+  "genres": [
+    "Big Beat"
+  ],
+  "mbid": "fd3ff198-41fb-43aa-a70e-7c55c51ef120",
+  "tracks": [
+    {
+      "number": 1,
+      "title": "Intro"
+    },
+    {
+      "number": 2,
+      "title": "Live Again"
+    },
+    {
+      "number": 3,
+      "title": "No Reason"
+    },
+    {
+      "number": 4,
+      "title": "Goodbye"
+    },
+    {
+      "number": 5,
+      "title": "Fountains"
+    },
+    {
+      "number": 6,
+      "title": "Magic Wand"
+    },
+    {
+      "number": 7,
+      "title": "The Weight"
+    },
+    {
+      "number": 8,
+      "title": "Skipping Like a Stone"
+    },
+    {
+      "number": 9,
+      "title": "The Darkness That You Fear (Harvest mix)"
+    },
+    {
+      "number": 10,
+      "title": "Feels Like I Am Dreaming"
+    },
+    {
+      "number": 11,
+      "title": "For That Beautiful Feeling"
+    }
+  ]
+}

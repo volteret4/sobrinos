@@ -1,0 +1,64 @@
+{
+  "artist": "The Beatles",
+  "album": "Sgt. Pepper's Lonely Hearts Club Band",
+  "date": "1967",
+  "label": "Capitol Records",
+  "genres": [
+    "Rock"
+  ],
+  "mbid": "c60b8b80-01be-4844-af15-df04375d316d",
+  "tracks": [
+    {
+      "number": 1,
+      "title": "Sgt. Pepper’s Lonely Hearts Club Band"
+    },
+    {
+      "number": 2,
+      "title": "With a Little Help From My Friends"
+    },
+    {
+      "number": 3,
+      "title": "Lucy in the Sky With Diamonds"
+    },
+    {
+      "number": 4,
+      "title": "Getting Better"
+    },
+    {
+      "number": 5,
+      "title": "Fixing a Hole"
+    },
+    {
+      "number": 6,
+      "title": "She’s Leaving Home"
+    },
+    {
+      "number": 7,
+      "title": "Being for the Benefit of Mr. Kite!"
+    },
+    {
+      "number": 8,
+      "title": "Within You Without You"
+    },
+    {
+      "number": 9,
+      "title": "When I’m Sixty‐Four"
+    },
+    {
+      "number": 10,
+      "title": "Lovely Rita"
+    },
+    {
+      "number": 11,
+      "title": "Good Morning Good Morning"
+    },
+    {
+      "number": 12,
+      "title": "Sgt. Pepper’s Lonely Hearts Club Band (reprise)"
+    },
+    {
+      "number": 13,
+      "title": "A Day in the Life"
+    }
+  ]
+}

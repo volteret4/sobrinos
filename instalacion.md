@@ -144,6 +144,46 @@ En el dispositivo con Kodi:
 
 ---
 
+---
+
+## 7. Android como lector NFC (tarjetas NTAG)
+
+Para usar el móvil como lector en lugar del ACR122U, las tarjetas deben ser **NTAG213, NTAG215 o NTAG216** (no Mifare Classic). Al asociar una tarjeta NTAG con `nfc_config_gen.py`, el script ofrece escribir una URL NDEF en ella. Al acercar la tarjeta al móvil, Android abre esa URL automáticamente en el navegador, que llama a la Pi.
+
+### Dependencias
+
+```bash
+sudo apt install nginx avahi-daemon
+pip install flask
+```
+
+### Activar mDNS (para `raspberrypi.local`)
+
+```bash
+sudo systemctl enable avahi-daemon
+sudo systemctl start avahi-daemon
+```
+
+### Configurar nginx como proxy
+
+```bash
+sudo cp config/nginx-sobrinos.conf /etc/nginx/sites-available/sobrinos
+sudo ln -s /etc/nginx/sites-available/sobrinos /etc/nginx/sites-enabled/
+sudo nginx -t && sudo systemctl reload nginx
+```
+
+El servidor HTTP arranca automáticamente con `nfc_reaccionar.py` — no hay proceso separado.
+
+### Verificar desde el móvil
+
+Con el móvil en la misma red WiFi, abre en el navegador:
+```
+http://raspberrypi.local/
+```
+Debe mostrar el estado actual de Kodi.
+
+---
+
 ## Verificación rápida
 
 ```bash

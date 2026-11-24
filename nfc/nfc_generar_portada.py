@@ -13,12 +13,14 @@ Requisitos:
 - requests: para descargar portadas
 """
 
+import io
 import os
 import sys
 import json
 import argparse
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
+from urllib.parse import quote, urlparse
 import logging
 import colorsys
 from collections import Counter
@@ -86,6 +88,8 @@ CARD_WIDTH = int(CARD_WIDTH_MM * DPI / 25.4)  # ~613 px
 CARD_HEIGHT = int(CARD_HEIGHT_MM * DPI / 25.4)  # ~969 px
 COVER_SIZE = int(COVER_SIZE_MM * DPI / 25.4)  # ~601 px
 TEXT_AREA_HEIGHT = int(TEXT_AREA_HEIGHT_MM * DPI / 25.4)  # ~354 px
+
+GITHUB_PAGES_BASE = "https://volteret4.github.io/sobrinos"
 
 # Colores
 WHITE = (255, 255, 255)
@@ -559,7 +563,7 @@ class MusicFileProcessor:
 
     def __init__(self, folder_path: str):
         self.folder_path = Path(folder_path)
-        self.supported_formats = {'.mp3', '.flac', '.ogg', '.mp4', '.m4a', '.wv'}
+        self.supported_formats = {'.mp3', '.flac', '.ogg', '.mp4', '.m4a', '.wv', '.dsf'}
 
     def get_audio_files(self) -> List[Path]:
         """Obtiene todos los archivos de audio de la carpeta"""
@@ -961,6 +965,74 @@ class CoverArtDownloader:
         return image
 
 
+def _build_github_pages_url(album_info: "AlbumInfo") -> str:
+    """Constructs the GitHub Pages URL for the album page."""
+    safe_chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_. "
+    name = f"{album_info.artist} - {album_info.album}"
+    safe_name = "".join(c if c in safe_chars else "_" for c in name)
+    while "  " in safe_name:
+        safe_name = safe_name.replace("  ", " ")
+    while "__" in safe_name:
+        safe_name = safe_name.replace("__", "_")
+    safe_name = safe_name.strip(" -_")
+    return f"{GITHUB_PAGES_BASE}/albums/{quote(safe_name)}.html"
+
+
+class ArtistImageFetcher:
+    """Fetches an artist photo from Wikipedia or Last.fm."""
+
+    def fetch(self, album_info: "AlbumInfo") -> Optional[Image.Image]:
+        image = self._from_wikipedia(album_info)
+        if image:
+            return image
+        image = self._from_lastfm(album_info)
+        return image
+
+    def _from_wikipedia(self, album_info: "AlbumInfo") -> Optional[Image.Image]:
+        wiki_url = album_info.qr_links.get("wikipedia_artist", "")
+        if not wiki_url:
+            return None
+        try:
+            parsed = urlparse(wiki_url)
+            title = parsed.path.split("/wiki/")[-1]
+            lang = parsed.netloc.split(".")[0]
+            api_url = f"https://{lang}.wikipedia.org/api/rest_v1/page/summary/{quote(title)}"
+            resp = requests.get(api_url, timeout=8, headers={"User-Agent": "SobrinosNFC/1.0"})
+            resp.raise_for_status()
+            data = resp.json()
+            thumb = data.get("thumbnail", {}).get("source")
+            if thumb:
+                img_resp = requests.get(thumb, timeout=8)
+                img_resp.raise_for_status()
+                return Image.open(io.BytesIO(img_resp.content)).convert("RGB")
+        except Exception as e:
+            logger.debug(f"Wikipedia artist image failed: {e}")
+        return None
+
+    def _from_lastfm(self, album_info: "AlbumInfo") -> Optional[Image.Image]:
+        api_key = os.environ.get("LASTFM_API_KEY", "")
+        if not api_key or not album_info.artist:
+            return None
+        try:
+            url = (
+                "https://ws.audioscrobbler.com/2.0/"
+                f"?method=artist.getinfo&artist={quote(album_info.artist)}"
+                f"&api_key={api_key}&format=json"
+            )
+            resp = requests.get(url, timeout=8)
+            resp.raise_for_status()
+            images = resp.json().get("artist", {}).get("image", [])
+            for img in reversed(images):
+                src = img.get("#text", "")
+                if src and "2a96cbd8b46e442fc41c2b86b821562f" not in src:
+                    img_resp = requests.get(src, timeout=8)
+                    img_resp.raise_for_status()
+                    return Image.open(io.BytesIO(img_resp.content)).convert("RGB")
+        except Exception as e:
+            logger.debug(f"Last.fm artist image failed: {e}")
+        return None
+
+
 class CardGenerator:
     """Generador de tarjetas de álbumes"""
 
@@ -969,48 +1041,57 @@ class CardGenerator:
         self.setup_fonts()
 
     def setup_fonts(self):
-        """Configura las fuentes con tamaños duplicados"""
         self.fonts = {}
 
-        # Si se especifica fuente personalizada, usarla primero
         font_paths = []
         if self.custom_font_path and os.path.exists(self.custom_font_path):
             font_paths.append(self.custom_font_path)
-            logger.info(f"Usando fuente personalizada: {self.custom_font_path}")
 
-        # Fuentes por defecto del sistema
         font_paths.extend([
+            # Debian / Raspberry Pi OS
             "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",
             "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
             "/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf",
             "/usr/share/fonts/truetype/liberation/LiberationSans-Regular.ttf",
+            "/usr/share/fonts/truetype/freefont/FreeSansBold.ttf",
+            "/usr/share/fonts/truetype/freefont/FreeSans.ttf",
+            # Arch Linux
+            "/usr/share/fonts/TTF/DejaVuSans-Bold.ttf",
+            "/usr/share/fonts/TTF/DejaVuSans.ttf",
+            "/usr/share/fonts/liberation/LiberationSans-Bold.ttf",
+            "/usr/share/fonts/liberation/LiberationSans-Regular.ttf",
+            # macOS
+            "/Library/Fonts/Arial Bold.ttf",
+            "/Library/Fonts/Arial.ttf",
+            "/System/Library/Fonts/Helvetica.ttc",
         ])
+
+        # Last resort: ask fc-list for any usable font
+        try:
+            import subprocess
+            out = subprocess.check_output(["fc-list", "--format=%{file}\n"], timeout=5).decode()
+            for line in out.splitlines():
+                line = line.strip()
+                if line.endswith((".ttf", ".TTF", ".otf")):
+                    font_paths.append(line)
+        except Exception:
+            pass
+
+        sizes = {'title': 76, 'artist': 64, 'info': 50, 'track': 44}
 
         for font_path in font_paths:
             if os.path.exists(font_path):
                 try:
-                    # Tamaños duplicados (antes eran 32, 28, 20, 18)
-                    self.fonts = {
-                        'title': ImageFont.truetype(font_path, 64),      # Era 32, ahora 64
-                        'artist': ImageFont.truetype(font_path, 56),     # Era 28, ahora 56
-                        'info': ImageFont.truetype(font_path, 40),       # Era 20, ahora 40
-                        'track': ImageFont.truetype(font_path, 36),      # Era 18, ahora 36
-                    }
+                    self.fonts = {k: ImageFont.truetype(font_path, v) for k, v in sizes.items()}
                     logger.info(f"✓ Fuentes cargadas desde: {font_path}")
                     return
                 except Exception as e:
-                    logger.warning(f"Error cargando fuente {font_path}: {e}")
+                    logger.debug(f"Error cargando {font_path}: {e}")
                     continue
 
-        # Fallback a fuente por defecto
-        logger.warning("⚠️  Usando fuente por defecto del sistema")
+        logger.warning("⚠️  No se encontró ninguna fuente TTF — las tarjetas usarán fuente de mapa de bits (texto pequeño)")
         default_font = ImageFont.load_default()
-        self.fonts = {
-            'title': default_font,
-            'artist': default_font,
-            'info': default_font,
-            'track': default_font,
-        }
+        self.fonts = {k: default_font for k in sizes}
 
     def generate_front_card(self, album_info: AlbumInfo) -> Image.Image:
         """Genera la cara A (frontal) de la tarjeta con colores dinámicos"""
@@ -1047,52 +1128,50 @@ class CardGenerator:
         # Información del álbum
         current_y = text_y_start
         margin = 15
-        line_height = 70  # Aumentado para fuentes más grandes (era 35)
+        text_bottom = CARD_HEIGHT - 20  # do not go below this
+
+        def fits(y, step):
+            return y + step <= text_bottom
 
         # Título del álbum
         if album_info.album:
-            text = self._wrap_text(draw, album_info.album, self.fonts['title'], CARD_WIDTH - 2 * margin)
-            for line in text:
+            lines = self._wrap_text(draw, album_info.album, self.fonts['title'], CARD_WIDTH - 2 * margin)
+            for line in lines[:3]:
+                if not fits(current_y, 84):
+                    break
                 draw.text((margin, current_y), line, fill=text_primary, font=self.fonts['title'])
-                current_y += line_height
+                current_y += 84
 
-        current_y += 20  # Aumentado (era 10)
+        current_y += 8
 
         # Artista
-        if album_info.artist:
-            text = self._wrap_text(draw, album_info.artist, self.fonts['artist'], CARD_WIDTH - 2 * margin)
-            for line in text:
+        if album_info.artist and fits(current_y, 72):
+            lines = self._wrap_text(draw, album_info.artist, self.fonts['artist'], CARD_WIDTH - 2 * margin)
+            for line in lines[:2]:
+                if not fits(current_y, 72):
+                    break
                 draw.text((margin, current_y), line, fill=text_secondary, font=self.fonts['artist'])
-                current_y += line_height - 10  # Ajustado para fuente de artista
+                current_y += 72
 
-        current_y += 30  # Aumentado (era 15)
-
-        # Géneros
-        if album_info.genres:
-            genres_text = " • ".join(album_info.genres[:3])  # Máximo 3 géneros
-            text = self._wrap_text(draw, f"Géneros: {genres_text}", self.fonts['info'], CARD_WIDTH - 2 * margin)
-            for line in text:
-                draw.text((margin, current_y), line, fill=text_secondary, font=self.fonts['info'])
-                current_y += 50  # Aumentado para fuentes más grandes (era 25)
-
-        # Sello
-        if album_info.label:
-            text = self._wrap_text(draw, f"Sello: {album_info.label}", self.fonts['info'], CARD_WIDTH - 2 * margin)
-            for line in text:
-                draw.text((margin, current_y), line, fill=text_secondary, font=self.fonts['info'])
-                current_y += 50  # Aumentado para fuentes más grandes (era 25)
+        current_y += 8
 
         # Fecha
-        if album_info.date:
-            draw.text((margin, current_y), f"Fecha: {album_info.date}", fill=text_secondary, font=self.fonts['info'])
+        if album_info.date and fits(current_y, 58):
+            draw.text((margin, current_y), album_info.date[:4], fill=text_secondary, font=self.fonts['info'])
+            current_y += 58
+
+        # Géneros — sólo si hay espacio
+        if album_info.genres and fits(current_y, 58):
+            genres_text = " · ".join(album_info.genres[:2])
+            draw.text((margin, current_y), genres_text, fill=text_secondary, font=self.fonts['info'])
 
         # Borde sutil de la tarjeta
         draw.rectangle([0, 0, CARD_WIDTH-1, CARD_HEIGHT-1], outline=border_color, width=2)
 
         return image
 
-def generate_back_card(self, album_info: AlbumInfo, custom_url: Optional[str] = None) -> Image.Image:
-        """Genera la cara B modificada: sin cabecera, tracklist espaciado e iconos QR"""
+    def generate_back_card(self, album_info: AlbumInfo, custom_url: Optional[str] = None) -> Image.Image:
+        """Genera la cara B: foto del artista (top), tracklist (medio), QR GitHub Pages (bottom)."""
         bg_color = album_info.color_palette['background']
         text_primary = album_info.color_palette['text_primary']
         text_secondary = album_info.color_palette['text_secondary']
@@ -1102,36 +1181,115 @@ def generate_back_card(self, album_info: AlbumInfo, custom_url: Optional[str] = 
         draw = ImageDraw.Draw(image)
 
         margin = 25
-        current_y = margin + 20 # Comienza más arriba al no tener artista/álbum
+        photo_height = 280  # px for artist photo strip
 
-        # Lista de pistas con columnas separadas
-        track_height = 50
-        num_col_width = 70 # Espacio fijo para los números
+        # ── Artist photo ──────────────────────────────────────────────────────
+        artist_image = ArtistImageFetcher().fetch(album_info)
+        if artist_image:
+            ratio = CARD_WIDTH / artist_image.width
+            new_h = int(artist_image.height * ratio)
+            artist_image = artist_image.resize((CARD_WIDTH, new_h), Image.Resampling.LANCZOS)
+            # centre-crop to photo_height
+            if new_h > photo_height:
+                top = (new_h - photo_height) // 2
+                artist_image = artist_image.crop((0, top, CARD_WIDTH, top + photo_height))
+            else:
+                photo_height = new_h
+            image.paste(artist_image, (0, 0))
+        else:
+            photo_height = 0  # no photo — tracklist gets the extra space
 
-        available_height = CARD_HEIGHT - current_y - 200 # Espacio para pistas
-        max_tracks = max(1, available_height // track_height)
-        tracks_to_show = min(len(album_info.tracks), max_tracks)
+        # ── Tracklist ─────────────────────────────────────────────────────────
+        qr_section_height = 185
+        num_col_width = 60
+        title_x = margin + num_col_width
+        max_title_w = CARD_WIDTH - title_x - margin
+        track_bottom = CARD_HEIGHT - qr_section_height
+        available_h = track_bottom - photo_height - margin
 
-        for i in range(tracks_to_show):
-            track = album_info.tracks[i]
-            track_num = f"{track['number']:02d}."
+        # Pick the largest font size where all tracks fit
+        track_font = self._fit_tracklist_font(
+            draw, album_info.tracks, available_h, max_title_w
+        )
+        line_step = track_font.size + 8
 
-            # Columna de números
-            draw.text((margin, current_y), track_num, fill=text_secondary, font=self.fonts['track'])
+        # Measure actual number column width with chosen font
+        num_bbox = draw.textbbox((0, 0), "00.", font=track_font)
+        num_col_width = (num_bbox[2] - num_bbox[0]) + 10
+        title_x = margin + num_col_width
+        max_title_w = CARD_WIDTH - title_x - margin
 
-            # Columna de títulos (con mayor separación)
-            title_x = margin + num_col_width
-            max_title_width = CARD_WIDTH - title_x - margin
-            title = self._truncate_text(draw, track['title'], self.fonts['track'], max_title_width)
-            draw.text((title_x, current_y), title, fill=text_primary, font=self.fonts['track'])
+        current_y = photo_height + margin
+        for track in album_info.tracks:
+            lines = self._wrap_text(draw, track['title'], track_font, max_title_w)
+            lines = lines[:2]
+            needed = len(lines) * line_step + 4
+            if current_y + needed > track_bottom:
+                break
+            draw.text((margin, current_y), f"{track['number']:02d}.",
+                      fill=text_secondary, font=track_font)
+            for j, line in enumerate(lines):
+                draw.text((title_x, current_y + j * line_step), line,
+                          fill=text_primary, font=track_font)
+            current_y += needed
 
-            current_y += track_height
-
-        # Sección de códigos QR con Iconos
+        # ── QR ────────────────────────────────────────────────────────────────
         self._draw_qr_section(image, draw, album_info, custom_url)
 
-        draw.rectangle([0, 0, CARD_WIDTH-1, CARD_HEIGHT-1], outline=border_color, width=2)
+        draw.rectangle([0, 0, CARD_WIDTH - 1, CARD_HEIGHT - 1], outline=border_color, width=2)
         return image
+
+    def _draw_qr_section(self, image: Image.Image, draw, album_info, custom_url: Optional[str] = None):
+        """Draws a single centred QR pointing to the GitHub Pages album page."""
+        bg  = album_info.color_palette['background']
+        fg  = album_info.color_palette['text_secondary']
+        margin = 25
+        qr_size = 155
+
+        url = custom_url or _build_github_pages_url(album_info)
+        qr_img = QRCodeGenerator.create_qr_code(url, size=qr_size, bg_color=bg, fg_color=fg)
+        if not qr_img:
+            return
+
+        x = (CARD_WIDTH - qr_size) // 2
+        y = CARD_HEIGHT - qr_size - margin - 22
+        image.paste(qr_img, (x, y))
+
+    def _fit_tracklist_font(self, draw, tracks: list, available_h: int, max_title_w: int):
+        """Return the largest font size where all tracks fit in available_h."""
+        base_font = self.fonts['track']
+        try:
+            font_path = base_font.path
+        except AttributeError:
+            return base_font  # bitmap fallback — nothing to do
+
+        for size in range(base_font.size, 20, -2):
+            font = ImageFont.truetype(font_path, size)
+            step = size + 8
+            total = 0
+            for track in tracks:
+                lines = self._wrap_text_with_font(draw, track['title'], font, max_title_w)
+                total += min(len(lines), 2) * step + 4
+            if total <= available_h:
+                return font
+
+        return ImageFont.truetype(font_path, 22)
+
+    def _wrap_text_with_font(self, draw, text: str, font, max_width: int) -> List[str]:
+        words = text.split()
+        lines, current = [], ""
+        for word in words:
+            test = (current + " " + word).strip()
+            bbox = draw.textbbox((0, 0), test, font=font)
+            if bbox[2] - bbox[0] <= max_width:
+                current = test
+            else:
+                if current:
+                    lines.append(current)
+                current = word
+        if current:
+            lines.append(current)
+        return lines or [text]
 
     def _wrap_text(self, draw, text: str, font, max_width: int) -> List[str]:
         """Divide el texto en líneas que caben en el ancho máximo"""
@@ -1184,8 +1342,11 @@ def generate_back_card(self, album_info: AlbumInfo, custom_url: Optional[str] = 
 def main():
     """Función principal"""
     parser = argparse.ArgumentParser(description="Generador de Tarjetas de Álbumes")
+    PROJECT_ROOT = Path(__file__).parent.parent
     parser.add_argument("folder", help="Carpeta que contiene los archivos del álbum")
-    parser.add_argument("-o", "--output", help="Carpeta de salida (por defecto: carpeta del álbum)")
+    parser.add_argument("-o", "--output",
+                        help=f"Carpeta de salida (por defecto: {PROJECT_ROOT / 'docs' / 'portadas' / 'musica'})")
+    parser.add_argument("--custom-url", help="URL personalizada para el QR (por defecto: GitHub Pages del álbum)")
     parser.add_argument("-v", "--verbose", action="store_true", help="Modo verboso")
     parser.add_argument("-f", "--font", help="Ruta a archivo de fuente TTF personalizada")
 
@@ -1199,7 +1360,7 @@ def main():
         logger.error(f"La carpeta {folder_path} no existe")
         sys.exit(1)
 
-    output_path = Path(args.output) if args.output else folder_path
+    output_path = Path(args.output) if args.output else PROJECT_ROOT / "docs" / "portadas" / "musica"
     output_path.mkdir(parents=True, exist_ok=True)
 
     try:
@@ -1232,8 +1393,11 @@ def main():
         logger.info("Generando tarjetas...")
         generator = CardGenerator(custom_font_path=args.font)
 
+        qr_url = args.custom_url or _build_github_pages_url(album_info)
+        logger.info(f"QR apuntará a: {qr_url}")
+
         front_card = generator.generate_front_card(album_info)
-        back_card = generator.generate_back_card(album_info)
+        back_card = generator.generate_back_card(album_info, custom_url=args.custom_url)
 
         # Guardar imágenes
         album_name = album_info.album or "album"

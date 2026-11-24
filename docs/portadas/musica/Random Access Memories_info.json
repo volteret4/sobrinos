@@ -1,0 +1,64 @@
+{
+  "artist": "Daft Punk",
+  "album": "Random Access Memories",
+  "date": "2013-05-17",
+  "label": "Columbia",
+  "genres": [
+    "Disco"
+  ],
+  "mbid": "f6758afb-ecff-410e-8979-b131cfa3c6d3",
+  "tracks": [
+    {
+      "number": 1,
+      "title": "Give Life Back to Music"
+    },
+    {
+      "number": 2,
+      "title": "The Game of Love"
+    },
+    {
+      "number": 3,
+      "title": "Giorgio by Moroder"
+    },
+    {
+      "number": 4,
+      "title": "Within"
+    },
+    {
+      "number": 5,
+      "title": "Instant Crush"
+    },
+    {
+      "number": 6,
+      "title": "Lose Yourself to Dance"
+    },
+    {
+      "number": 7,
+      "title": "Touch"
+    },
+    {
+      "number": 8,
+      "title": "Get Lucky"
+    },
+    {
+      "number": 9,
+      "title": "Beyond"
+    },
+    {
+      "number": 10,
+      "title": "Motherboard"
+    },
+    {
+      "number": 11,
+      "title": "Fragments of Time"
+    },
+    {
+      "number": 12,
+      "title": "Doin’ It Right"
+    },
+    {
+      "number": 13,
+      "title": "Contact"
+    }
+  ]
+}

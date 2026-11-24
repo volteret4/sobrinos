@@ -1,0 +1,92 @@
+{
+  "artist": "Los Planetas",
+  "album": "Una semana en el motor de un autobús",
+  "date": "2013-06-03",
+  "label": "Octubre, RCA",
+  "genres": [
+    "Alternative Rock"
+  ],
+  "mbid": "34c0d2bc-8fc7-4cd9-ba91-612cde00c6f1",
+  "tracks": [
+    {
+      "number": 1,
+      "title": "Segundo premio"
+    },
+    {
+      "number": 1,
+      "title": "Desaparecer"
+    },
+    {
+      "number": 2,
+      "title": "Desaparecer"
+    },
+    {
+      "number": 2,
+      "title": "La playa"
+    },
+    {
+      "number": 3,
+      "title": "La playa"
+    },
+    {
+      "number": 3,
+      "title": "Un mundo de gente incompleta"
+    },
+    {
+      "number": 4,
+      "title": "Parte de lo que me debes"
+    },
+    {
+      "number": 4,
+      "title": "Ciencia ficción"
+    },
+    {
+      "number": 5,
+      "title": "Un mundo de gente incompleta"
+    },
+    {
+      "number": 5,
+      "title": "Montañas de basura"
+    },
+    {
+      "number": 6,
+      "title": "Ciencia ficción"
+    },
+    {
+      "number": 6,
+      "title": "Toxicosmos"
+    },
+    {
+      "number": 7,
+      "title": "Montañas de basura"
+    },
+    {
+      "number": 7,
+      "title": "Línea 1"
+    },
+    {
+      "number": 8,
+      "title": "Cumpleaños total"
+    },
+    {
+      "number": 8,
+      "title": "Algunos amigos"
+    },
+    {
+      "number": 9,
+      "title": "Laboratorio mágico"
+    },
+    {
+      "number": 10,
+      "title": "Toxicosmos"
+    },
+    {
+      "number": 11,
+      "title": "Línea 1"
+    },
+    {
+      "number": 12,
+      "title": "La copa de Europa"
+    }
+  ]
+}

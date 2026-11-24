@@ -39,7 +39,7 @@ try:
 except ImportError as exc:
     sys.exit(
         f"Error: {exc}\n"
-        "Activa el entorno virtual:  source ~/Scripts/python_venv/bin/activate"
+        "Activa el entorno virtual:  source ~/.local/share/venvs/sobrinos/bin/activate"
     )
 
 # ── Constantes ────────────────────────────────────────────────────────────────
@@ -60,11 +60,10 @@ MARK_LEN_MM  = 3.0   # longitud de la marca de corte
 MARK_GAP_MM  = 1.0   # separación entre tarjeta y marca
 MARK_COLOR   = (0.7, 0.7, 0.7)   # gris claro
 
-# Regex para extraer (titulo_base, fecha, cara) del nombre de fichero
-# Ejemplo: "El_rey_león_20260310_cara_A.png"
-_RE_CARD = re.compile(
-    r"^(?P<titulo>.+?)_(?P<fecha>\d{8})_cara_(?P<cara>[AB])\.png$"
-)
+# Cine:   "El_rey_león_20260310_cara_A.png"  (con fecha YYYYMMDD)
+# Música: "Kings of Convenience - Declaration_cara_A.png"  (sin fecha)
+_RE_CARD_DATE  = re.compile(r"^(?P<titulo>.+?)_(?P<fecha>\d{8})_cara_(?P<cara>[AB])\.png$")
+_RE_CARD_PLAIN = re.compile(r"^(?P<titulo>.+?)_cara_(?P<cara>[AB])\.png$")
 
 
 # ── Descubrimiento y deduplicación ────────────────────────────────────────────
@@ -85,12 +84,18 @@ def descubrir_tarjetas(
     # titulo_normalizado → {fecha → {cara → path}}
     grupos: dict = {}
     for png in sorted(carpeta.glob("*.png")):
-        m = _RE_CARD.match(png.name)
-        if not m:
-            continue
-        titulo = _normalizar(m.group("titulo"))
-        fecha  = m.group("fecha")
-        cara   = m.group("cara")
+        m = _RE_CARD_DATE.match(png.name)
+        if m:
+            titulo = _normalizar(m.group("titulo"))
+            fecha  = m.group("fecha")
+            cara   = m.group("cara")
+        else:
+            m = _RE_CARD_PLAIN.match(png.name)
+            if not m:
+                continue
+            titulo = _normalizar(m.group("titulo"))
+            fecha  = "00000000"   # clave fija; sin deduplicación por fecha
+            cara   = m.group("cara")
         grupos.setdefault(titulo, {}).setdefault(fecha, {})[cara] = png
 
     pares = []

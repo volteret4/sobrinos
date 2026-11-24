@@ -1,0 +1,52 @@
+{
+  "artist": "The Cure",
+  "album": "Disintegration",
+  "date": "1989-05-02",
+  "label": "Elektra, Asylum Records",
+  "genres": [
+    "New Wave"
+  ],
+  "mbid": "2570867b-b745-4521-8505-d3e631339fbc",
+  "tracks": [
+    {
+      "number": 1,
+      "title": "Plainsong"
+    },
+    {
+      "number": 2,
+      "title": "Pictures of You"
+    },
+    {
+      "number": 3,
+      "title": "Closedown"
+    },
+    {
+      "number": 4,
+      "title": "Lovesong"
+    },
+    {
+      "number": 5,
+      "title": "Lullaby"
+    },
+    {
+      "number": 6,
+      "title": "Fascination Street"
+    },
+    {
+      "number": 7,
+      "title": "Prayers for Rain"
+    },
+    {
+      "number": 8,
+      "title": "The Same Deep Water as You"
+    },
+    {
+      "number": 9,
+      "title": "Disintegration"
+    },
+    {
+      "number": 10,
+      "title": "Untitled"
+    }
+  ]
+}

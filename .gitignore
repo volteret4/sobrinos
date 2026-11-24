@@ -10,3 +10,5 @@ secrets.yaml
 .env
 .sops.yaml
 test
+
+imprimir.pdf

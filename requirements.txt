@@ -4,6 +4,7 @@ pyscard>=2.0.0          # Lector NFC ACR122U (smartcard.System / smartcard.util)
 # ── Kodi / reproductores ─────────────────────────────────────────────────────
 requests>=2.25.1        # Cliente HTTP para Kodi JSON-RPC y APIs externas
 urllib3>=1.26.0
+flask>=3.0.0            # Servidor HTTP para acceso desde Android (NTAG)
 
 # ── Metadatos de música ──────────────────────────────────────────────────────
 mutagen>=1.46.0         # Lectura de tags de archivos de audio

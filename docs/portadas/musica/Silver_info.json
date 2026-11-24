@@ -1,0 +1,36 @@
+{
+  "artist": "Jesu",
+  "album": "Silver",
+  "date": "2006-06-23",
+  "label": "Daymare Recordings",
+  "genres": [
+    "Shoegaze"
+  ],
+  "mbid": "b17b33e2-e1c4-49c1-85a7-7ea723ce0d3d",
+  "tracks": [
+    {
+      "number": 1,
+      "title": "Silver"
+    },
+    {
+      "number": 2,
+      "title": "Star"
+    },
+    {
+      "number": 3,
+      "title": "Wolves"
+    },
+    {
+      "number": 4,
+      "title": "Dead Eyes"
+    },
+    {
+      "number": 5,
+      "title": "Silver (original beats)"
+    },
+    {
+      "number": 6,
+      "title": "Wolves (original mix)"
+    }
+  ]
+}

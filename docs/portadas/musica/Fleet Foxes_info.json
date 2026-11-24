@@ -1,0 +1,56 @@
+{
+  "artist": "Fleet Foxes",
+  "album": "Fleet Foxes",
+  "date": "2008-06-03",
+  "label": "Sub Pop Records",
+  "genres": [
+    "Folk Rock"
+  ],
+  "mbid": "d99d7f59-44ad-4fbd-a837-0dc00576f01b",
+  "tracks": [
+    {
+      "number": 1,
+      "title": "Sun It Rises"
+    },
+    {
+      "number": 2,
+      "title": "White Winter Hymnal"
+    },
+    {
+      "number": 3,
+      "title": "Ragged Wood"
+    },
+    {
+      "number": 4,
+      "title": "Tiger Mountain Peasant Song"
+    },
+    {
+      "number": 5,
+      "title": "Quiet Houses"
+    },
+    {
+      "number": 6,
+      "title": "He Doesn't Know Why"
+    },
+    {
+      "number": 7,
+      "title": "Heard Them Stirring"
+    },
+    {
+      "number": 8,
+      "title": "Your Protector"
+    },
+    {
+      "number": 9,
+      "title": "Meadowlarks"
+    },
+    {
+      "number": 10,
+      "title": "Blue Ridge Mountains"
+    },
+    {
+      "number": 11,
+      "title": "Oliver James"
+    }
+  ]
+}

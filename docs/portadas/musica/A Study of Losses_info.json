@@ -1,0 +1,84 @@
+{
+  "artist": "Beirut",
+  "album": "A Study of Losses",
+  "date": "2025-04-18",
+  "label": "Pompeii Records",
+  "genres": [
+    "Indie Folk"
+  ],
+  "mbid": "c6c9c67f-b57a-476d-923c-045849dec3e1",
+  "tracks": [
+    {
+      "number": 1,
+      "title": "Disappearances and Losses"
+    },
+    {
+      "number": 2,
+      "title": "Forest Encyclopedia"
+    },
+    {
+      "number": 3,
+      "title": "Oceanus Procellarum"
+    },
+    {
+      "number": 4,
+      "title": "Villa Sacchetti"
+    },
+    {
+      "number": 5,
+      "title": "Mare Crisium"
+    },
+    {
+      "number": 6,
+      "title": "Garbo’s Face"
+    },
+    {
+      "number": 7,
+      "title": "Mare Imbrium"
+    },
+    {
+      "number": 8,
+      "title": "Tuanaki Atoll"
+    },
+    {
+      "number": 9,
+      "title": "Mare Serinitatis"
+    },
+    {
+      "number": 10,
+      "title": "Guericke’s Unicorn"
+    },
+    {
+      "number": 11,
+      "title": "Mare Humorum"
+    },
+    {
+      "number": 12,
+      "title": "Sappho’s Poems"
+    },
+    {
+      "number": 13,
+      "title": "Ghost Train"
+    },
+    {
+      "number": 14,
+      "title": "Caspian Tiger"
+    },
+    {
+      "number": 15,
+      "title": "Mani’s 7 Books"
+    },
+    {
+      "number": 16,
+      "title": "Moon Voyager"
+    },
+    {
+      "number": 17,
+      "title": "Mare Nectaris"
+    },
+    {
+      "number": 18,
+      "title": "Mare Tranquillitatis"
+    }
+  ]
+}

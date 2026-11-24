@@ -1,0 +1,40 @@
+{
+  "artist": "Tool",
+  "album": "Fear Inoculum",
+  "date": "2019-08-30",
+  "label": "RCA, Sony Music, Tool Dissectional",
+  "genres": [
+    "Progressive Metal"
+  ],
+  "mbid": "5c027aef-bb0c-4b47-ab7f-5c79606efa59",
+  "tracks": [
+    {
+      "number": 1,
+      "title": "Fear Inoculum"
+    },
+    {
+      "number": 2,
+      "title": "Pneuma"
+    },
+    {
+      "number": 3,
+      "title": "Invincible"
+    },
+    {
+      "number": 4,
+      "title": "Descending"
+    },
+    {
+      "number": 5,
+      "title": "Culling Voices"
+    },
+    {
+      "number": 6,
+      "title": "Chocolate Chip Trip"
+    },
+    {
+      "number": 7,
+      "title": "7empest"
+    }
+  ]
+}

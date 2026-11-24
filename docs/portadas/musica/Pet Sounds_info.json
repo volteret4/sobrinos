@@ -1,0 +1,64 @@
+{
+  "artist": "The Beach Boys",
+  "album": "Pet Sounds",
+  "date": "2016-06-10",
+  "label": "Capitol Records",
+  "genres": [
+    "Pop"
+  ],
+  "mbid": "2c2c80be-57e3-44d2-a910-a7a873683141",
+  "tracks": [
+    {
+      "number": 1,
+      "title": "Wouldn’t It Be Nice"
+    },
+    {
+      "number": 2,
+      "title": "You Still Believe in Me"
+    },
+    {
+      "number": 3,
+      "title": "That’s Not Me"
+    },
+    {
+      "number": 4,
+      "title": "Don’t Talk (Put Your Head on My Shoulder)"
+    },
+    {
+      "number": 5,
+      "title": "I’m Waiting for the Day"
+    },
+    {
+      "number": 6,
+      "title": "Let’s Go Away for Awhile"
+    },
+    {
+      "number": 7,
+      "title": "Sloop John B"
+    },
+    {
+      "number": 8,
+      "title": "God Only Knows"
+    },
+    {
+      "number": 9,
+      "title": "I Know There’s an Answer"
+    },
+    {
+      "number": 10,
+      "title": "Here Today"
+    },
+    {
+      "number": 11,
+      "title": "I Just Wasn’t Made for These Times"
+    },
+    {
+      "number": 12,
+      "title": "Pet Sounds"
+    },
+    {
+      "number": 13,
+      "title": "Caroline, No"
+    }
+  ]
+}

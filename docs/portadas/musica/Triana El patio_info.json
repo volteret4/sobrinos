@@ -1,0 +1,40 @@
+{
+  "artist": "Triana",
+  "album": "Triana (El patio)",
+  "date": "1988",
+  "label": "Fonomusic",
+  "genres": [
+    "Folk"
+  ],
+  "mbid": "16df3de8-3bbc-3961-a378-0a80f8c22b89",
+  "tracks": [
+    {
+      "number": 1,
+      "title": "Abre la puerta"
+    },
+    {
+      "number": 2,
+      "title": "Sé de un lugar"
+    },
+    {
+      "number": 3,
+      "title": "Todo es de color"
+    },
+    {
+      "number": 4,
+      "title": "Luminosa mañana"
+    },
+    {
+      "number": 5,
+      "title": "Diálogo"
+    },
+    {
+      "number": 6,
+      "title": "En el lago"
+    },
+    {
+      "number": 7,
+      "title": "Recuerdos de una noche"
+    }
+  ]
+}

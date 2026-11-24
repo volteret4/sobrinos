@@ -1,0 +1,60 @@
+{
+  "artist": "M83",
+  "album": "Dead Cities, Red Seas & Lost Ghosts",
+  "date": "2014-09",
+  "label": "naïve",
+  "genres": [
+    "Electronic Rock"
+  ],
+  "mbid": "4194a771-5db4-47dc-8318-4d8dde354ca4",
+  "tracks": [
+    {
+      "number": 1,
+      "title": "Birds"
+    },
+    {
+      "number": 2,
+      "title": "Unrecorded"
+    },
+    {
+      "number": 3,
+      "title": "Run Into Flowers"
+    },
+    {
+      "number": 4,
+      "title": "In Church"
+    },
+    {
+      "number": 5,
+      "title": "Be Wild"
+    },
+    {
+      "number": 6,
+      "title": "America"
+    },
+    {
+      "number": 7,
+      "title": "On a White Lake, Near a Green Mountain"
+    },
+    {
+      "number": 8,
+      "title": "Noise"
+    },
+    {
+      "number": 9,
+      "title": "Cyborg"
+    },
+    {
+      "number": 10,
+      "title": "0078h"
+    },
+    {
+      "number": 11,
+      "title": "Gone"
+    },
+    {
+      "number": 12,
+      "title": "Beauties Can Die"
+    }
+  ]
+}

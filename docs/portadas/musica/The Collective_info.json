@@ -1,0 +1,56 @@
+{
+  "artist": "Kim Gordon",
+  "album": "The Collective",
+  "date": "2024-03-08",
+  "label": "Matador",
+  "genres": [
+    "Noise Rock"
+  ],
+  "mbid": "a294dc23-c81c-46c0-b1ee-06ac42fbdf7f",
+  "tracks": [
+    {
+      "number": 1,
+      "title": "BYE BYE"
+    },
+    {
+      "number": 2,
+      "title": "The Candy House"
+    },
+    {
+      "number": 3,
+      "title": "I Don’t Miss My Mind"
+    },
+    {
+      "number": 4,
+      "title": "I’m a Man"
+    },
+    {
+      "number": 5,
+      "title": "Trophies"
+    },
+    {
+      "number": 6,
+      "title": "It’s Dark Inside"
+    },
+    {
+      "number": 7,
+      "title": "Psychedelic Orgasm"
+    },
+    {
+      "number": 8,
+      "title": "Tree House"
+    },
+    {
+      "number": 9,
+      "title": "Shelf Warmer"
+    },
+    {
+      "number": 10,
+      "title": "The Believers"
+    },
+    {
+      "number": 11,
+      "title": "Dream Dollar"
+    }
+  ]
+}

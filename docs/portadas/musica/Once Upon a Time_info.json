@@ -1,0 +1,76 @@
+{
+  "artist": "Donna Summer",
+  "album": "Once Upon a Time…",
+  "date": "1987-01-12",
+  "label": "Casablanca Records",
+  "genres": [
+    "Disco"
+  ],
+  "mbid": "50f20f45-bde4-45ac-959f-8714975fa432",
+  "tracks": [
+    {
+      "number": 1,
+      "title": "Once Upon a Time"
+    },
+    {
+      "number": 2,
+      "title": "Faster and Faster to Nowhere"
+    },
+    {
+      "number": 3,
+      "title": "Fairy Tale High"
+    },
+    {
+      "number": 4,
+      "title": "Say Something Nice"
+    },
+    {
+      "number": 5,
+      "title": "Now I Need You"
+    },
+    {
+      "number": 6,
+      "title": "Working the Midnight Shift"
+    },
+    {
+      "number": 7,
+      "title": "Queen for a Day"
+    },
+    {
+      "number": 8,
+      "title": "If You Got It Flaunt It"
+    },
+    {
+      "number": 9,
+      "title": "A Man Like You"
+    },
+    {
+      "number": 10,
+      "title": "Sweet Romance"
+    },
+    {
+      "number": 11,
+      "title": "(Theme) Once Upon a Time"
+    },
+    {
+      "number": 12,
+      "title": "Dance Into My Life"
+    },
+    {
+      "number": 13,
+      "title": "Rumour Has It"
+    },
+    {
+      "number": 14,
+      "title": "I Love You"
+    },
+    {
+      "number": 15,
+      "title": "Happily Ever After"
+    },
+    {
+      "number": 16,
+      "title": "(Theme) Once Upon a Time"
+    }
+  ]
+}

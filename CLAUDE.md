@@ -25,8 +25,11 @@ python nfc/nfc_config_gen.py
 # Monitorear tarjetas y reaccionar (requiere nfc_playlist.json)
 python nfc/nfc_reaccionar.py
 
-# Generar portadas para tarjetas de música (cara A y cara B)
+# Generar portadas para tarjetas de álbum (cara A: portada+info, cara B: tracklist+QR)
 python nfc/nfc_generar_portada.py /ruta/al/album [--custom-url https://tu_web]
+
+# Generar portadas para tarjetas de artista (cara A: foto artista, cara B: collage portadas)
+python nfc/nfc_generar_portada_artista.py /ruta/ARTISTA [--custom-url https://url]
 
 # Generar portadas para tarjetas de cine (interactivo, por lotes)
 python nfc/nfc_tarjetas_cine.py /carpeta/con/posters [-o /carpeta/salida]
@@ -43,7 +46,7 @@ python album_web_generator.py /ruta/al/album [--db ruta/db.sqlite] [-o ruta/sali
 3. `nfc/nfc_reaccionar.py` — bucle de monitoreo: lee el ID lógico (bloque 4) o el UID físico, busca en `nfc_playlist.json` y ejecuta el comando via `subprocess.Popen`
 
 ### Generación de portadas
-- `nfc/nfc_generar_portada.py` — genera dos imágenes PNG a 300 DPI (52×82 mm) para álbumes de música. Cara A: portada + metadatos. Cara B: tracklist + QR (wikipedia/genius o URL custom). Extrae metadatos con `mutagen`, descarga portadas de MusicBrainz.
+- `nfc/nfc_generar_portada.py` — genera dos imágenes PNG a 300 DPI (52×82 mm) para álbumes de música. Cara A: portada + metadatos. Cara B: foto del artista (Wikipedia/Last.fm) + tracklist + QR a GitHub Pages (`volteret4.github.io/sobrinos/albums/`). Extrae metadatos con `mutagen`, portadas de MusicBrainz. Salida por defecto: `docs/portadas/musica/`.
 - `nfc/nfc_tarjetas_cine.py` — genera portadas para películas/series. Cara A: poster ajustado al alto. Cara B: fondo color (celeste=serie, verde=película) + título + QR de IMDB/FilmAffinity.
 
 ### Web de música (`album_web_generator.py` + `modules/`)
@@ -64,7 +67,7 @@ La web de música ya existe (generada por `album_web_generator.py`). **La web de
 
 ## Configuración
 
-- `nfc_playlist.json` — mapeo UID→{nombre, comando} generado por `nfc_config_gen.py`
+- `nfc_playlist.json` — mapeo UID→{nombre, tipo, ruta | rutas | comando} generado por `nfc_config_gen.py`. Con Kodi se guardan rutas, no `kodi_id` (cambia en cada perfil)
 - `.env` — variables de entorno (credenciales Spotify, token Genius, etc.)
 - Kodi requiere JSON-RPC en `http://<host>:8080/jsonrpc`
 

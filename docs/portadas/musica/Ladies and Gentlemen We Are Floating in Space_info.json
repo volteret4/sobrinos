@@ -1,0 +1,60 @@
+{
+  "artist": "Spiritualized",
+  "album": "Ladies and Gentlemen We Are Floating in Space",
+  "date": "1997",
+  "label": "Dedicated",
+  "genres": [
+    "Space Rock"
+  ],
+  "mbid": "4430ed38-635e-48ff-972a-624afacc7396",
+  "tracks": [
+    {
+      "number": 1,
+      "title": "Ladies and Gentlemen We Are Floating in Space"
+    },
+    {
+      "number": 2,
+      "title": "Come Together"
+    },
+    {
+      "number": 3,
+      "title": "I Think I'm in Love"
+    },
+    {
+      "number": 4,
+      "title": "All of My Thoughts"
+    },
+    {
+      "number": 5,
+      "title": "Stay With Me"
+    },
+    {
+      "number": 6,
+      "title": "Electricity"
+    },
+    {
+      "number": 7,
+      "title": "Home of the Brave"
+    },
+    {
+      "number": 8,
+      "title": "The Individual"
+    },
+    {
+      "number": 9,
+      "title": "Broken Heart"
+    },
+    {
+      "number": 10,
+      "title": "No God Only Religion"
+    },
+    {
+      "number": 11,
+      "title": "Cool Waves"
+    },
+    {
+      "number": 12,
+      "title": "Cop Shoot Cop..."
+    }
+  ]
+}

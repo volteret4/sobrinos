@@ -1,0 +1,52 @@
+{
+  "artist": "Cigarettes After Sex",
+  "album": "Cigarettes After Sex",
+  "date": "2017-06-09",
+  "label": "Partisan Records",
+  "genres": [
+    "Dream Pop"
+  ],
+  "mbid": "6b091951-c709-4395-9c17-fbf90dcf54a3",
+  "tracks": [
+    {
+      "number": 1,
+      "title": "K."
+    },
+    {
+      "number": 2,
+      "title": "Each Time You Fall in Love"
+    },
+    {
+      "number": 3,
+      "title": "Sunsetz"
+    },
+    {
+      "number": 4,
+      "title": "Apocalypse"
+    },
+    {
+      "number": 5,
+      "title": "Flash"
+    },
+    {
+      "number": 6,
+      "title": "Sweet"
+    },
+    {
+      "number": 7,
+      "title": "Opera House"
+    },
+    {
+      "number": 8,
+      "title": "Truly"
+    },
+    {
+      "number": 9,
+      "title": "John Wayne"
+    },
+    {
+      "number": 10,
+      "title": "Young & Dumb"
+    }
+  ]
+}

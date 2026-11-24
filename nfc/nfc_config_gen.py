@@ -9,7 +9,8 @@ from smartcard.util import toHexString
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 from reproductores.kodi_api_manager import KodiAPIManager
 
-CONFIG_FILE = "nfc_playlist.json"
+CONFIG_FILE  = "nfc_playlist.json"
+PI_HOSTNAME  = "raspberrypi.local"   # hostname mDNS de la Pi en la red local
 
 REPRODUCTORES = {
     "1": {"nombre": "MoodeAudio (Red/HTTP)", "tipo": "http",  "id": "moode"},
@@ -113,8 +114,29 @@ def _mostrar_lista(items, fmt):
         print(f"    {idx:3}. {fmt(item)}")
 
 
+def _destino(kodi, tipo, clave):
+    """Ruta(s) a guardar: archivo (película), carpeta (serie), canciones (álbum) o carpetas (artista)."""
+    if tipo in ("pelicula", "serie"):
+        return {"ruta": clave} if clave else None
+    if tipo == "album":
+        canciones = sorted(kodi.get_songs(clave), key=lambda c: c.get("track", 0))
+        rutas = [c["file"] for c in canciones]
+    else:
+        rutas = []
+        for album in sorted(kodi.get_albums(clave), key=lambda a: a.get("year", 0)):
+            for cancion in kodi.get_songs(album["albumid"]):
+                carpeta = cancion["file"].rsplit("/", 1)[0] + "/"
+                if carpeta not in rutas:
+                    rutas.append(carpeta)
+    return {"rutas": rutas} if rutas else None
+
+
 def seleccionar_de_kodi(kodi):
-    """Navega la biblioteca de Kodi y devuelve (tipo, kodi_id, nombre)."""
+    """Navega la biblioteca de Kodi y devuelve (tipo, destino, nombre).
+
+    destino es {"ruta": ...} o {"rutas": [...]}, tal como las ve Kodi: los ids de la
+    biblioteca cambian de un perfil a otro y al reescanear; las rutas no.
+    """
     print("\n  ¿Qué quieres asociar?")
     print("    1. Película")
     print("    2. Serie")
@@ -131,11 +153,11 @@ def seleccionar_de_kodi(kodi):
 
     if tipo == "pelicula":
         raw = kodi.get_movies()
-        items = [(m["movieid"], m["title"], str(m.get("year", ""))) for m in raw]
+        items = [(m["file"], m["title"], str(m.get("year", ""))) for m in raw]
         fmt = lambda i: f"{i[1]} ({i[2]})"
     elif tipo == "serie":
         raw = kodi.get_tv_shows()
-        items = [(s["tvshowid"], s["title"], str(s.get("year", ""))) for s in raw]
+        items = [(s["file"], s["title"], str(s.get("year", ""))) for s in raw]
         fmt = lambda i: f"{i[1]} ({i[2]})"
     elif tipo == "album":
         raw = kodi.get_albums()
@@ -159,14 +181,78 @@ def seleccionar_de_kodi(kodi):
     try:
         num = int(input("\n  Selecciona número: ").strip())
         if 1 <= num <= len(items):
-            kodi_id, nombre, _ = items[num - 1]
+            clave, nombre, _ = items[num - 1]
+            destino = _destino(kodi, tipo, clave)
+            if destino is None:
+                print("  Kodi no da la ruta de ese elemento.")
+                return None
             print(f"  ✓ Seleccionado: {fmt(items[num - 1])}")
-            return tipo, kodi_id, nombre
+            return tipo, destino, nombre
     except ValueError:
         pass
 
     print("  Selección inválida.")
     return None
+
+
+# ── Soporte NTAG ─────────────────────────────────────────────────────────────
+
+def es_ntag(uid_hex):
+    """NTAG213/215/216 tienen UID de 7 bytes (14 hex chars). Mifare Classic: 4 bytes (8 chars)."""
+    return len(uid_hex) == 14
+
+
+def escribir_ndef_url(reader, url):
+    """
+    Escribe una URL como NDEF URI record en una tarjeta NTAG213/215/216.
+    Requiere que la tarjeta esté presente en el lector.
+    """
+    # Prefijos URI comprimidos (NFC Forum URI RTD)
+    PREFIJOS = [
+        ("http://www.",  0x01),
+        ("https://www.", 0x02),
+        ("http://",      0x03),
+        ("https://",     0x04),
+    ]
+    prefix_code, suffix = 0x00, url
+    for prefijo, codigo in PREFIJOS:
+        if url.startswith(prefijo):
+            prefix_code, suffix = codigo, url[len(prefijo):]
+            break
+
+    payload     = bytes([prefix_code]) + suffix.encode("utf-8")
+    ndef_record = bytes([0xD1, 0x01, len(payload), 0x55]) + payload
+    tlv         = bytes([0x03, len(ndef_record)]) + ndef_record + bytes([0xFE])
+
+    # Rellenar hasta múltiplo de 4 bytes (tamaño de página NTAG)
+    while len(tlv) % 4:
+        tlv += b"\x00"
+
+    try:
+        connection = reader.createConnection()
+        connection.connect()
+
+        # Escribir Capability Container en página 3 (marca la tarjeta como NDEF)
+        cmd_cc = [0xFF, 0xD6, 0x00, 0x03, 0x04, 0xE1, 0x10, 0x12, 0x00]
+        _, sw1, _ = connection.transmit(cmd_cc)
+        if sw1 != 0x90:
+            print("  Error escribiendo CC NDEF.")
+            return False
+
+        # Escribir páginas de datos a partir de la página 4
+        for i, pagina in enumerate(range(4, 4 + len(tlv) // 4)):
+            bloque = list(tlv[i * 4:(i + 1) * 4])
+            _, sw1, _ = connection.transmit([0xFF, 0xD6, 0x00, pagina, 0x04] + bloque)
+            if sw1 != 0x90:
+                print(f"  Error escribiendo página {pagina}.")
+                return False
+
+        connection.disconnect()
+        return True
+
+    except Exception as e:
+        print(f"  Error NDEF: {e}")
+        return False
 
 
 def main():
@@ -225,12 +311,12 @@ def main():
                     resultado = seleccionar_de_kodi(kodi)
                     if resultado is None:
                         continue
-                    tipo, kodi_id, nombre_meta = resultado
+                    tipo, destino, nombre_meta = resultado
                     entrada = {
                         "nombre": nombre_meta,
                         "reproductor": "kodi",
                         "tipo": tipo,
-                        "kodi_id": kodi_id,
+                        **destino,
                     }
 
                 elif player["tipo"] == "http":
@@ -265,6 +351,19 @@ def main():
                     json.dump(config_total, f, indent=4, ensure_ascii=False)
 
                 print(f"¡Asociación guardada para '{nombre_meta}' → {player['nombre']}!")
+
+                # ── NTAG: ofrecer escritura NDEF ──────────────────────────────
+                if es_ntag(uid):
+                    print(f"\n  [NTAG detectado — UID de 7 bytes]")
+                    url_ndef = f"http://{PI_HOSTNAME}/play/{uid}"
+                    resp = input(f"  ¿Escribir URL NDEF para Android? [{url_ndef}] (S/n): ").strip().lower()
+                    if resp != "n":
+                        print("  Mantenga la tarjeta en el lector...")
+                        if escribir_ndef_url(reader, url_ndef):
+                            print(f"  ✓ URL escrita. Al tocar la tarjeta con el móvil abrirá esa URL.")
+                        else:
+                            print("  ✗ No se pudo escribir. Verifique que la tarjeta es NTAG213/215/216.")
+
                 print("Retire la tarjeta para continuar...")
                 time.sleep(3)
 

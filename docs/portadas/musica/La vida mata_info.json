@@ -1,0 +1,64 @@
+{
+  "artist": "Los Enemigos",
+  "album": "La vida mata",
+  "date": "1990",
+  "label": "Grabaciones Accidentales",
+  "genres": [
+    "Rock"
+  ],
+  "mbid": "5f02639f-ea87-4fa3-90e1-0ad1bf9ec6e9",
+  "tracks": [
+    {
+      "number": 1,
+      "title": "El gran calambre final"
+    },
+    {
+      "number": 2,
+      "title": "El fraile y yo"
+    },
+    {
+      "number": 3,
+      "title": "Traspiés"
+    },
+    {
+      "number": 4,
+      "title": "Ouija"
+    },
+    {
+      "number": 5,
+      "title": "La torre de Babel"
+    },
+    {
+      "number": 6,
+      "title": "Paquito"
+    },
+    {
+      "number": 7,
+      "title": "Desde el jergón"
+    },
+    {
+      "number": 8,
+      "title": "Septiembre"
+    },
+    {
+      "number": 9,
+      "title": "Yo no quiero ser feliz"
+    },
+    {
+      "number": 10,
+      "title": "Miedo"
+    },
+    {
+      "number": 11,
+      "title": "Firmarás"
+    },
+    {
+      "number": 12,
+      "title": "Yo, el Rey"
+    },
+    {
+      "number": 13,
+      "title": "Nadie me quiere"
+    }
+  ]
+}
